@@ -26,7 +26,7 @@ box_struct: MACRO
 \1CaughtGender::
 \1CaughtLocation:: db
 \1Level::          db
-\1End::
+\1BoxEnd::
 ENDM
 
 party_struct: MACRO
@@ -41,7 +41,7 @@ party_struct: MACRO
 \1Speed::          dw
 \1SpclAtk::        dw
 \1SpclDef::        dw
-\1StatsEnd::
+\1StructEnd::
 ENDM
 
 red_box_struct: MACRO
@@ -80,7 +80,6 @@ battle_struct: MACRO
 \1Species::   db
 \1Item::      db
 \1Moves::     ds NUM_MOVES
-\1MovesEnd::
 \1DVs::       dw
 \1PP::        ds NUM_MOVES
 \1Happiness:: db
@@ -94,7 +93,6 @@ battle_struct: MACRO
 \1Speed::     dw
 \1SpclAtk::   dw
 \1SpclDef::   dw
-\1StatsEnd::
 \1Type::
 \1Type1::     db
 \1Type2::     db
@@ -106,7 +104,7 @@ box: MACRO
 \1Species::         ds MONS_PER_BOX + 1
 \1Mons::
 \1Mon1::            box_struct \1Mon1
-\1Mon2::            ds BOXMON_STRUCT_LENGTH * (MONS_PER_BOX + -1)
+\1Mon2::            ds BOXMON_STRUCT_LENGTH * (MONS_PER_BOX - 1)
 \1MonOT::           ds NAME_LENGTH * MONS_PER_BOX
 \1MonNicknames::    ds MON_NAME_LENGTH * MONS_PER_BOX
 \1MonNicknamesEnd::
@@ -126,40 +124,39 @@ map_connection_struct: MACRO
 ENDM
 
 channel_struct: MACRO
-; Addreses are wChannel1 (c101).
 \1MusicID::           dw
 \1MusicBank::         db
-\1Flags1::            db ; 0:on/off 1:subroutine 3:sfx 4:noise 5:rest
-\1Flags2::            db ; 0:vibrato on/off 2:duty 4:cry pitch
-\1Flags3::            db ; 0:vibrato up/down
+\1Flags1::            db ; 0:on/off 1:subroutine 2:looping 3:sfx 4:noise 5:rest
+\1Flags2::            db ; 0:vibrato on/off 1:pitch slide 2:duty cycle pattern 4:pitch offset
+\1Flags3::            db ; 0:vibrato up/down 1:pitch slide direction
 \1MusicAddress::      dw
 \1LastMusicAddress::  dw
                       dw
 \1NoteFlags::         db ; 5:rest
 \1Condition::         db ; conditional jumps
 \1DutyCycle::         db ; bits 6-7 (0:12.5% 1:25% 2:50% 3:75%)
-\1Intensity::         db ; hi:pressure lo:velocity
+\1VolumeEnvelope::    db ; hi:volume lo:fade
 \1Frequency::         dw ; 11 bits
 \1Pitch::             db ; 0:rest 1-c:note
 \1Octave::            db ; 7-0 (0 is highest)
-\1PitchOffset::       db ; raises existing octaves (to repeat phrases)
+\1Transposition::     db ; raises existing octaves (to repeat phrases)
 \1NoteDuration::      db ; frames remaining for the current note
 \1Field16::           ds 1
                       ds 1
 \1LoopCount::         db
 \1Tempo::             dw
 \1Tracks::            db ; hi:left lo:right
-\1SFXDutyLoop::       db
+\1DutyCyclePattern::  db
 \1VibratoDelayCount:: db ; initialized by \1VibratoDelay
 \1VibratoDelay::      db ; number of frames a note plays until vibrato starts
 \1VibratoExtent::     db
 \1VibratoRate::       db ; hi:frames for each alt lo:frames to the next alt
-\1PitchWheelTarget::  dw ; frequency endpoint for pitch wheel
-\1PitchWheelAmount::  db
-\1PitchWheelAmountFraction::   db
+\1PitchSlideTarget::  dw ; frequency endpoint for pitch slide
+\1PitchSlideAmount::  db
+\1PitchSlideAmountFraction::   db
 \1Field25::           db
                       ds 1
-\1CryPitch::          dw
+\1PitchOffset::       dw
 \1Field29::           ds 1
 \1Field2a::           ds 2
 \1Field2c::           ds 1
@@ -171,7 +168,7 @@ channel_struct: MACRO
 ENDM
 
 battle_tower_struct: MACRO
-\1Name:: ds NAME_LENGTH + -1
+\1Name:: ds NAME_LENGTH - 1
 \1TrainerClass:: ds 1
 \1Mon1:: party_struct \1Mon1
 \1Mon1Name:: ds MON_NAME_LENGTH
@@ -217,7 +214,7 @@ hof_mon: MACRO
 \1ID::       dw
 \1DVs::      dw
 \1Level::    db
-\1Nickname:: ds MON_NAME_LENGTH + -1
+\1Nickname:: ds MON_NAME_LENGTH - 1
 \1End::
 ENDM
 
@@ -233,22 +230,23 @@ hall_of_fame: MACRO
 ENDM
 
 link_battle_record: MACRO
-\1Name::   ds NAME_LENGTH + -1
+\1Name::   ds NAME_LENGTH - 1
 \1ID::     dw
 \1Wins::   dw
 \1Losses:: dw
 \1Draws::  dw
+\1End::
 ENDM
 
 trademon: MACRO
-\1Species::     db ; wc6d0 | wc702
-\1SpeciesName:: ds MON_NAME_LENGTH ; wc6d1 | wc703
-\1Nickname::    ds MON_NAME_LENGTH ; wc6dc | wc70e
-\1SenderName::  ds NAME_LENGTH ; wc6e7 | wc719
-\1OTName::      ds NAME_LENGTH ; wc6f2 | wc724
-\1DVs::         dw ; wc6fd | wc72f
-\1ID::          dw ; wc6ff | wc731
-\1CaughtData::  db ; wc701 | wc733
+\1Species::     db
+\1SpeciesName:: ds MON_NAME_LENGTH
+\1Nickname::    ds MON_NAME_LENGTH
+\1SenderName::  ds NAME_LENGTH
+\1OTName::      ds NAME_LENGTH
+\1DVs::         dw
+\1ID::          dw
+\1CaughtData::  db
 \1End::
 ENDM
 

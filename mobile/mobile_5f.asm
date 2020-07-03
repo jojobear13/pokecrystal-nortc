@@ -11,7 +11,7 @@ Function17c000:
 
 	ld hl, HaveWantMap
 	decoord 0, 0
-	bccoord 0, 0, wAttrMap
+	bccoord 0, 0, wAttrmap
 
 	ld a, SCREEN_HEIGHT
 .y
@@ -68,7 +68,7 @@ Function17c000:
 	ld bc, $80 tiles
 	call CopyBytes
 
-	ld hl, HaveWantGFX + $800
+	ld hl, HaveWantGFX + $80 tiles
 	ld de, vTiles1
 	ld bc, $10 tiles
 	call CopyBytes
@@ -295,14 +295,14 @@ Function17d0f3:
 	farcall Function17d1f1
 	ld a, $1
 	ld [wForceEvolution], a
-	ld a, $2
+	ld a, LINK_TRADECENTER
 	ld [wLinkMode], a
 	farcall EvolvePokemon
 	xor a
 	ld [wLinkMode], a
 	farcall SaveAfterLinkTrade
 	ld a, $5
-	call GetSRAMBank
+	call OpenSRAM
 	ld a, $5
 	ld [$a800], a
 	call CloseSRAM
@@ -507,9 +507,9 @@ Function17d2c0:
 	ret
 
 Function17d2ce:
-	ld a, $5
-	call GetSRAMBank
-	ld a, [$aa72]
+	ld a, BANK(s5_aa72)
+	call OpenSRAM
+	ld a, [s5_aa72]
 	call CloseSRAM
 	and a
 	jr nz, .asm_17d2e2
@@ -543,13 +543,13 @@ Function17d2ce:
 
 Function17d314:
 	ld a, $5
-	call GetSRAMBank
+	call OpenSRAM
 	ld a, [$b1b1]
 	call CloseSRAM
 	cp $21
 	jr nc, .asm_17d354
 	ld a, $6
-	call GetSRAMBank
+	call OpenSRAM
 	ld l, $0
 	ld h, l
 	ld de, $a006
@@ -582,7 +582,7 @@ Function17d314:
 .asm_17d354
 	call CloseSRAM
 	ld a, $5
-	call GetSRAMBank
+	call OpenSRAM
 	xor a
 	ld hl, $aa73
 	ld bc, $c
@@ -625,7 +625,7 @@ Function17d370:
 	call CopyBytes
 	xor a
 	ldh [rVBK], a
-	ld hl, GFX_17eb7e
+	ld hl, PostalMarkGFX
 	ld de, vTiles2 tile $60
 	ld bc, 1 tiles
 	call CopyBytes
@@ -636,7 +636,7 @@ Function17d370:
 	ld a, $d0
 	ld [wcd21], a
 	ld a, $6
-	call GetSRAMBank
+	call OpenSRAM
 	ld hl, $a006
 	ld de, wBGPals1
 	ld bc, $1000
@@ -677,7 +677,7 @@ Function17d405:
 	push af
 	ld a, $5
 	ldh [rSVBK], a
-	ld hl, Palette_17eff6
+	ld hl, PokemonNewsPalettes
 	ld de, wBGPals1
 	ld bc, 8 palettes
 	call CopyBytes
@@ -712,13 +712,13 @@ Jumptable_17d483:
 	dw Function17e427
 
 Function17d48d:
-	ld hl, Palette_17eff6
+	ld hl, PokemonNewsPalettes
 	ld de, wc608
 	ld bc, $40
 	call CopyBytes
-	ld hl, TileAttrmap_17eb8e
+	ld hl, PokemonNewsTileAttrmap
 	decoord 0, 0
-	bccoord 0, 0, wAttrMap
+	bccoord 0, 0, wAttrmap
 	ld a, $12
 .asm_17d4a4
 	push af
@@ -948,7 +948,7 @@ Function17d5f6:
 
 Function17d60b:
 	ld a, $5
-	call GetSRAMBank
+	call OpenSRAM
 	ld hl, $b1d3
 	ld de, wc608
 	ld bc, $20
@@ -963,7 +963,7 @@ Function17d60b:
 	ld h, a
 	call CloseSRAM
 	ld a, $6
-	call GetSRAMBank
+	call OpenSRAM
 	ld de, wc708
 	ld a, c
 	and a
@@ -1023,7 +1023,7 @@ Function17d60b:
 .asm_17d684
 	call CloseSRAM
 	ld a, $5
-	call GetSRAMBank
+	call OpenSRAM
 	ld hl, wc708
 	ld de, $b1b3
 	ld a, [$b1b1]
@@ -1040,7 +1040,7 @@ Function17d6a1:
 	ld c, a
 	ld b, $0
 	ld a, $5
-	call GetSRAMBank
+	call OpenSRAM
 	ld hl, $b1d3
 	add hl, bc
 	add hl, bc
@@ -1058,7 +1058,7 @@ Function17d6a1:
 	ld l, c
 	call CloseSRAM
 	ld a, $6
-	call GetSRAMBank
+	call OpenSRAM
 	ld a, l
 	ld [wcd5e], a
 	ld a, h
@@ -1177,7 +1177,7 @@ Function17d78d:
 	ld b, a
 	call HlToCrashCheckPointer
 	ld a, $6
-	call GetSRAMBank
+	call OpenSRAM
 	ld hl, $a006
 	add hl, bc
 	ld de, wBGPals1
@@ -1330,7 +1330,7 @@ Function17d85d:
 
 .asm_17d89b
 	ld a, [wcd4f]
-	call GetSRAMBank
+	call OpenSRAM
 
 .asm_17d8a1
 	push hl
@@ -1511,7 +1511,7 @@ Function17d9e3:
 
 .asm_17da01
 	ld a, [wc70c]
-	call GetSRAMBank
+	call OpenSRAM
 
 .asm_17da07
 	ld a, [wc708]
@@ -1556,7 +1556,7 @@ Function17da31:
 
 .asm_17da4f
 	ld a, [wc70a]
-	call GetSRAMBank
+	call OpenSRAM
 
 .asm_17da55
 	ld a, [wc708]
@@ -2021,7 +2021,7 @@ Function17dd49:
 
 .sram
 	ld a, [wc708]
-	call GetSRAMBank
+	call OpenSRAM
 
 .got_bank
 	ld a, [wc709]
@@ -2097,7 +2097,7 @@ Function17ddcd:
 
 .asm_17dde7
 	ld a, [wc708]
-	call GetSRAMBank
+	call OpenSRAM
 
 .asm_17dded
 	ld a, [wc709]
@@ -2154,7 +2154,7 @@ Function17de32:
 	ld b, $0
 	call CopyBytes
 	ld a, $6
-	call GetSRAMBank
+	call OpenSRAM
 	call Function17f4f6
 	ld a, [wc708]
 	ld e, a
@@ -2208,7 +2208,7 @@ Function17de91:
 	ld bc, $7
 	call CopyBytes
 	ld a, $6
-	call GetSRAMBank
+	call OpenSRAM
 	call Function17f4f6
 	ld a, [wc708]
 	ld e, a
@@ -2452,7 +2452,7 @@ Function17ded9:
 
 Function17e026:
 	ld a, BANK(sBoxCount)
-	call GetSRAMBank
+	call OpenSRAM
 	ld a, [sBoxCount]
 	call CloseSRAM
 	cp $14
@@ -2467,7 +2467,7 @@ Function17e026:
 	pop hl
 	pop bc
 	ld a, BANK(sBoxMonNicknames)
-	call GetSRAMBank
+	call OpenSRAM
 	bit 1, b
 	jr z, .asm_17e067
 	push bc
@@ -2494,7 +2494,7 @@ Function17e026:
 	call CloseSRAM
 	farcall SetGiftBoxMonCaughtData
 	ld a, $1
-	call GetSRAMBank
+	call OpenSRAM
 	pop hl
 	pop bc
 	jr .asm_17e092
@@ -2696,7 +2696,7 @@ Function17e1a1:
 
 .asm_17e1bb
 	ld a, [wc708]
-	call GetSRAMBank
+	call OpenSRAM
 
 .asm_17e1c1
 	ld a, [wc709]
@@ -2728,7 +2728,7 @@ Function17e1a1:
 
 .asm_17e1f3
 	ld a, [wc70c]
-	call GetSRAMBank
+	call OpenSRAM
 
 .asm_17e1f9
 	ld a, [wc70d]
@@ -2870,9 +2870,9 @@ Function17e2a7:
 	xor a
 	ld [wcf66], a
 	farcall Function118233
-	ld de, GFX_17eb7e
+	ld de, PostalMarkGFX
 	ld hl, vTiles2 tile $60
-	lb bc, BANK(GFX_17eb7e), 1
+	lb bc, BANK(PostalMarkGFX), 1
 	call Get2bpp
 	ld a, [wMobileErrorCodeBuffer]
 	and a
@@ -2890,7 +2890,7 @@ Function17e2a7:
 	xor a
 	ld [wcd7a], a
 	ld a, $5
-	call GetSRAMBank
+	call OpenSRAM
 	ld hl, $aa73
 	ld de, $aa7f
 	ld bc, $c
@@ -2926,7 +2926,7 @@ Function17e309:
 
 Function17e32b:
 	ld a, $5
-	call GetSRAMBank
+	call OpenSRAM
 	ld hl, wc608
 	ld de, $b0b1
 	ld bc, $40
@@ -2939,7 +2939,7 @@ Function17e32b:
 
 Function17e349:
 	ld a, $5
-	call GetSRAMBank
+	call OpenSRAM
 	ld hl, $b0b1
 	ld de, wc608
 	ld bc, $40
@@ -3486,7 +3486,7 @@ Function17e691:
 
 .asm_17e6c7
 	pop hl
-	bccoord 0, 0, wAttrMap
+	bccoord 0, 0, wAttrmap
 	add hl, bc
 	ld [hl], a
 	pop hl
@@ -3509,7 +3509,7 @@ Function17e6de:
 	ld l, a
 	ld a, [wc709]
 	ld h, a
-	decoord 0, 0, wAttrMap
+	decoord 0, 0, wAttrmap
 	add hl, de
 	pop af
 	ld b, $7
@@ -3530,49 +3530,18 @@ Function17e6de:
 PokemonNewsGFX:
 INCBIN "gfx/mobile/pokemon_news.2bpp"
 
-GFX_17eb7e:
-INCBIN "gfx/unknown/17eb7e.2bpp"
+PostalMarkGFX:
+INCBIN "gfx/font/postal_mark.2bpp"
 
-TileAttrmap_17eb8e:
-INCBIN "gfx/unknown/17eb8e.attrmap"
+PokemonNewsTileAttrmap:
+INCBIN "gfx/mobile/pokemon_news.bin"
 
-Palette_17eff6:
-	RGB 24,  9,  8
-	RGB  4,  9, 18
-	RGB 18, 18, 12
-	RGB  0,  0,  0
-	RGB 24, 24, 18
-	RGB 18, 18, 12
-	RGB  4,  9, 18
-	RGB  0,  0,  0
-	RGB 31, 31, 31
-	RGB 23, 11, 10
-	RGB 13,  6,  5
-	RGB  0,  0,  0
-	RGB 31, 31, 31
-	RGB 15, 25,  5
-	RGB 10, 20,  0
-	RGB  0,  0,  0
-	RGB 31, 31, 31
-	RGB 20, 28, 20
-	RGB 10, 18, 15
-	RGB  0,  0,  0
-	RGB 31, 31, 31
-	RGB 22, 22, 12
-	RGB 17, 12,  5
-	RGB  0,  0,  0
-	RGB  5,  5, 16
-	RGB  8, 19, 28
-	RGB  0,  0,  0
-	RGB 31, 31, 31
-	RGB 31, 31, 31
-	RGB 27, 24,  0
-	RGB 24, 16,  3
-	RGB  0,  0,  0
+PokemonNewsPalettes:
+INCLUDE "gfx/mobile/pokemon_news.pal"
 
 RunMobileScript::
 	ld a, $6
-	call GetSRAMBank
+	call OpenSRAM
 	inc de
 .loop
 	call _RunMobileScript
@@ -4113,13 +4082,13 @@ MobileScript_Prefecture:
 	bit 7, a
 	jr nz, .asm_17f355
 	ld a, BANK(sCrystalData)
-	call GetSRAMBank
+	call OpenSRAM
 	ld a, [sCrystalData + 2]
 	jr .asm_17f35d
 
 .asm_17f355
 	ld a, BANK(s5_b2f3)
-	call GetSRAMBank
+	call OpenSRAM
 	ld a, [s5_b2f3]
 
 .asm_17f35d
@@ -4156,13 +4125,13 @@ Function17f382:
 	bit 7, a
 	jr nz, .asm_17f3a3
 	ld a, BANK(sCrystalData)
-	call GetSRAMBank
+	call OpenSRAM
 	ld de, sCrystalData + 3
 	jr .asm_17f3ab
 
 .asm_17f3a3
 	ld a, BANK(s5_b2f4)
-	call GetSRAMBank
+	call OpenSRAM
 	ld de, s5_b2f4
 
 .asm_17f3ab
@@ -4250,7 +4219,7 @@ Function17f41d:
 	push af
 	ld l, c
 	ld h, b
-	ld bc, -wTileMap + $10000
+	ld bc, -wTilemap + $10000
 	add hl, bc
 	ld de, -SCREEN_WIDTH
 	ld c, $1
@@ -4330,7 +4299,7 @@ Function17f44f:
 
 .asm_17f488
 	ld a, [wcd54]
-	call GetSRAMBank
+	call OpenSRAM
 
 .asm_17f48e
 	ld a, [wcd55]
@@ -4352,7 +4321,7 @@ Function17f44f:
 .asm_17f4af
 	call CloseSRAM
 	ld a, $6
-	call GetSRAMBank
+	call OpenSRAM
 
 .asm_17f4b7
 	ld de, wc608
@@ -4480,7 +4449,7 @@ DisplayMobileError:
 	ld a, [wc303]
 	bit 7, a
 	jr nz, .quit
-	farcall HDMATransferAttrMapAndTileMapToWRAMBank3
+	farcall HDMATransferAttrmapAndTilemapToWRAMBank3
 	jr .loop
 
 .quit
@@ -4522,7 +4491,7 @@ DisplayMobileError:
 
 .asm_17f5a1
 	ld a, BANK(sMobileLoginPassword)
-	call GetSRAMBank
+	call OpenSRAM
 	xor a
 	ld [sMobileLoginPassword], a
 	call CloseSRAM
@@ -4545,7 +4514,7 @@ Function17f5c3:
 
 Function17f5d2:
 	call Function17f5e4
-	farcall HDMATransferAttrMapAndTileMapToWRAMBank3
+	farcall HDMATransferAttrmapAndTilemapToWRAMBank3
 	call SetPalettes
 	ld a, $1
 	ld [wc303], a
@@ -4564,7 +4533,7 @@ Function17f5e4:
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 	call ByteFill
 	ld a, $6
-	hlcoord 0, 0, wAttrMap
+	hlcoord 0, 0, wAttrmap
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 	call ByteFill
 	hlcoord 2, 1

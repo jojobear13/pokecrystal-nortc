@@ -1,6 +1,6 @@
 MAP_NAME_SIGN_START EQU $60
 
-ReturnFromMapSetupScript::
+InitMapNameSign::
 	xor a
 	ldh [hBGMapMode], a
 	farcall .inefficient_farcall ; this is a waste of 6 ROM bytes and 6 stack bytes
@@ -63,24 +63,24 @@ ReturnFromMapSetupScript::
 	ld a, [wPrevLandmark]
 	cp c
 	ret z
-	cp SPECIAL_MAP
+	cp LANDMARK_SPECIAL
 	ret
 
 .CheckSpecialMap:
 ; These landmarks do not get pop-up signs.
 	cp -1
 	ret z
-	cp SPECIAL_MAP ; redundant check
+	cp LANDMARK_SPECIAL ; redundant check
 	ret z
-	cp RADIO_TOWER
+	cp LANDMARK_RADIO_TOWER
 	ret z
-	cp LAV_RADIO_TOWER
+	cp LANDMARK_LAV_RADIO_TOWER
 	ret z
-	cp UNDERGROUND_PATH
+	cp LANDMARK_UNDERGROUND_PATH
 	ret z
-	cp INDIGO_PLATEAU
+	cp LANDMARK_INDIGO_PLATEAU
 	ret z
-	cp POWER_PLANT
+	cp LANDMARK_POWER_PLANT
 	ret z
 	ld a, 1
 	and a
@@ -135,7 +135,7 @@ InitMapNameFrame:
 	hlcoord 0, 0
 	ld b, 2
 	ld c, 18
-	call InitMapSignAttrMap
+	call InitMapSignAttrmap
 	call PlaceMapNameFrame
 	ret
 
@@ -171,8 +171,8 @@ PlaceMapNameCenterAlign:
 	pop hl
 	ret
 
-InitMapSignAttrMap:
-	ld de, wAttrMap - wTileMap
+InitMapSignAttrmap:
+	ld de, wAttrmap - wTilemap
 	add hl, de
 	inc b
 	inc b

@@ -3,7 +3,7 @@
 	const VIOLETPOKECENTER1F_GAMEBOY_KID
 	const VIOLETPOKECENTER1F_GENTLEMAN
 	const VIOLETPOKECENTER1F_YOUNGSTER
-	const VIOLETPOKECENTER1F_SCIENTIST
+	const VIOLETPOKECENTER1F_ELMS_AIDE
 
 VioletPokecenter1F_MapScripts:
 	db 0 ; scene scripts
@@ -11,7 +11,7 @@ VioletPokecenter1F_MapScripts:
 	db 0 ; callbacks
 
 VioletPokecenterNurse:
-	jumpstd pokecenternurse
+	jumpstd PokecenterNurseScript
 
 VioletPokecenter1F_ElmsAideScript:
 	faceplayer
@@ -37,18 +37,18 @@ VioletPokecenter1F_ElmsAideScript:
 	readvar VAR_FACING
 	ifequal UP, .AideWalksAroundPlayer
 	turnobject PLAYER, DOWN
-	applymovement VIOLETPOKECENTER1F_SCIENTIST, MovementData_AideWalksStraightOutOfPokecenter
+	applymovement VIOLETPOKECENTER1F_ELMS_AIDE, MovementData_AideWalksStraightOutOfPokecenter
 	playsound SFX_EXIT_BUILDING
-	disappear VIOLETPOKECENTER1F_SCIENTIST
+	disappear VIOLETPOKECENTER1F_ELMS_AIDE
 	waitsfx
 	end
 
 .AideWalksAroundPlayer:
-	applymovement VIOLETPOKECENTER1F_SCIENTIST, MovementData_AideWalksLeftToExitPokecenter
+	applymovement VIOLETPOKECENTER1F_ELMS_AIDE, MovementData_AideWalksLeftToExitPokecenter
 	turnobject PLAYER, DOWN
-	applymovement VIOLETPOKECENTER1F_SCIENTIST, MovementData_AideFinishesLeavingPokecenter
+	applymovement VIOLETPOKECENTER1F_ELMS_AIDE, MovementData_AideFinishesLeavingPokecenter
 	playsound SFX_EXIT_BUILDING
-	disappear VIOLETPOKECENTER1F_SCIENTIST
+	disappear VIOLETPOKECENTER1F_ELMS_AIDE
 	waitsfx
 	end
 
@@ -56,7 +56,7 @@ VioletPokecenter1F_ElmsAideScript:
 	db "EGG@"
 
 .AideGivesEgg:
-	jumpstd receivetogepiegg
+	jumpstd ReceiveTogepiEggScript
 	end
 
 .PartyFull:

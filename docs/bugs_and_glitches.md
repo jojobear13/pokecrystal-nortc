@@ -15,26 +15,32 @@ Some fixes are mentioned as breaking compatibility with link battles. This can b
 
 ## Contents
 
+- [Perish Song and Spikes can leave a Pokémon with 0 HP and not faint](#perish-song-and-spikes-can-leave-a-pokémon-with-0-hp-and-not-faint)
 - [Thick Club and Light Ball can make (Special) Attack wrap around above 1024](#thick-club-and-light-ball-can-make-special-attack-wrap-around-above-1024)
 - [Metal Powder can increase damage taken with boosted (Special) Defense](#metal-powder-can-increase-damage-taken-with-boosted-special-defense)
 - [Reflect and Light Screen can make (Special) Defense wrap around above 1024](#reflect-and-light-screen-can-make-special-defense-wrap-around-above-1024)
 - [Glacier Badge may not boost Special Defense depending on the value of Special Attack](#glacier-badge-may-not-boost-special-defense-depending-on-the-value-of-special-attack)
 - [Moves with a 100% secondary effect chance will not trigger it in 1/256 uses](#moves-with-a-100-secondary-effect-chance-will-not-trigger-it-in-1256-uses)
 - [Belly Drum sharply boosts Attack even with under 50% HP](#belly-drum-sharply-boosts-attack-even-with-under-50-hp)
+- [Berserk Gene's confusion lasts for 256 turns or the previous Pokémon's confusion count](#berserk-genes-confusion-lasts-for-256-turns-or-the-previous-Pokémons-confusion-count)
 - [Confusion damage is affected by type-boosting items and Explosion/Self-Destruct doubling](#confusion-damage-is-affected-by-type-boosting-items-and-explosionself-destruct-doubling)
+- [Saves corrupted by mid-save shutoff are not handled](#saves-corrupted-by-mid-save-shutoff-are-not-handled)
 - [Moves that lower Defense can do so after breaking a Substitute](#moves-that-lower-defense-can-do-so-after-breaking-a-substitute)
 - [Counter and Mirror Coat still work if the opponent uses an item](#counter-and-mirror-coat-still-work-if-the-opponent-uses-an-item)
 - [A Disabled but PP Up–enhanced move may not trigger Struggle](#a-disabled-but-pp-upenhanced-move-may-not-trigger-struggle)
 - [A Pokémon that fainted from Pursuit will have its old status condition when revived](#a-pokémon-that-fainted-from-pursuit-will-have-its-old-status-condition-when-revived)
 - [Lock-On and Mind Reader don't always bypass Fly and Dig](#lock-on-and-mind-reader-dont-always-bypass-fly-and-dig)
+- [Wild Pokémon can always Teleport regardless of level difference](#wild-pokémon-can-always-teleport-regardless-of-level-difference)
 - [Beat Up can desynchronize link battles](#beat-up-can-desynchronize-link-battles)
 - [Beat Up works incorrectly with only one Pokémon in the party](#beat-up-works-incorrectly-with-only-one-pokémon-in-the-party)
 - [Beat Up may fail to raise Substitute](#beat-up-may-fail-to-raise-substitute)
 - [Beat Up may trigger King's Rock even if it failed](#beat-up-may-trigger-kings-rock-even-if-it-failed)
 - [Present damage is incorrect in link battles](#present-damage-is-incorrect-in-link-battles)
+- [A Transformed Pokémon can use Sketch and learn otherwise unobtainable moves](#a-transformed-pokémon-can-use-sketch-and-learn-otherwise-unobtainable-moves)
 - ["Smart" AI encourages Mean Look if its own Pokémon is badly poisoned](#smart-ai-encourages-mean-look-if-its-own-pokémon-is-badly-poisoned)
 - [AI makes a false assumption about `CheckTypeMatchup`](#ai-makes-a-false-assumption-about-checktypematchup)
 - [NPC use of Full Heal or Full Restore does not cure Nightmare status](#npc-use-of-full-heal-or-full-restore-does-not-cure-nightmare-status)
+- [NPC use of Full Heal does not cure confusion status](#npc-use-of-full-heal-does-not-cure-confusion-status)
 - [HP bar animation is slow for high HP](#hp-bar-animation-is-slow-for-high-hp)
 - [HP bar animation off-by-one error for low HP](#hp-bar-animation-off-by-one-error-for-low-hp)
 - [Experience underflow for level 1 Pokémon with Medium-Slow growth rate](#experience-underflow-for-level-1-pokémon-with-medium-slow-growth-rate)
@@ -63,6 +69,7 @@ Some fixes are mentioned as breaking compatibility with link battles. This can b
 - [Swimming NPCs aren't limited by their movement radius](#swimming-npcs-arent-limited-by-their-movement-radius)
 - [`CheckOwnMon` only checks the first five letters of OT names](#checkownmon-only-checks-the-first-five-letters-of-ot-names)
 - [Catching a Transformed Pokémon always catches a Ditto](#catching-a-transformed-pokémon-always-catches-a-ditto)
+- [If your party and current PC box are full during the Dude's catching tutorial, his Poké Ball can't be used and may crash the game](#if-your-party-and-current-pc-box-are-full-during-the-dudes-catching-tutorial-his-poké-ball-cant-be-used-and-may-crash-the-game)
 - [Using a Park Ball in normal battles has a corrupt animation](#using-a-park-ball-in-normal-battles-has-a-corrupt-animation)
 - [`HELD_CATCH_CHANCE` has no effect](#held_catch_chance-has-no-effect)
 - [Only the first three evolution entries can have Stone compatibility reported correctly](#only-the-first-three-evolution-entries-can-have-stone-compatibility-reported-correctly)
@@ -71,8 +78,57 @@ Some fixes are mentioned as breaking compatibility with link battles. This can b
 - [`LoadSpriteGFX` does not limit the capacity of `UsedSprites`](#loadspritegfx-does-not-limit-the-capacity-of-usedsprites)
 - [`ChooseWildEncounter` doesn't really validate the wild Pokémon species](#choosewildencounter-doesnt-really-validate-the-wild-pokémon-species)
 - [`TryObjectEvent` arbitrary code execution](#tryobjectevent-arbitrary-code-execution)
+- [`ReadObjectEvents` overflows into `wObjectMasks`](#readobjectevents-overflows-into-wobjectmasks)
 - [`ClearWRAM` only clears WRAM bank 1](#clearwram-only-clears-wram-bank-1)
 - [`BattleAnimCmd_ClearObjs` only clears the first 6⅔ objects](#battleanimcmd_clearobjs-only-clears-the-first-6-objects)
+
+
+## Perish Song and Spikes can leave a Pokémon with 0 HP and not faint
+
+*Fixing this bug will break compatibility with standard Pokémon Crystal for link battles.*
+
+([Video](https://www.youtube.com/watch?v=1IiPWw5fMf8&t=85))
+
+**Fix:** Edit `CheckFaint_PlayerThenEnemy` and `CheckFaint_EnemyThenPlayer` in [engine/battle/core.asm](https://github.com/pret/pokecrystal/blob/master/engine/battle/core.asm):
+
+```diff
+ 	jp HandleEncore
+
++HasAnyoneFainted:
++	call HasPlayerFainted
++	jp nz, HasEnemyFainted
++	ret
++
+ CheckFaint_PlayerThenEnemy:
++.faint_loop
++	call .Function
++	ret c
++	call HasAnyoneFainted
++	ret nz
++	jr .faint_loop
++
++.Function:
+ 	call HasPlayerFainted
+ 	jr nz, .PlayerNotFainted
+ 	call HandlePlayerMonFaint
+ 	...
+```
+
+```diff
+ CheckFaint_EnemyThenPlayer:
++.faint_loop
++	call .Function
++	ret c
++	call HasAnyoneFainted
++	ret nz
++	jr .faint_loop
++
++.Function:
+ 	call HasEnemyFainted
+ 	jr nz, .EnemyNotFainted
+ 	call HandleEnemyMonFaint
+ 	...
+```
 
 
 ## Thick Club and Light Ball can make (Special) Attack wrap around above 1024
@@ -271,6 +327,39 @@ As Pryce's dialog ("That BADGE will raise the SPECIAL stats of POKéMON.") impli
 ```
 
 
+## Berserk Gene's confusion lasts for 256 turns or the previous Pokémon's confusion count
+
+*Fixing this bug will break compatibility with standard Pokémon Crystal for link battles.*
+
+([Video](https://youtube.com/watch?v=Pru3mohq20A))
+
+**Fix:** Edit `HandleBerserkGene` in [engine/battle/core.asm](https://github.com/pret/pokecrystal/blob/master/engine/battle/core.asm):
+
+```diff
+ HandleBerserkGene:
+ 	...
+ 	ld a, BATTLE_VARS_SUBSTATUS3
+ 	call GetBattleVarAddr
+ 	push af
+ 	set SUBSTATUS_CONFUSED, [hl]
++	ldh a, [hBattleTurn]
++	and a
++	ld hl, wEnemyConfuseCount
++	jr z, .set_confuse_count
++	ld hl, wPlayerConfuseCount
++.set_confuse_count
++	call BattleRandom
++	and %11
++	add 2
++	ld [hl], a
+ 	ld a, BATTLE_VARS_MOVE_ANIM
+ 	call GetBattleVarAddr
+ 	...
+```
+
+This makes the Berserk Gene use the regular confusion duration (2-5 turns).
+
+
 ## Confusion damage is affected by type-boosting items and Explosion/Self-Destruct doubling
 
 *Fixing this bug will break compatibility with standard Pokémon Crystal for link battles.*
@@ -279,11 +368,15 @@ As Pryce's dialog ("That BADGE will raise the SPECIAL stats of POKéMON.") impli
 
 **Fix:**
 
-First, edit [hram.asm](https://github.com/pret/pokecrystal/blob/master/hram.asm):
+First, edit [wram.asm](https://github.com/pret/pokecrystal/blob/master/wram.asm):
 
 ```diff
- hClockResetTrigger:: db ; ffeb
-+hIsConfusionDamage:: db ; ffec
+ wTurnEnded:: db
+
+-	ds 1
++wIsConfusionDamage:: db
+
+ wPlayerStats::
 ```
 
 Then edit four routines in [engine/battle/effect_commands.asm](https://github.com/pret/pokecrystal/blob/master/engine/battle/effect_commands.asm):
@@ -296,7 +389,7 @@ Then edit four routines in [engine/battle/effect_commands.asm](https://github.co
  	pop af
  	ld e, a
 +	ld a, TRUE
-+	ldh [hIsConfusionDamage], a
++	ld [wIsConfusionDamage], a
  	ret
 ```
 
@@ -306,7 +399,7 @@ Then edit four routines in [engine/battle/effect_commands.asm](https://github.co
  	...
  .skip_zero_damage_check
 +	xor a ; Not confusion damage
-+	ldh [hIsConfusionDamage], a
++	ld [wIsConfusionDamage], a
 +	; fallthrough
 +
 +ConfusionDamageCalc:
@@ -322,7 +415,7 @@ Then edit four routines in [engine/battle/effect_commands.asm](https://github.co
  ; Item boosts
 +
 +; Item boosts don't apply to confusion damage
-+	ldh a, [hIsConfusionDamage]
++	ld a, [wIsConfusionDamage]
 +	and a
 +	jr nz, .DoneItem
 +
@@ -358,6 +451,109 @@ Then edit four routines in [engine/battle/effect_commands.asm](https://github.co
 -	call BattleCommand_DamageCalc
 +	call ConfusionDamageCalc
  	call BattleCommand_LowerSub
+```
+
+
+## Saves corrupted by mid-save shutoff are not handled
+
+([Video 1](https://www.youtube.com/watch?v=ukqtK0l6bu0), [Video 2](https://www.youtube.com/watch?v=c2zHd1BPtvc))
+
+**Fix:** Edit `MoveMonWOMail_InsertMon_SaveGame` and `_SaveGameData` in [engine/menus/save.asm](https://github.com/pret/pokecrystal/blob/master/engine/menus/save.asm):
+
+```diff
+ MoveMonWOMail_InsertMon_SaveGame:
+ 	...
+ 	ld a, TRUE
+ 	ld [wSaveFileExists], a
+ 	farcall StageRTCTimeForSave
+ 	farcall BackupMysteryGift
+-	call ValidateSave
++	call InvalidateSave
+ 	call SaveOptions
+ 	call SavePlayerData
+ 	call SavePokemonData
+ 	call SaveChecksum
+-	call ValidateBackupSave
++	call ValidateSave
++	call InvalidateBackupSave
+ 	call SaveBackupOptions
+ 	call SaveBackupPlayerData
+ 	call SaveBackupPokemonData
+ 	call SaveBackupChecksum
++	call ValidateBackupSave
+ 	farcall BackupPartyMonMail
+ 	farcall BackupMobileEventIndex
+ 	farcall SaveRTC
+ 	...
+```
+
+```diff
+ _SaveGameData:
+ 	...
+ 	ld a, TRUE
+ 	ld [wSaveFileExists], a
+ 	farcall StageRTCTimeForSave
+ 	farcall BackupMysteryGift
+-	call ValidateSave
++	call InvalidateSave
+ 	call SaveOptions
+ 	call SavePlayerData
+ 	call SavePokemonData
+ 	call SaveBox
+ 	call SaveChecksum
+-	call ValidateBackupSave
++	call ValidateSave
++	call InvalidateBackupSave
+ 	call SaveBackupOptions
+ 	call SaveBackupPlayerData
+ 	call SaveBackupPokemonData
+ 	call SaveBackupChecksum
++	call ValidateBackupSave
+ 	call UpdateStackTop
+ 	farcall BackupPartyMonMail
+ 	farcall BackupMobileEventIndex
+ 	farcall SaveRTC
+ 	...
+```
+
+Then create two new routines, `InvalidateSave` and `InvalidateBackupSave`:
+
+```diff
+ ValidateSave:
+ 	ld a, BANK(sCheckValue1) ; aka BANK(sCheckValue2)
+ 	call OpenSRAM
+ 	ld a, SAVE_CHECK_VALUE_1
+ 	ld [sCheckValue1], a
+ 	ld a, SAVE_CHECK_VALUE_2
+ 	ld [sCheckValue2], a
+ 	jp CloseSRAM
+
++InvalidateSave:
++	ld a, BANK(sCheckValue1) ; aka BANK(sCheckValue2)
++	call OpenSRAM
++	xor a
++	ld [sCheckValue1], a
++	ld [sCheckValue2], a
++	jp CloseSRAM
+```
+
+```diff
+ ValidateBackupSave:
+ 	ld a, BANK(sBackupCheckValue1) ; aka BANK(sBackupCheckValue2)
+ 	call OpenSRAM
+ 	ld a, SAVE_CHECK_VALUE_1
+ 	ld [sBackupCheckValue1], a
+ 	ld a, SAVE_CHECK_VALUE_2
+ 	ld [sBackupCheckValue2], a
+ 	jp CloseSRAM
+
++InvalidateBackupSave:
++	ld a, BANK(sBackupCheckValue1) ; aka BANK(sBackupCheckValue2)
++	call OpenSRAM
++	xor a
++	ld [sBackupCheckValue1], a
++	ld [sBackupCheckValue2], a
++	jp CloseSRAM
 ```
 
 
@@ -496,6 +692,25 @@ This bug affects Attract, Curse, Foresight, Mean Look, Mimic, Nightmare, Spider 
 -	and 1 << SUBSTATUS_FLYING | 1 << SUBSTATUS_UNDERGROUND
 +	xor a
  	ret
+```
+
+
+## Wild Pokémon can always Teleport regardless of level difference
+
+**Fix:** Edit `BattleCommand_Teleport` in [engine/battle/move_effects/teleport.asm](https://github.com/pret/pokecrystal/blob/master/engine/battle/move_effects/teleport.asm):
+
+```diff
+ .loop_enemy
+ 	call BattleRandom
+ 	cp c
+ 	jr nc, .loop_enemy
+ 	srl b
+ 	srl b
+ 	cp b
+-	; This should be jr c, .failed
+-	; As written, it makes enemy use of Teleport always succeed if able
+-	jr nc, .run_away
++	jr c, .failed
 ```
 
 
@@ -644,6 +859,23 @@ This bug existed for all battles in Gold and Silver, and was only fixed for sing
 ```
 
 
+## A Transformed Pokémon can use Sketch and learn otherwise unobtainable moves
+
+([Video](https://www.youtube.com/watch?v=AFiBxAOkCGI))
+
+**Fix:** Edit `BattleCommand_Sketch` in [engine/battle/move_effects/sketch.asm](https://github.com/pret/pokecrystal/blob/master/engine/battle/move_effects/sketch.asm):
+
+```diff
+-; If the opponent is transformed, fail.
++; If the user is transformed, fail.
+-	ld a, BATTLE_VARS_SUBSTATUS5_OPP
++	ld a, BATTLE_VARS_SUBSTATUS5
+ 	call GetBattleVarAddr
+ 	bit SUBSTATUS_TRANSFORMED, [hl]
+ 	jp nz, .fail
+```
+
+
 ## "Smart" AI encourages Mean Look if its own Pokémon is badly poisoned
 
 ([Video](https://www.youtube.com/watch?v=cygMO-zHTls))
@@ -670,8 +902,10 @@ This bug existed for all battles in Gold and Silver, and was only fixed for sing
  	ld hl, wEnemyMonType1
  	ldh a, [hBattleTurn]
  	and a
- 	jr z, CheckTypeMatchup
+-	jr z, CheckTypeMatchup
++	jr z, .get_type
  	ld hl, wBattleMonType1
++.get_type
 +	ld a, BATTLE_VARS_MOVE_TYPE
 +	call GetBattleVar ; preserves hl, de, and bc
  CheckTypeMatchup:
@@ -706,12 +940,67 @@ This bug existed for all battles in Gold and Silver, and was only fixed for sing
  	xor a
  	ld [hl], a
  	ld [wEnemyMonStatus], a
--	; Bug: this should reset SUBSTATUS_NIGHTMARE too
--	; Uncomment the lines below to fix
+-	; Bug: this should reset SUBSTATUS_NIGHTMARE
+-	; Uncomment the 2 lines below to fix
 -	; ld hl, wEnemySubStatus1
 -	; res SUBSTATUS_NIGHTMARE, [hl]
 +	ld hl, wEnemySubStatus1
 +	res SUBSTATUS_NIGHTMARE, [hl]
+	; Bug: this should reset SUBSTATUS_CONFUSED
+	; Uncomment the 2 lines below to fix
+	; ld hl, wEnemySubStatus3
+	; res SUBSTATUS_CONFUSED, [hl]
+ 	ld hl, wEnemySubStatus5
+ 	res SUBSTATUS_TOXIC, [hl]
+ 	ret
+```
+
+
+## NPC use of Full Heal does not cure confusion status
+
+**Fix:** Edit `EnemyUsedFullRestore`, `EnemyUsedFullHeal`, and `AI_HealStatus` in [engine/battle/ai/items.asm](https://github.com/pret/pokecrystal/blob/master/engine/battle/ai/items.asm):
+
+```diff
+ EnemyUsedFullRestore:
+ 	call AI_HealStatus
+ 	ld a, FULL_RESTORE
+ 	ld [wCurEnemyItem], a
+-	ld hl, wEnemySubStatus3
+-	res SUBSTATUS_CONFUSED, [hl]
+ 	xor a
+ 	ld [wEnemyConfuseCount], a
+```
+
+```diff
+ EnemyUsedFullHeal:
+ 	call AIUsedItemSound
+ 	call AI_HealStatus
+ 	ld a, FULL_HEAL
++	ld [wCurEnemyItem], a
++	xor a
++	ld [wEnemyConfuseCount], a
+ 	jp PrintText_UsedItemOn_AND_AIUpdateHUD
+```
+
+```diff
+ AI_HealStatus:
+ 	ld a, [wCurOTMon]
+ 	ld hl, wOTPartyMon1Status
+ 	ld bc, PARTYMON_STRUCT_LENGTH
+ 	call AddNTimes
+ 	xor a
+ 	ld [hl], a
+ 	ld [wEnemyMonStatus], a
+	; Bug: this should reset SUBSTATUS_NIGHTMARE
+	; Uncomment the 2 lines below to fix
+	; ld hl, wEnemySubStatus1
+	; res SUBSTATUS_NIGHTMARE, [hl]
+-	; Bug: this should reset SUBSTATUS_CONFUSED
+-	; Uncomment the 2 lines below to fix
+-	; ld hl, wEnemySubStatus3
+-	; res SUBSTATUS_CONFUSED, [hl]
++	ld hl, wEnemySubStatus3
++	res SUBSTATUS_CONFUSED, [hl]
  	ld hl, wEnemySubStatus5
  	res SUBSTATUS_TOXIC, [hl]
  	ret
@@ -809,10 +1098,10 @@ This can bring Pokémon straight from level 1 to 100 by gaining just a few exper
 
 ([Video](https://www.youtube.com/watch?v=o54VjpAEoO8))
 
-**Fix:** Edit `_ABoostedStringBuffer2ExpPointsText` and `_StringBuffer2ExpPointsText` in [data/text/common_2.asm](https://github.com/pret/pokecrystal/blob/master/data/text/common_2.asm):
+**Fix:** Edit `_BoostedExpPointsText` and `_ExpPointsText` in [data/text/common_2.asm](https://github.com/pret/pokecrystal/blob/master/data/text/common_2.asm):
 
 ```diff
- _ABoostedStringBuffer2ExpPointsText::
+ _BoostedExpPointsText::
  	text_start
  	line "a boosted"
  	cont "@"
@@ -821,7 +1110,7 @@ This can bring Pokémon straight from level 1 to 100 by gaining just a few exper
  	text " EXP. Points!"
  	prompt
 
- _StringBuffer2ExpPointsText::
+ _ExpPointsText::
  	text_start
  	line "@"
 -	text_decimal wStringBuffer2, 2, 4
@@ -1065,7 +1354,7 @@ CopyPokemonName_Buffer1_Buffer3:
  	jr nc, .GenerateDVs
 ```
 
-**Better fix:** Rewrite the whole system to use millimeters instead of feet and inches, since they have better precision (1 in = 25.4 mm); and only convert from metric to imperial units for display purposes (or don't, of course). 
+**Better fix:** Rewrite the whole system to use millimeters instead of feet and inches, since they have better precision (1 in = 25.4 mm); and only convert from metric to imperial units for display purposes (or don't, of course).
 
 
 ## Magikarp lengths can be miscalculated
@@ -1262,7 +1551,7 @@ Finally, edit [engine/battle/read_trainer_party.asm](https://github.com/pret/pok
 
 ([Video](https://www.youtube.com/watch?v=ojq3xqfRF6I))
 
-**Fix:** Edit `Slots_PayoutAnim` in [engine/games/slot_machine.asm](https://github.com/pret/pokecrystal/blob/master/engine/games/slot_machine.asm):
+**Fix:** Edit `SlotsAction_PayoutAnim` in [engine/games/slot_machine.asm](https://github.com/pret/pokecrystal/blob/master/engine/games/slot_machine.asm):
 
 ```diff
  .okay
@@ -1412,7 +1701,7 @@ If you want to make sure `hInMenu` always has a defined value in the move select
  	...
 
  	jp .loop
- 
+
  .quit
 +	pop af
 +	ldh [hInMenu], a
@@ -1471,13 +1760,13 @@ First, edit `UsedSurfScript` in [engine/events/overworld.asm](https://github.com
  	writetext UsedSurfText ; "used SURF!"
  	waitbutton
  	closetext
- 
+
  	callasm .empty_fn ; empty function
- 
+
  	readmem wBuffer2
  	writevar VAR_MOVEMENT
- 
- 	special ReplaceKrisSprite
+
+ 	special UpdatePlayerSprite
  	special PlayMapMusic
 -; step into the water (slow_step DIR, step_end)
  	special SurfStartStep
@@ -1554,8 +1843,8 @@ This bug can allow you to talk to Eusine in Celadon City and encounter Ho-Oh wit
 
  	ld hl, wPlayerName
 
--rept NAME_LENGTH_JAPANESE + -2 ; should be PLAYER_NAME_LENGTH + -2
-+rept PLAYER_NAME_LENGTH + -2
+-rept NAME_LENGTH_JAPANESE - 2 ; should be PLAYER_NAME_LENGTH - 2
++rept PLAYER_NAME_LENGTH - 2
  	ld a, [de]
  	cp [hl]
  	jr nz, .notfound
@@ -1613,6 +1902,33 @@ This bug can affect Mew or Pokémon other than Ditto that used Transform via Mir
 
  	pop af
  	ld [wEnemySubStatus5], a
+```
+
+
+## If your party and current PC box are full during the Dude's catching tutorial, his Poké Ball can't be used and may crash the game
+([Video](https://www.youtube.com/watch?v=A8zaTOkjKS4&t=407))
+
+**Fix:** Edit `PokeBallEffect` in [engine/items/item_effects.asm](https://github.com/pret/pokecrystal/blob/master/engine/items/item_effects.asm):
+
+```diff
+     ld a, [wBattleMode]
+     dec a
+     jp nz, UseBallInTrainerBattle
+ 
++    ld a, [wBattleType]
++    cp BATTLETYPE_TUTORIAL
++    jr z, .room_in_party
++
+     ld a, [wPartyCount]
+     cp PARTY_LENGTH
+     jr nz, .room_in_party
+ 
+     ld a, BANK(sBoxCount)
+     call OpenSRAM
+     ld a, [sBoxCount]
+     cp MONS_PER_BOX
+     call CloseSRAM
+     jp z, Ball_BoxIsFullMessage
 ```
 
 
@@ -1813,8 +2129,9 @@ This supports up to six entries.
  	ld de, 3
  	ld hl, .pointers
  	call IsInArray
- 	jr nc, .nope
+- 	jr nc, .nope
  	pop bc
++	jr nc, .nope
 
  	inc hl
  	ld a, [hli]
@@ -1824,9 +2141,41 @@ This supports up to six entries.
 
  .nope
 -	; pop bc
-+	pop bc
  	xor a
  	ret
+```
+
+
+## `ReadObjectEvents` overflows into `wObjectMasks`
+
+**Fix:** Edit `ReadObjectEvents` in [home/map.asm](https://github.com/pret/pokecrystal/blob/master/home/map.asm):
+
+```diff
+-; get NUM_OBJECTS - [wCurMapObjectEventCount]
++; get NUM_OBJECTS - [wCurMapObjectEventCount] - 1
+ 	ld a, [wCurMapObjectEventCount]
+ 	ld c, a
+-	ld a, NUM_OBJECTS ; - 1
++	ld a, NUM_OBJECTS - 1
+ 	sub c
+ 	jr z, .skip
+-	; jr c, .skip
++	jr c, .skip
+ 
+ 	; could have done "inc hl" instead
+ 	ld bc, 1
+ 	add hl, bc
+-; Fill the remaining sprite IDs and y coords with 0 and -1, respectively.
+-; Bleeds into wObjectMasks due to a bug.  Uncomment the above code to fix.
+ 	ld bc, MAPOBJECT_LENGTH
+ .loop
+ 	ld [hl],  0
+ 	inc hl
+ 	ld [hl], -1
+ 	dec hl
+ 	add hl, bc
+ 	dec a
+ 	jr nz, .loop
 ```
 
 

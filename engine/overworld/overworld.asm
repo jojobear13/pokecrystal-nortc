@@ -6,7 +6,7 @@ GetEmote2bpp:
 	ldh [rVBK], a
 	ret
 
-_ReplaceKrisSprite::
+_UpdatePlayerSprite::
 	call GetPlayerSprite
 	ld a, [wUsedSprites]
 	ldh [hUsedSpriteIndex], a
@@ -15,7 +15,7 @@ _ReplaceKrisSprite::
 	call GetUsedSprite
 	ret
 
-Function14146: ; mobile
+_RefreshSprites: ; mobile
 	ld hl, wSpriteFlags
 	ld a, [hl]
 	push af
@@ -26,7 +26,7 @@ Function14146: ; mobile
 	ld [wSpriteFlags], a
 	ret
 
-Function14157: ; mobile
+_ClearSprites: ; mobile
 	ld hl, wSpriteFlags
 	ld a, [hl]
 	push af
@@ -109,7 +109,7 @@ AddIndoorSprites:
 	push af
 	ld a, [hl]
 	call AddSpriteGFX
-	ld de, OBJECT_LENGTH
+	ld de, MAPOBJECT_LENGTH
 	add hl, de
 	pop af
 	inc a
@@ -142,10 +142,10 @@ LoadUsedSpritesGFX:
 	ld a, MAPCALLBACK_SPRITES
 	call RunMapCallback
 	call GetUsedSprites
-	call .LoadMiscTiles
+	call LoadMiscTiles
 	ret
 
-.LoadMiscTiles:
+LoadMiscTiles:
 	ld a, [wSpriteFlags]
 	bit 6, a
 	ret nz
@@ -234,7 +234,7 @@ GetMonSprite:
 
 	farcall LoadOverworldMonIcon
 
-	ld l, 1
+	ld l, WALKING_SPRITE
 	ld h, 0
 	scf
 	ret
@@ -250,8 +250,8 @@ GetMonSprite:
 	jp nz, GetMonSprite
 
 .NoBreedmon:
-	ld a, 1
-	ld l, 1
+	ld a, WALKING_SPRITE
+	ld l, WALKING_SPRITE
 	ld h, 0
 	and a
 	ret

@@ -40,7 +40,7 @@ AzaleaGymBugsyScript:
 	setevent EVENT_BEAT_BUG_CATCHER_AL
 	setevent EVENT_BEAT_BUG_CATCHER_JOSH
 	writetext BugsyText_HiveBadgeSpeech
-	buttonsound
+	promptbutton
 	verbosegiveitem TM_FURY_CUTTER
 	iffalse .NoRoomForFuryCutter
 	setevent EVENT_GOT_TM49_FURY_CUTTER
@@ -62,10 +62,10 @@ AzaleaGymActivateRockets:
 	end
 
 .GoldenrodRockets:
-	jumpstd goldenrodrockets
+	jumpstd GoldenrodRocketsScript
 
 .RadioTowerRockets:
-	jumpstd radiotowerrockets
+	jumpstd RadioTowerRocketsScript
 
 TrainerTwinsAmyandmay1:
 	trainer TWINS, AMYANDMAY1, EVENT_BEAT_TWINS_AMY_AND_MAY, TwinsAmyandmay1SeenText, TwinsAmyandmay1BeatenText, 0, .AfterScript
@@ -142,10 +142,10 @@ AzaleaGymGuyScript:
 AzaleaGymStatue:
 	checkflag ENGINE_HIVEBADGE
 	iftrue .Beaten
-	jumpstd gymstatue1
+	jumpstd GymStatue1Script
 .Beaten:
 	gettrainername STRING_BUFFER_4, BUGSY, BUGSY1
-	jumpstd gymstatue2
+	jumpstd GymStatue2Script
 
 BugsyText_INeverLose:
 	text "I'm BUGSY!"

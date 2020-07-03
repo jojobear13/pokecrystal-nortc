@@ -139,7 +139,7 @@ BillsPC_DepositMenu:
 	and a
 	ret
 
-Unreferenced_Functione512:
+Functione512: ; unreferenced
 	ld a, [wPartyCount]
 	and a
 	jr z, .no_mon
@@ -206,14 +206,14 @@ BillsPC_WithdrawMenu:
 	and a
 	ret
 
-Unreferenced_Functione56d:
+Functione56d: ; unreferenced
 	ld a, [wPartyCount]
 	cp PARTY_LENGTH
-	jr nc, .asm_e576
+	jr nc, .party_full
 	and a
 	ret
 
-.asm_e576
+.party_full
 	ld hl, PCCantTakeText
 	call MenuTextboxBackup
 	scf
@@ -256,12 +256,12 @@ CopyBoxmonToTempMon:
 	ld de, wTempMonSpecies
 	ld bc, BOXMON_STRUCT_LENGTH
 	ld a, BANK(sBoxMon1Species)
-	call GetSRAMBank
+	call OpenSRAM
 	call CopyBytes
 	call CloseSRAM
 	ret
 
-Unreferenced_Functione5d9:
+LoadBoxMonListing: ; unreferenced
 	ld a, [wCurBox]
 	cp b
 	jr z, .same_box
@@ -282,13 +282,13 @@ Unreferenced_Functione5d9:
 	ld hl, sBoxCount
 
 .okay
-	call GetSRAMBank
+	call OpenSRAM
 	ld a, [hl]
-	ld bc, 1 + MONS_PER_BOX + 1
+	ld bc, sBoxMons - sBox
 	add hl, bc
 	ld b, a
 	ld c, $0
-	ld de, wc608
+	ld de, wBoxPartialData
 	ld a, b
 	and a
 	jr z, .empty_box
@@ -296,7 +296,7 @@ Unreferenced_Functione5d9:
 	push hl
 	push bc
 	ld a, c
-	ld bc, 0
+	ld bc, sBoxMon1Species - sBoxMons
 	add hl, bc
 	ld bc, BOXMON_STRUCT_LENGTH
 	call AddNTimes
@@ -311,7 +311,7 @@ Unreferenced_Functione5d9:
 	push hl
 	push bc
 	ld a, c
-	ld bc, MONS_PER_BOX * (BOXMON_STRUCT_LENGTH + NAME_LENGTH)
+	ld bc, sBoxMonNicknames - sBoxMons
 	add hl, bc
 	call SkipNames
 	call CopyBytes

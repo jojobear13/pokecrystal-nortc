@@ -2,7 +2,7 @@
 	const MOUNTMORTARB1F_POKE_BALL1
 	const MOUNTMORTARB1F_POKE_BALL2
 	const MOUNTMORTARB1F_BOULDER
-	const MOUNTMORTARB1F_BLACK_BELT
+	const MOUNTMORTARB1F_KIYO
 	const MOUNTMORTARB1F_POKE_BALL3
 	const MOUNTMORTARB1F_POKE_BALL4
 	const MOUNTMORTARB1F_POKE_BALL5
@@ -30,7 +30,7 @@ MountMortarB1FKiyoScript:
 	opentext
 .BeatKiyo:
 	writetext MountMortarB1FTyrogueRewardText
-	buttonsound
+	promptbutton
 	waitsfx
 	readvar VAR_PARTYCOUNT
 	ifequal PARTY_LENGTH, .NoRoom
@@ -52,7 +52,7 @@ MountMortarB1FKiyoScript:
 	end
 
 MountMortarB1FBoulder:
-	jumpstd strengthboulder
+	jumpstd StrengthBoulderScript
 
 MountMortarB1FHyperPotion:
 	itemball HYPER_POTION

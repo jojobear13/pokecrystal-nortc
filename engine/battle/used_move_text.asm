@@ -5,9 +5,9 @@ DisplayUsedMoveText:
 	jp WaitBGMap
 
 UsedMoveText:
-; this is a stream of text and asm from 105db9 to 105ef6
 	text_far _ActorNameText
 	text_asm
+
 	ldh a, [hBattleTurn]
 	and a
 	jr nz, .start
@@ -41,7 +41,7 @@ UsedMoveText:
 .grammar
 	call GetMoveGrammar ; convert move id to grammar index
 
-; everything except 'instead' made redundant in localization
+; everything except 'CheckObedience' made redundant in localization
 
 	; check obedience
 	ld a, [wAlreadyDisobeyed]

@@ -1,6 +1,6 @@
 ParryPhoneCalleeScript:
 	gettrainername STRING_BUFFER_3, HIKER, PARRY1
-	checkflag ENGINE_PARRY
+	checkflag ENGINE_PARRY_READY_FOR_REMATCH
 	iftrue .WantsBattle
 	farscall PhoneScript_AnswerPhone_Male
 	checkflag ENGINE_PARRY_FRIDAY_AFTERNOON
@@ -14,13 +14,13 @@ ParryPhoneCalleeScript:
 	farsjump ParryBattleWithMeScript
 
 .WantsBattle:
-	getlandmarkname STRING_BUFFER_5, ROUTE_45
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_45
 	farsjump ParryHaventYouGottenToScript
 
 ParryPhoneCallerScript:
 	gettrainername STRING_BUFFER_3, HIKER, PARRY1
 	farscall PhoneScript_GreetPhone_Male
-	checkflag ENGINE_PARRY
+	checkflag ENGINE_PARRY_READY_FOR_REMATCH
 	iftrue .GenericCall
 	checkflag ENGINE_PARRY_FRIDAY_AFTERNOON
 	iftrue .GenericCall
@@ -35,6 +35,6 @@ ParryFridayDay:
 	setflag ENGINE_PARRY_FRIDAY_AFTERNOON
 
 ParryWantsBattle:
-	getlandmarkname STRING_BUFFER_5, ROUTE_45
-	setflag ENGINE_PARRY
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_45
+	setflag ENGINE_PARRY_READY_FOR_REMATCH
 	farsjump PhoneScript_WantsToBattle_Male

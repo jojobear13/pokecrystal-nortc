@@ -65,7 +65,7 @@ BlackthornGymClairScript:
 	checkevent EVENT_GOT_TM24_DRAGONBREATH
 	iftrue .GotTM24
 	writetext BlackthornGymClairText_YouKeptMeWaiting
-	buttonsound
+	promptbutton
 	giveitem TM_DRAGONBREATH
 	iffalse .BagFull
 	getitemname STRING_BUFFER_3, TM_DRAGONBREATH
@@ -75,7 +75,7 @@ BlackthornGymClairScript:
 	itemnotify
 	setevent EVENT_GOT_TM24_DRAGONBREATH
 	writetext BlackthornGymClairText_DescribeTM24
-	buttonsound
+	promptbutton
 	sjump .GotTM24
 
 .BagFull:
@@ -142,10 +142,10 @@ BlackthornGymGuyScript:
 BlackthornGymStatue:
 	checkflag ENGINE_RISINGBADGE
 	iftrue .Beaten
-	jumpstd gymstatue1
+	jumpstd GymStatue1Script
 .Beaten:
 	gettrainername STRING_BUFFER_4, CLAIR, CLAIR1
-	jumpstd gymstatue2
+	jumpstd GymStatue2Script
 
 ClairIntroText:
 	text "I am CLAIR."

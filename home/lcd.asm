@@ -1,6 +1,6 @@
 ; LCD handling
 
-Unreferenced_Function547::
+Function547:: ; unreferenced
 	ldh a, [hLCDCPointer]
 	cp LOW(rSCX)
 	ret nz
@@ -15,7 +15,7 @@ LCD::
 	and a
 	jr z, .done
 
-; At this point it's assumed we're in WRAM bank 5!
+; At this point it's assumed we're in BANK(wLYOverrides)!
 	push bc
 	ldh a, [rLY]
 	ld c, a

@@ -1,9 +1,9 @@
 ; PrintDayCareText.TextTable indexes
 	const_def
 	const DAYCARETEXT_MAN_INTRO
-	const DAYCARETEXT_MAN_EGG
+	const DAYCARETEXT_MAN_ODD_EGG
 	const DAYCARETEXT_LADY_INTRO
-	const DAYCARETEXT_LADY_EGG
+	const DAYCARETEXT_LADY_ODD_EGG
 	const DAYCARETEXT_WHICH_ONE
 	const DAYCARETEXT_DEPOSIT
 	const DAYCARETEXT_CANT_BREED_EGG
@@ -480,7 +480,7 @@ DayCare_GiveEgg:
 	ld bc, PARTYMON_STRUCT_LENGTH
 	call DayCare_GetCurrentPartyMember
 	ld hl, wEggMon
-	ld bc, wEggMonEnd - wEggMon
+	ld bc, BOXMON_STRUCT_LENGTH
 	call CopyBytes
 
 	call GetBaseData
@@ -548,7 +548,7 @@ DayCare_InitBreeding:
 .UselessJump:
 	xor a
 	ld hl, wEggMon
-	ld bc, wEggMonEnd - wEggMon
+	ld bc, BOXMON_STRUCT_LENGTH
 	call ByteFill
 	ld hl, wEggNick
 	ld bc, MON_NAME_LENGTH

@@ -252,7 +252,7 @@ TMHM_ShowTMMoveDescription:
 	ld a, [wTempTMHM]
 	ld [wCurSpecies], a
 	hlcoord 1, 14
-	call PrintMoveDesc
+	call PrintMoveDescription
 	jp TMHM_JoypadLoop
 
 TMHM_ChooseTMorHM:
@@ -371,7 +371,7 @@ TMHM_DisplayPocketItems:
 	ld [hl], "H"
 	inc hl
 	ld de, wTempTMHM
-	lb bc, PRINTNUM_RIGHTALIGN | 1, 2
+	lb bc, PRINTNUM_LEFTALIGN | 1, 2
 	call PrintNum
 	pop af
 	ld [wTempTMHM], a
@@ -417,7 +417,7 @@ TMHM_DisplayPocketItems:
 	inc hl
 	inc hl
 	push de
-	ld de, TMHM_String_Cancel
+	ld de, TMHM_CancelString
 	call PlaceString
 	pop de
 .done
@@ -436,7 +436,7 @@ TMHMPocket_GetCurrentLineCoord:
 	jr nz, .loop
 	ret
 
-Unreferenced_Function2ca95:
+Function2ca95: ; unreferenced
 	pop hl
 	ld bc, 3
 	add hl, bc
@@ -449,7 +449,7 @@ Unreferenced_Function2ca95:
 	pop hl
 	ret
 
-TMHM_String_Cancel:
+TMHM_CancelString:
 	db "CANCEL@"
 
 TMHM_GetCurrentPocketPosition:
@@ -472,7 +472,7 @@ TMHM_GetCurrentPocketPosition:
 Tutorial_TMHMPocket:
 	hlcoord 9, 3
 	push de
-	ld de, TMHM_String_Cancel
+	ld de, TMHM_CancelString
 	call PlaceString
 	pop de
 	ret
@@ -484,7 +484,7 @@ TMHM_PlaySFX_ReadText2:
 	pop de
 	ret
 
-Unreferenced_Function2cadf:
+Function2cadf: ; unreferenced
 	call ConvertCurItemIntoCurTMHM
 	call .CheckHaveRoomForTMHM
 	ld hl, .NoRoomTMHMText

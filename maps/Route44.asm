@@ -23,14 +23,14 @@ TrainerBirdKeeperVance1:
 	loadvar VAR_CALLERID, PHONE_BIRDKEEPER_VANCE
 	endifjustbattled
 	opentext
-	checkflag ENGINE_VANCE
+	checkflag ENGINE_VANCE_READY_FOR_REMATCH
 	iftrue .WantsBattle
 	checkcellnum PHONE_BIRDKEEPER_VANCE
 	iftrue Route44NumberAcceptedM
 	checkevent EVENT_VANCE_ASKED_FOR_PHONE_NUMBER
 	iftrue .AskedAlready
 	writetext BirdKeeperVanceLegendaryBirdsText
-	buttonsound
+	promptbutton
 	setevent EVENT_VANCE_ASKED_FOR_PHONE_NUMBER
 	scall Route44AskNumber1M
 	sjump .AskForNumber
@@ -63,7 +63,7 @@ TrainerBirdKeeperVance1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wVanceFightCount, 1
-	clearflag ENGINE_VANCE
+	clearflag ENGINE_VANCE_READY_FOR_REMATCH
 	end
 
 .LoadFight1:
@@ -71,14 +71,14 @@ TrainerBirdKeeperVance1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wVanceFightCount, 2
-	clearflag ENGINE_VANCE
+	clearflag ENGINE_VANCE_READY_FOR_REMATCH
 	end
 
 .LoadFight2:
 	loadtrainer BIRD_KEEPER, VANCE3
 	startbattle
 	reloadmapafterbattle
-	clearflag ENGINE_VANCE
+	clearflag ENGINE_VANCE_READY_FOR_REMATCH
 	checkevent EVENT_VANCE_CARBOS
 	iftrue .Carbos
 	checkevent EVENT_GOT_CARBOS_FROM_VANCE
@@ -103,48 +103,48 @@ TrainerBirdKeeperVance1:
 	sjump Route44NumberAcceptedM
 
 Route44AskNumber1M:
-	jumpstd asknumber1m
+	jumpstd AskNumber1MScript
 	end
 
 Route44AskNumber2M:
-	jumpstd asknumber2m
+	jumpstd AskNumber2MScript
 	end
 
 Route44RegisteredNumberM:
-	jumpstd registerednumberm
+	jumpstd RegisteredNumberMScript
 	end
 
 Route44NumberAcceptedM:
-	jumpstd numberacceptedm
+	jumpstd NumberAcceptedMScript
 	end
 
 Route44NumberDeclinedM:
-	jumpstd numberdeclinedm
+	jumpstd NumberDeclinedMScript
 	end
 
 Route44PhoneFullM:
-	jumpstd phonefullm
+	jumpstd PhoneFullMScript
 	end
 
 Route44RematchM:
-	jumpstd rematchm
+	jumpstd RematchMScript
 	end
 
 Route44GiftM:
-	jumpstd giftm
+	jumpstd GiftMScript
 	end
 
 Route44PackFullM:
-	jumpstd packfullm
+	jumpstd PackFullMScript
 	end
 
 VancePackFull:
 	setevent EVENT_VANCE_CARBOS
-	jumpstd packfullm
+	jumpstd PackFullMScript
 	end
 
 Route44RematchGiftM:
-	jumpstd rematchgiftm
+	jumpstd RematchGiftMScript
 	end
 
 TrainerPsychicPhil:
@@ -165,7 +165,7 @@ TrainerFisherWilton1:
 	loadvar VAR_CALLERID, PHONE_FISHER_WILTON
 	endifjustbattled
 	opentext
-	checkflag ENGINE_WILTON
+	checkflag ENGINE_WILTON_READY_FOR_REMATCH
 	iftrue .WantsBattle
 	checkflag ENGINE_WILTON_HAS_ITEM
 	iftrue .HasItem
@@ -174,7 +174,7 @@ TrainerFisherWilton1:
 	checkevent EVENT_WILTON_ASKED_FOR_PHONE_NUMBER
 	iftrue .AskedAlready
 	writetext FisherWiltonHugePoliwagText
-	buttonsound
+	promptbutton
 	setevent EVENT_WILTON_ASKED_FOR_PHONE_NUMBER
 	scall Route44AskNumber1M
 	sjump .AskForNumber
@@ -207,7 +207,7 @@ TrainerFisherWilton1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wWiltonFightCount, 1
-	clearflag ENGINE_WILTON
+	clearflag ENGINE_WILTON_READY_FOR_REMATCH
 	end
 
 .LoadFight1:
@@ -215,14 +215,14 @@ TrainerFisherWilton1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wWiltonFightCount, 2
-	clearflag ENGINE_WILTON
+	clearflag ENGINE_WILTON_READY_FOR_REMATCH
 	end
 
 .LoadFight2:
 	loadtrainer FISHER, WILTON3
 	startbattle
 	reloadmapafterbattle
-	clearflag ENGINE_WILTON
+	clearflag ENGINE_WILTON_READY_FOR_REMATCH
 	end
 
 .HasItem:

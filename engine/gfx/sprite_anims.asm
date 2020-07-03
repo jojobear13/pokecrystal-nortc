@@ -38,7 +38,7 @@ DoAnimFrame:
 	dw .FlyFrom
 	dw .FlyLeaf
 	dw .FlyTo
-	dw .GSIntroHoOh
+	dw .GSIntroHoOhLugia
 	dw .EZChatCursor
 	dw .MobileTradeSentPulse
 	dw .MobileTradeOTPulse
@@ -66,7 +66,7 @@ DoAnimFrame:
 
 	ld hl, SPRITEANIMSTRUCT_YOFFSET
 	add hl, bc
-	ld [hl], $0
+	ld [hl], 0
 	ret
 
 .PartyMonSwitch
@@ -198,7 +198,7 @@ DoAnimFrame:
 	call DeinitializeSprite
 	ret
 
-.GSIntroHoOh
+.GSIntroHoOhLugia
 	ld hl, SPRITEANIMSTRUCT_0C
 	add hl, bc
 	ld a, [hl]
@@ -221,7 +221,7 @@ DoAnimFrame:
 	ret
 
 .GameFreakLogo:
-	callfar GameFreakLogoJumper
+	callfar PlaceGameFreakLogo
 	ret
 
 .GSIntroStar
@@ -269,8 +269,8 @@ DoAnimFrame:
 	ret
 
 .asm_8d3ba
-	ld a, $1
-	ld [wcf64], a
+	ld a, 1
+	ld [wIntroSceneFrameCounter], a
 	call DeinitializeSprite
 	ret
 
@@ -844,7 +844,7 @@ DoAnimFrame:
 	ret
 
 .AnonymousJumptable:
-	ld hl, sp+$0
+	ld hl, sp+0
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
@@ -853,7 +853,7 @@ DoAnimFrame:
 	ld hl, SPRITEANIMSTRUCT_JUMPTABLE_INDEX
 	add hl, bc
 	ld l, [hl]
-	ld h, $0
+	ld h, 0
 	add hl, hl
 	add hl, de
 	ld a, [hli]

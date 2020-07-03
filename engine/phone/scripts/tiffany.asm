@@ -1,6 +1,6 @@
 TiffanyPhoneCalleeScript:
 	gettrainername STRING_BUFFER_3, PICNICKER, TIFFANY3
-	checkflag ENGINE_TIFFANY
+	checkflag ENGINE_TIFFANY_READY_FOR_REMATCH
 	iftrue .WantsBattle
 	farscall PhoneScript_AnswerPhone_Female
 	checkflag ENGINE_TIFFANY_TUESDAY_AFTERNOON
@@ -16,11 +16,11 @@ TiffanyPhoneCalleeScript:
 	farsjump TiffanyNoItemScript
 
 .WantsBattle:
-	getlandmarkname STRING_BUFFER_5, ROUTE_43
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_43
 	farsjump TiffanyAsleepScript
 
 .HasItem:
-	getlandmarkname STRING_BUFFER_5, ROUTE_43
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_43
 	farsjump TiffanyHurryScript
 
 TiffanyPhoneCallerScript:
@@ -28,7 +28,7 @@ TiffanyPhoneCallerScript:
 	farscall PhoneScript_Random4
 	ifequal 0, TiffanysFamilyMembers
 	farscall PhoneScript_GreetPhone_Female
-	checkflag ENGINE_TIFFANY
+	checkflag ENGINE_TIFFANY_READY_FOR_REMATCH
 	iftrue .Generic
 	checkflag ENGINE_TIFFANY_TUESDAY_AFTERNOON
 	iftrue .Generic
@@ -52,8 +52,8 @@ TiffanyTuesdayAfternoon:
 	setflag ENGINE_TIFFANY_TUESDAY_AFTERNOON
 
 TiffanyWantsBattle:
-	getlandmarkname STRING_BUFFER_5, ROUTE_43
-	setflag ENGINE_TIFFANY
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_43
+	setflag ENGINE_TIFFANY_READY_FOR_REMATCH
 	farsjump PhoneScript_WantsToBattle_Female
 
 TiffanysFamilyMembers:
@@ -94,5 +94,5 @@ TiffanysFamilyMembers:
 
 TiffanyHasPinkBow:
 	setflag ENGINE_TIFFANY_HAS_PINK_BOW
-	getlandmarkname STRING_BUFFER_5, ROUTE_43
+	getlandmarkname STRING_BUFFER_5, LANDMARK_ROUTE_43
 	farsjump PhoneScript_FoundItem_Female

@@ -2,7 +2,9 @@
 	const PINK_PAGE  ; 1
 	const GREEN_PAGE ; 2
 	const BLUE_PAGE  ; 3
-NUM_STAT_PAGES EQU const_value + -1
+NUM_STAT_PAGES EQU const_value - 1
+
+STAT_PAGE_MASK EQU %00000011
 
 BattleStatsScreenInit:
 	ld a, [wLinkMode]
@@ -37,13 +39,13 @@ StatsScreenInit_gotaddress:
 	push bc
 	push hl
 	call ClearBGPalettes
-	call ClearTileMap
+	call ClearTilemap
 	call UpdateSprites
 	farcall StatsScreen_LoadFont
 	pop hl
 	call _hl_
 	call ClearBGPalettes
-	call ClearTileMap
+	call ClearTilemap
 	pop bc
 
 	; restore old values
@@ -60,18 +62,18 @@ StatsScreenInit_gotaddress:
 StatsScreenMain:
 	xor a
 	ld [wJumptableIndex], a
-	; stupid interns
+; ???
 	ld [wcf64], a
 	ld a, [wcf64]
-	and %11111100
-	or 1
+	and $ff ^ STAT_PAGE_MASK
+	or PINK_PAGE ; first_page
 	ld [wcf64], a
 .loop
 	ld a, [wJumptableIndex]
 	and $ff ^ (1 << 7)
 	ld hl, StatsScreenPointerTable
 	rst JumpTable
-	call StatsScreen_WaitAnim ; check for keys?
+	call StatsScreen_WaitAnim
 	ld a, [wJumptableIndex]
 	bit 7, a
 	jr z, .loop
@@ -80,16 +82,16 @@ StatsScreenMain:
 StatsScreenMobile:
 	xor a
 	ld [wJumptableIndex], a
-	; stupid interns
+; ???
 	ld [wcf64], a
 	ld a, [wcf64]
-	and %11111100
-	or 1
+	and $ff ^ STAT_PAGE_MASK
+	or PINK_PAGE ; first_page
 	ld [wcf64], a
 .loop
 	farcall Mobile_SetOverworldDelay
 	ld a, [wJumptableIndex]
-	and $ff ^ (1 << 7)
+	and $7f
 	ld hl, StatsScreenPointerTable
 	rst JumpTable
 	call StatsScreen_WaitAnim
@@ -129,7 +131,7 @@ StatsScreen_WaitAnim:
 .finish
 	ld hl, wcf64
 	res 5, [hl]
-	farcall HDMATransferTileMapToWRAMBank3
+	farcall HDMATransferTilemapToWRAMBank3
 	ret
 
 StatsScreen_SetJumptableIndex:
@@ -148,8 +150,8 @@ MonStatsInit:
 	ld hl, wcf64
 	res 6, [hl]
 	call ClearBGPalettes
-	call ClearTileMap
-	farcall HDMATransferTileMapToWRAMBank3
+	call ClearTilemap
+	farcall HDMATransferTilemapToWRAMBank3
 	call StatsScreen_CopyToTempMon
 	ld a, [wCurPartySpecies]
 	cp EGG
@@ -222,7 +224,7 @@ StatsScreenWaitCry:
 StatsScreen_CopyToTempMon:
 	ld a, [wMonType]
 	cp TEMPMON
-	jr nz, .breedmon
+	jr nz, .not_tempmon
 	ld a, [wBufferMonSpecies]
 	ld [wCurSpecies], a
 	call GetBaseData
@@ -232,7 +234,7 @@ StatsScreen_CopyToTempMon:
 	call CopyBytes
 	jr .done
 
-.breedmon
+.not_tempmon
 	farcall CopyMonToTempMon
 	ld a, [wCurPartySpecies]
 	cp EGG
@@ -249,7 +251,7 @@ StatsScreen_GetJoypad:
 	call GetJoypad
 	ld a, [wMonType]
 	cp TEMPMON
-	jr nz, .notbreedmon
+	jr nz, .not_tempmon
 	push hl
 	push de
 	push bc
@@ -261,11 +263,11 @@ StatsScreen_GetJoypad:
 	and D_DOWN | D_UP
 	jr nz, .set_carry
 	ld a, [wMenuJoypad]
-	jr .clear_flags
+	jr .clear_carry
 
-.notbreedmon
+.not_tempmon
 	ldh a, [hJoyPressed]
-.clear_flags
+.clear_carry
 	and a
 	ret
 
@@ -355,7 +357,7 @@ StatsScreen_JoypadAction:
 
 .set_page
 	ld a, [wcf64]
-	and %11111100
+	and $ff ^ STAT_PAGE_MASK
 	or c
 	ld [wcf64], a
 	ld h, 4
@@ -444,7 +446,7 @@ StatsScreen_InitUpperHalf:
 	dw sBoxMonNicknames
 	dw wBufferMonNick
 
-Unreferenced_Function4df7f:
+Function4df7f: ; unreferenced
 	hlcoord 7, 0
 	ld bc, SCREEN_WIDTH
 	ld d, SCREEN_HEIGHT
@@ -530,11 +532,11 @@ StatsScreen_LoadGFX:
 
 .Jumptable:
 ; entries correspond to *_PAGE constants
-	dw .PinkPage
-	dw .GreenPage
-	dw .BluePage
+	dw LoadPinkPage
+	dw LoadGreenPage
+	dw LoadBluePage
 
-.PinkPage:
+LoadPinkPage:
 	hlcoord 0, 9
 	ld b, $0
 	predef DrawPlayerHP
@@ -676,7 +678,7 @@ StatsScreen_LoadGFX:
 .PkrsStr:
 	db "#RUS@"
 
-.GreenPage:
+LoadGreenPage:
 	ld de, .Item
 	hlcoord 0, 8
 	call PlaceString
@@ -721,17 +723,17 @@ StatsScreen_LoadGFX:
 .Move:
 	db "MOVE@"
 
-.BluePage:
+LoadBluePage:
 	call .PlaceOTInfo
 	hlcoord 10, 8
 	ld de, SCREEN_WIDTH
 	ld b, 10
 	ld a, $31 ; vertical divider
-.BluePageVerticalDivider:
+.vertical_divider
 	ld [hl], a
 	add hl, de
 	dec b
-	jr nz, .BluePageVerticalDivider
+	jr nz, .vertical_divider
 	hlcoord 11, 8
 	ld bc, 6
 	predef PrintTempMonStats
@@ -759,7 +761,7 @@ StatsScreen_LoadGFX:
 	jr z, .done
 	cp $7f
 	jr z, .done
-	and $80
+	and CAUGHT_GENDER_MASK
 	ld a, "♂"
 	jr z, .got_gender
 	ld a, "♀"
@@ -888,7 +890,7 @@ StatsScreen_GetAnimationParam:
 	ld b, h
 	ld c, l
 	ld a, BANK(sBoxMons)
-	call GetSRAMBank
+	call OpenSRAM
 	call .CheckEggFaintedFrzSlp
 	push af
 	call CloseSRAM
@@ -942,9 +944,8 @@ StatsScreen_LoadTextboxSpaceGFX:
 	pop hl
 	ret
 
-Unreferenced_4e32a:
-; A blank space tile?
-	ds 16
+StatsScreenSpaceGFX: ; unreferenced
+INCBIN "gfx/font/space.2bpp"
 
 EggStatsScreen:
 	xor a
@@ -989,7 +990,7 @@ EggStatsScreen:
 	call DelayFrame
 	hlcoord 0, 0
 	call PrepMonFrontpic
-	farcall HDMATransferTileMapToWRAMBank3
+	farcall HDMATransferTilemapToWRAMBank3
 	call StatsScreen_AnimateEgg
 
 	ld a, [wTempMonHappiness]
@@ -1094,7 +1095,7 @@ CopyNickname:
 	cp BOXMON
 	jr nz, .partymon
 	ld a, BANK(sBoxMonNicknames)
-	call GetSRAMBank
+	call OpenSRAM
 	push de
 	call CopyBytes
 	pop de

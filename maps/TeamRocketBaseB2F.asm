@@ -284,7 +284,7 @@ RocketBaseElectrodeScript:
 	turnobject PLAYER, RIGHT
 	opentext
 	writetext RocketBaseLanceElectrodeDoneText
-	buttonsound
+	promptbutton
 	verbosegiveitem HM_WHIRLPOOL
 	setevent EVENT_GOT_HM06_WHIRLPOOL
 	writetext RocketBaseLanceWhirlpoolText
@@ -731,8 +731,7 @@ RocketBaseLanceElectrodeDoneText:
 	cont "any need for it."
 	done
 
-; unused
-UnknownText_0x6d8e6:
+RocketBaseReceivedHM06Text: ; unused
 	text "<PLAYER> received"
 	line "HM06."
 	done

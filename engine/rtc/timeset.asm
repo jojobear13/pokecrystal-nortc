@@ -19,7 +19,7 @@ InitClock:
 	ld c, 8
 	call DelayFrames
 	call RotateFourPalettesLeft
-	call ClearTileMap
+	call ClearTilemap
 	call ClearSprites
 	ld b, SCGB_DIPLOMA
 	call GetSGBLayout
@@ -196,7 +196,7 @@ DisplayHourOClock:
 	pop hl
 	ret
 
-UnreferencedFunction907f1:
+Function907f1: ; unreferenced
 	ld h, d
 	ld l, e
 	push hl
@@ -273,19 +273,19 @@ SetMinutes:
 
 DisplayMinutesWithMinString:
 	ld de, wInitMinuteBuffer
-	call PrintTwoDigitNumberRightAlign
+	call PrintTwoDigitNumberLeftAlign
 	inc hl
 	ld de, String_min
 	call PlaceString
 	ret
 
-PrintTwoDigitNumberRightAlign:
+PrintTwoDigitNumberLeftAlign:
 	push hl
 	ld a, " "
 	ld [hli], a
 	ld [hl], a
 	pop hl
-	lb bc, PRINTNUM_RIGHTALIGN | 1, 2
+	lb bc, PRINTNUM_LEFTALIGN | 1, 2
 	call PrintNum
 	ret
 
@@ -593,7 +593,7 @@ InitialClearDSTFlag:
 	text_far _TimeAskOkayText
 	text_end
 
-DebugDisplayTime:
+MrChrono: ; unreferenced
 	hlcoord 1, 14
 	lb bc, 3, SCREEN_WIDTH - 2
 	call ClearBox
@@ -684,7 +684,7 @@ PrintHour:
 	call AdjustHourForAMorPM
 	ld [wDeciramBuffer], a
 	ld de, wDeciramBuffer
-	call PrintTwoDigitNumberRightAlign
+	call PrintTwoDigitNumberLeftAlign
 	ret
 
 GetTimeOfDayString:

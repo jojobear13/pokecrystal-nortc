@@ -20,7 +20,7 @@ CheckForLuckyNumberWinners:
 	dec d
 	jr nz, .PartyLoop
 	ld a, BANK(sBox)
-	call GetSRAMBank
+	call OpenSRAM
 	ld a, [sBoxCount]
 	and a
 	jr z, .SkipOpenBox
@@ -59,7 +59,7 @@ CheckForLuckyNumberWinners:
 	add hl, bc
 	add hl, bc
 	ld a, [hli]
-	call GetSRAMBank
+	call OpenSRAM
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a ; hl now contains the address of the loaded box in SRAM
@@ -103,6 +103,7 @@ CheckForLuckyNumberWinners:
 	ld a, [wScriptVar]
 	and a
 	ret z ; found nothing
+
 	farcall StubbedTrainerRankings_LuckyNumberShow
 	ld a, [wTempByteValue]
 	and a
@@ -148,7 +149,7 @@ CheckForLuckyNumberWinners:
 .done
 	pop hl
 	push hl
-	ld de, -6
+	ld de, MON_SPECIES - MON_ID
 	add hl, de
 	ld a, [hl]
 	pop hl

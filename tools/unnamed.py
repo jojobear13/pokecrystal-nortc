@@ -62,7 +62,7 @@ for line in args.symfile:
         symbols.add(symbol)
 
 # If no object files were provided, just print what we know and exit
-print("Unnamed symbols: %d (%.2f%% complete)" % (len(symbols),
+print("Unnamed pokecrystal symbols: %d (%.2f%% complete)" % (len(symbols),
         (symbols_total - len(symbols)) / symbols_total * 100))
 if not objects:
     for sym in symbols:
@@ -73,14 +73,22 @@ if not objects:
 files = {}
 for objfile in objects:
     f = open(objfile, "rb")
-    if unpack_file("4s", f)[0] != b'RGB6':
-        print("Error: File '%s' is of an unknown format." % filename, file=stderr)
+    obj_ver = None
+
+    magic = unpack_file("4s", f)[0]
+    if magic == b'RGB6':
+        obj_ver = 6
+    elif magic == b'RGB9':
+        obj_ver = 10 + unpack_file("<I", f)[0]
+
+    if obj_ver not in [6, 10, 11, 12, 13]:
+        print("Error: File '%s' is of an unknown format." % objfile, file=stderr)
         exit(1)
 
     num_symbols = unpack_file("<II", f)[0]
     for x in range(num_symbols):
         sym_name = read_string(f)
-        sym_type = symtype(unpack_file("<B", f)[0])
+        sym_type = symtype(unpack_file("<B", f)[0] & 0x7f)
         if sym_type == symtype.IMPORT:
             continue
         sym_filename = read_string(f)

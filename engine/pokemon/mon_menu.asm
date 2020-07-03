@@ -466,7 +466,7 @@ ComposeMailMessage:
 	ld hl, wTempMail
 	ld bc, MAIL_STRUCT_LENGTH
 	ld a, BANK(sPartyMail)
-	call GetSRAMBank
+	call OpenSRAM
 	call CopyBytes
 	call CloseSRAM
 	ret
@@ -626,12 +626,12 @@ MonMenu_Fly:
 	ld a, $0
 	ret
 
-.Unreferenced:
+.NoReload: ; unreferenced
 	ld a, $1
 	ret
 
 MonMenu_Flash:
-	farcall OWFlash
+	farcall FlashFunction
 	ld a, [wFieldMoveSucceeded]
 	cp $1
 	jr nz, .Fail
@@ -844,7 +844,7 @@ ChooseMoveToDelete:
 	ld hl, w2DMenuFlags1
 	res 6, [hl]
 	call ClearSprites
-	call ClearTileMap
+	call ClearTilemap
 	pop af
 	ret
 
@@ -877,7 +877,7 @@ MoveScreenLoop:
 	inc a
 	ld [wPartyMenuCursor], a
 	call SetUpMoveScreenBG
-	call Function132d3
+	call PlaceMoveScreenArrows
 	ld de, MoveScreenAttributes
 	call SetMenuAttributes
 .loop
@@ -1075,7 +1075,7 @@ MoveScreenLoop:
 	ld hl, w2DMenuFlags1
 	res 6, [hl]
 	call ClearSprites
-	jp ClearTileMap
+	jp ClearTilemap
 
 MoveScreenAttributes:
 	db 3, 1
@@ -1089,7 +1089,7 @@ String_MoveWhere:
 
 SetUpMoveScreenBG:
 	call ClearBGPalettes
-	call ClearTileMap
+	call ClearTilemap
 	call ClearSprites
 	xor a
 	ldh [hBGMapMode], a
@@ -1214,7 +1214,7 @@ PlaceMoveData:
 
 .description
 	hlcoord 1, 14
-	predef PrintMoveDesc
+	predef PrintMoveDescription
 	ld a, $1
 	ldh [hBGMapMode], a
 	ret
@@ -1228,12 +1228,12 @@ String_MoveAtk:
 String_MoveNoPower:
 	db "---@"
 
-Function132d3:
-	call Function132da
-	call Function132fe
+PlaceMoveScreenArrows:
+	call PlaceMoveScreenLeftArrow
+	call PlaceMoveScreenRightArrow
 	ret
 
-Function132da:
+PlaceMoveScreenLeftArrow:
 	ld a, [wCurPartyMon]
 	and a
 	ret z
@@ -1262,7 +1262,7 @@ Function132da:
 	ld [hl], "◀"
 	ret
 
-Function132fe:
+PlaceMoveScreenRightArrow:
 	ld a, [wCurPartyMon]
 	inc a
 	ld c, a

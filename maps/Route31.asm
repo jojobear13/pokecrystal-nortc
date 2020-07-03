@@ -29,7 +29,7 @@ TrainerBugCatcherWade1:
 	loadvar VAR_CALLERID, PHONE_BUG_CATCHER_WADE
 	endifjustbattled
 	opentext
-	checkflag ENGINE_WADE
+	checkflag ENGINE_WADE_READY_FOR_REMATCH
 	iftrue .WadeRematch
 	checkflag ENGINE_WADE_HAS_ITEM
 	iftrue .WadeItem
@@ -79,7 +79,7 @@ TrainerBugCatcherWade1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wWadeFightCount, 1
-	clearflag ENGINE_WADE
+	clearflag ENGINE_WADE_READY_FOR_REMATCH
 	end
 
 .LoadFight1:
@@ -87,7 +87,7 @@ TrainerBugCatcherWade1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wWadeFightCount, 2
-	clearflag ENGINE_WADE
+	clearflag ENGINE_WADE_READY_FOR_REMATCH
 	end
 
 .LoadFight2:
@@ -95,7 +95,7 @@ TrainerBugCatcherWade1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wWadeFightCount, 3
-	clearflag ENGINE_WADE
+	clearflag ENGINE_WADE_READY_FOR_REMATCH
 	end
 
 .LoadFight3:
@@ -103,14 +103,14 @@ TrainerBugCatcherWade1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wWadeFightCount, 4
-	clearflag ENGINE_WADE
+	clearflag ENGINE_WADE_READY_FOR_REMATCH
 	end
 
 .LoadFight4:
 	loadtrainer BUG_CATCHER, WADE5
 	startbattle
 	reloadmapafterbattle
-	clearflag ENGINE_WADE
+	clearflag ENGINE_WADE_READY_FOR_REMATCH
 	end
 
 .WadeItem:
@@ -145,39 +145,39 @@ TrainerBugCatcherWade1:
 	sjump .PackFullSTD
 
 .AskPhoneNumberSTD:
-	jumpstd asknumber1m
+	jumpstd AskNumber1MScript
 	end
 
 .AskAgainSTD:
-	jumpstd asknumber2m
+	jumpstd AskNumber2MScript
 	end
 
 .RegisterNumberSTD:
-	jumpstd registerednumberm
+	jumpstd RegisteredNumberMScript
 	end
 
 .AcceptedNumberSTD:
-	jumpstd numberacceptedm
+	jumpstd NumberAcceptedMScript
 	end
 
 .DeclinedNumberSTD:
-	jumpstd numberdeclinedm
+	jumpstd NumberDeclinedMScript
 	end
 
 .PhoneFullSTD:
-	jumpstd phonefullm
+	jumpstd PhoneFullMScript
 	end
 
 .RematchSTD:
-	jumpstd rematchm
+	jumpstd RematchMScript
 	end
 
 .ItemSTD:
-	jumpstd giftm
+	jumpstd GiftMScript
 	end
 
 .PackFullSTD:
-	jumpstd packfullm
+	jumpstd PackFullMScript
 	end
 
 Route31MailRecipientScript:
@@ -194,7 +194,7 @@ Route31MailRecipientScript:
 
 .TryGiveKenya:
 	writetext Text_Route31SleepyManGotMail
-	buttonsound
+	promptbutton
 	checkpokemail ReceivedSpearowMailText
 	ifequal POKEMAIL_WRONG_MAIL, .WrongMail
 	ifequal POKEMAIL_REFUSED, .Refused
@@ -202,9 +202,9 @@ Route31MailRecipientScript:
 	ifequal POKEMAIL_LAST_MON, .LastMon
 	; POKEMAIL_CORRECT
 	writetext Text_Route31HandOverMailMon
-	buttonsound
+	promptbutton
 	writetext Text_Route31ReadingMail
-	buttonsound
+	promptbutton
 	setevent EVENT_GAVE_KENYA
 	verbosegiveitem TM_NIGHTMARE
 	iffalse .NoRoomForItems

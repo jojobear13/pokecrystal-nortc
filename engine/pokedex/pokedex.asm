@@ -16,7 +16,7 @@
 	const DEXSTATE_EXIT
 
 POKEDEX_SCX EQU 5
-GLOBAL POKEDEX_SCX
+EXPORT POKEDEX_SCX
 
 Pokedex:
 	ldh a, [hWX]
@@ -79,7 +79,7 @@ Pokedex:
 InitPokedex:
 	call ClearBGPalettes
 	call ClearSprites
-	call ClearTileMap
+	call ClearTilemap
 	call Pokedex_LoadGFX
 
 	ld hl, wPokedexDataStart
@@ -168,7 +168,7 @@ Pokedex_GetLandmark:
 	ld c, a
 	call GetWorldMapLocation
 
-	cp SPECIAL_MAP
+	cp LANDMARK_SPECIAL
 	jr nz, .load
 
 	ld a, [wBackupMapGroup]
@@ -219,7 +219,7 @@ Pokedex_InitMainScreen:
 	ldh [hBGMapMode], a
 	call ClearSprites
 	xor a
-	hlcoord 0, 0, wAttrMap
+	hlcoord 0, 0, wAttrmap
 	ld bc, SCREEN_HEIGHT * SCREEN_WIDTH
 	call ByteFill
 	farcall DrawPokedexListWindow
@@ -718,7 +718,7 @@ Pokedex_InitSearchResultsScreen:
 	xor a
 	ldh [hBGMapMode], a
 	xor a
-	hlcoord 0, 0, wAttrMap
+	hlcoord 0, 0, wAttrmap
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 	call ByteFill
 	call Pokedex_SetBGMapMode4
@@ -887,7 +887,7 @@ Pokedex_UnownModeEraseCursor:
 
 Pokedex_UnownModePlaceCursor:
 	ld a, [wDexCurUnownIndex]
-	ld c, $5a ; diamond cursor
+	ld c, FIRST_UNOWN_CHAR + NUM_UNOWN ; diamond cursor
 
 Pokedex_UnownModeUpdateCursorGfx:
 	ld e, a
@@ -1055,8 +1055,8 @@ Pokedex_ListingPosChanged:
 	ret
 
 Pokedex_FillColumn:
-; Fills a column starting at HL, going downwards.
-; B is the height of the column and A is the tile it's filled with.
+; Fills a column starting at hl, going downwards.
+; b is the height of the column, and a is the tile it's filled with.
 	push de
 	ld de, SCREEN_WIDTH
 .loop
@@ -1333,7 +1333,7 @@ endr
 	ld h, [hl]
 	ld l, a
 	pop af
-	add $40 - 1 ; Unown A
+	add FIRST_UNOWN_CHAR - 1 ; Unown A
 	ld [hl], a
 	inc de
 	inc b
@@ -1986,59 +1986,59 @@ Pokedex_PutOldModeCursorOAM:
 	ret
 
 .CursorOAM:
-	dsprite  3,  0,  9, -1, $30, 7
-	dsprite  2,  0,  9, -1, $31, 7
-	dsprite  2,  0, 10, -1, $32, 7
-	dsprite  2,  0, 11, -1, $32, 7
-	dsprite  2,  0, 12, -1, $32, 7
-	dsprite  2,  0, 13, -1, $33, 7
-	dsprite  2,  0, 16, -2, $33, 7 | X_FLIP
-	dsprite  2,  0, 17, -2, $32, 7 | X_FLIP
-	dsprite  2,  0, 18, -2, $32, 7 | X_FLIP
-	dsprite  2,  0, 19, -2, $32, 7 | X_FLIP
-	dsprite  2,  0, 20, -2, $31, 7 | X_FLIP
-	dsprite  3,  0, 20, -2, $30, 7 | X_FLIP
-	dsprite  4,  0,  9, -1, $30, 7 | Y_FLIP
-	dsprite  5,  0,  9, -1, $31, 7 | Y_FLIP
-	dsprite  5,  0, 10, -1, $32, 7 | Y_FLIP
-	dsprite  5,  0, 11, -1, $32, 7 | Y_FLIP
-	dsprite  5,  0, 12, -1, $32, 7 | Y_FLIP
-	dsprite  5,  0, 13, -1, $33, 7 | Y_FLIP
-	dsprite  5,  0, 16, -2, $33, 7 | X_FLIP | Y_FLIP
-	dsprite  5,  0, 17, -2, $32, 7 | X_FLIP | Y_FLIP
-	dsprite  5,  0, 18, -2, $32, 7 | X_FLIP | Y_FLIP
-	dsprite  5,  0, 19, -2, $32, 7 | X_FLIP | Y_FLIP
-	dsprite  5,  0, 20, -2, $31, 7 | X_FLIP | Y_FLIP
-	dsprite  4,  0, 20, -2, $30, 7 | X_FLIP | Y_FLIP
+	dbsprite  9,  3, -1,  0, $30, 7
+	dbsprite  9,  2, -1,  0, $31, 7
+	dbsprite 10,  2, -1,  0, $32, 7
+	dbsprite 11,  2, -1,  0, $32, 7
+	dbsprite 12,  2, -1,  0, $32, 7
+	dbsprite 13,  2, -1,  0, $33, 7
+	dbsprite 16,  2, -2,  0, $33, 7 | X_FLIP
+	dbsprite 17,  2, -2,  0, $32, 7 | X_FLIP
+	dbsprite 18,  2, -2,  0, $32, 7 | X_FLIP
+	dbsprite 19,  2, -2,  0, $32, 7 | X_FLIP
+	dbsprite 20,  2, -2,  0, $31, 7 | X_FLIP
+	dbsprite 20,  3, -2,  0, $30, 7 | X_FLIP
+	dbsprite  9,  4, -1,  0, $30, 7 | Y_FLIP
+	dbsprite  9,  5, -1,  0, $31, 7 | Y_FLIP
+	dbsprite 10,  5, -1,  0, $32, 7 | Y_FLIP
+	dbsprite 11,  5, -1,  0, $32, 7 | Y_FLIP
+	dbsprite 12,  5, -1,  0, $32, 7 | Y_FLIP
+	dbsprite 13,  5, -1,  0, $33, 7 | Y_FLIP
+	dbsprite 16,  5, -2,  0, $33, 7 | X_FLIP | Y_FLIP
+	dbsprite 17,  5, -2,  0, $32, 7 | X_FLIP | Y_FLIP
+	dbsprite 18,  5, -2,  0, $32, 7 | X_FLIP | Y_FLIP
+	dbsprite 19,  5, -2,  0, $32, 7 | X_FLIP | Y_FLIP
+	dbsprite 20,  5, -2,  0, $31, 7 | X_FLIP | Y_FLIP
+	dbsprite 20,  4, -2,  0, $30, 7 | X_FLIP | Y_FLIP
 	db -1
 
 .CursorAtTopOAM:
 ; OAM data for when the cursor is at the top of the list. The tiles at the top
 ; are cut off so they don't show up outside the list area.
-	dsprite  3,  0,  9, -1, $30, 7
-	dsprite  2,  0,  9, -1, $34, 7
-	dsprite  2,  0, 10, -1, $35, 7
-	dsprite  2,  0, 11, -1, $35, 7
-	dsprite  2,  0, 12, -1, $35, 7
-	dsprite  2,  0, 13, -1, $36, 7
-	dsprite  2,  0, 16, -2, $36, 7 | X_FLIP
-	dsprite  2,  0, 17, -2, $35, 7 | X_FLIP
-	dsprite  2,  0, 18, -2, $35, 7 | X_FLIP
-	dsprite  2,  0, 19, -2, $35, 7 | X_FLIP
-	dsprite  2,  0, 20, -2, $34, 7 | X_FLIP
-	dsprite  3,  0, 20, -2, $30, 7 | X_FLIP
-	dsprite  4,  0,  9, -1, $30, 7 | Y_FLIP
-	dsprite  5,  0,  9, -1, $31, 7 | Y_FLIP
-	dsprite  5,  0, 10, -1, $32, 7 | Y_FLIP
-	dsprite  5,  0, 11, -1, $32, 7 | Y_FLIP
-	dsprite  5,  0, 12, -1, $32, 7 | Y_FLIP
-	dsprite  5,  0, 13, -1, $33, 7 | Y_FLIP
-	dsprite  5,  0, 16, -2, $33, 7 | X_FLIP | Y_FLIP
-	dsprite  5,  0, 17, -2, $32, 7 | X_FLIP | Y_FLIP
-	dsprite  5,  0, 18, -2, $32, 7 | X_FLIP | Y_FLIP
-	dsprite  5,  0, 19, -2, $32, 7 | X_FLIP | Y_FLIP
-	dsprite  5,  0, 20, -2, $31, 7 | X_FLIP | Y_FLIP
-	dsprite  4,  0, 20, -2, $30, 7 | X_FLIP | Y_FLIP
+	dbsprite  9,  3, -1,  0, $30, 7
+	dbsprite  9,  2, -1,  0, $34, 7
+	dbsprite 10,  2, -1,  0, $35, 7
+	dbsprite 11,  2, -1,  0, $35, 7
+	dbsprite 12,  2, -1,  0, $35, 7
+	dbsprite 13,  2, -1,  0, $36, 7
+	dbsprite 16,  2, -2,  0, $36, 7 | X_FLIP
+	dbsprite 17,  2, -2,  0, $35, 7 | X_FLIP
+	dbsprite 18,  2, -2,  0, $35, 7 | X_FLIP
+	dbsprite 19,  2, -2,  0, $35, 7 | X_FLIP
+	dbsprite 20,  2, -2,  0, $34, 7 | X_FLIP
+	dbsprite 20,  3, -2,  0, $30, 7 | X_FLIP
+	dbsprite  9,  4, -1,  0, $30, 7 | Y_FLIP
+	dbsprite  9,  5, -1,  0, $31, 7 | Y_FLIP
+	dbsprite 10,  5, -1,  0, $32, 7 | Y_FLIP
+	dbsprite 11,  5, -1,  0, $32, 7 | Y_FLIP
+	dbsprite 12,  5, -1,  0, $32, 7 | Y_FLIP
+	dbsprite 13,  5, -1,  0, $33, 7 | Y_FLIP
+	dbsprite 16,  5, -2,  0, $33, 7 | X_FLIP | Y_FLIP
+	dbsprite 17,  5, -2,  0, $32, 7 | X_FLIP | Y_FLIP
+	dbsprite 18,  5, -2,  0, $32, 7 | X_FLIP | Y_FLIP
+	dbsprite 19,  5, -2,  0, $32, 7 | X_FLIP | Y_FLIP
+	dbsprite 20,  5, -2,  0, $31, 7 | X_FLIP | Y_FLIP
+	dbsprite 20,  4, -2,  0, $30, 7 | X_FLIP | Y_FLIP
 	db -1
 
 Pokedex_PutNewModeABCModeCursorOAM:
@@ -2047,26 +2047,26 @@ Pokedex_PutNewModeABCModeCursorOAM:
 	ret
 
 .CursorOAM:
-	dsprite  3,  3,  9, -1, $30, 7
-	dsprite  2,  3,  9, -1, $31, 7
-	dsprite  2,  3, 10, -1, $32, 7
-	dsprite  2,  3, 11, -1, $32, 7
-	dsprite  2,  3, 12, -1, $33, 7
-	dsprite  2,  3, 16,  0, $33, 7 | X_FLIP
-	dsprite  2,  3, 17,  0, $32, 7 | X_FLIP
-	dsprite  2,  3, 18,  0, $32, 7 | X_FLIP
-	dsprite  2,  3, 19,  0, $31, 7 | X_FLIP
-	dsprite  3,  3, 19,  0, $30, 7 | X_FLIP
-	dsprite  4,  3,  9, -1, $30, 7 | Y_FLIP
-	dsprite  5,  3,  9, -1, $31, 7 | Y_FLIP
-	dsprite  5,  3, 10, -1, $32, 7 | Y_FLIP
-	dsprite  5,  3, 11, -1, $32, 7 | Y_FLIP
-	dsprite  5,  3, 12, -1, $33, 7 | Y_FLIP
-	dsprite  5,  3, 16,  0, $33, 7 | X_FLIP | Y_FLIP
-	dsprite  5,  3, 17,  0, $32, 7 | X_FLIP | Y_FLIP
-	dsprite  5,  3, 18,  0, $32, 7 | X_FLIP | Y_FLIP
-	dsprite  5,  3, 19,  0, $31, 7 | X_FLIP | Y_FLIP
-	dsprite  4,  3, 19,  0, $30, 7 | X_FLIP | Y_FLIP
+	dbsprite  9,  3, -1,  3, $30, 7
+	dbsprite  9,  2, -1,  3, $31, 7
+	dbsprite 10,  2, -1,  3, $32, 7
+	dbsprite 11,  2, -1,  3, $32, 7
+	dbsprite 12,  2, -1,  3, $33, 7
+	dbsprite 16,  2,  0,  3, $33, 7 | X_FLIP
+	dbsprite 17,  2,  0,  3, $32, 7 | X_FLIP
+	dbsprite 18,  2,  0,  3, $32, 7 | X_FLIP
+	dbsprite 19,  2,  0,  3, $31, 7 | X_FLIP
+	dbsprite 19,  3,  0,  3, $30, 7 | X_FLIP
+	dbsprite  9,  4, -1,  3, $30, 7 | Y_FLIP
+	dbsprite  9,  5, -1,  3, $31, 7 | Y_FLIP
+	dbsprite 10,  5, -1,  3, $32, 7 | Y_FLIP
+	dbsprite 11,  5, -1,  3, $32, 7 | Y_FLIP
+	dbsprite 12,  5, -1,  3, $33, 7 | Y_FLIP
+	dbsprite 16,  5,  0,  3, $33, 7 | X_FLIP | Y_FLIP
+	dbsprite 17,  5,  0,  3, $32, 7 | X_FLIP | Y_FLIP
+	dbsprite 18,  5,  0,  3, $32, 7 | X_FLIP | Y_FLIP
+	dbsprite 19,  5,  0,  3, $31, 7 | X_FLIP | Y_FLIP
+	dbsprite 19,  4,  0,  3, $30, 7 | X_FLIP | Y_FLIP
 	db -1
 
 Pokedex_UpdateSearchResultsCursorOAM:
@@ -2078,30 +2078,30 @@ Pokedex_UpdateSearchResultsCursorOAM:
 	ret
 
 .CursorOAM:
-	dsprite  3,  3,  9, -1, $30, 7
-	dsprite  2,  3,  9, -1, $31, 7
-	dsprite  2,  3, 10, -1, $32, 7
-	dsprite  2,  3, 11, -1, $32, 7
-	dsprite  2,  3, 12, -1, $32, 7
-	dsprite  2,  3, 13, -1, $33, 7
-	dsprite  2,  3, 16, -2, $33, 7 | X_FLIP
-	dsprite  2,  3, 17, -2, $32, 7 | X_FLIP
-	dsprite  2,  3, 18, -2, $32, 7 | X_FLIP
-	dsprite  2,  3, 19, -2, $32, 7 | X_FLIP
-	dsprite  2,  3, 20, -2, $31, 7 | X_FLIP
-	dsprite  3,  3, 20, -2, $30, 7 | X_FLIP
-	dsprite  4,  3,  9, -1, $30, 7 | Y_FLIP
-	dsprite  5,  3,  9, -1, $31, 7 | Y_FLIP
-	dsprite  5,  3, 10, -1, $32, 7 | Y_FLIP
-	dsprite  5,  3, 11, -1, $32, 7 | Y_FLIP
-	dsprite  5,  3, 12, -1, $32, 7 | Y_FLIP
-	dsprite  5,  3, 13, -1, $33, 7 | Y_FLIP
-	dsprite  5,  3, 16, -2, $33, 7 | X_FLIP | Y_FLIP
-	dsprite  5,  3, 17, -2, $32, 7 | X_FLIP | Y_FLIP
-	dsprite  5,  3, 18, -2, $32, 7 | X_FLIP | Y_FLIP
-	dsprite  5,  3, 19, -2, $32, 7 | X_FLIP | Y_FLIP
-	dsprite  5,  3, 20, -2, $31, 7 | X_FLIP | Y_FLIP
-	dsprite  4,  3, 20, -2, $30, 7 | X_FLIP | Y_FLIP
+	dbsprite  9,  3, -1,  3, $30, 7
+	dbsprite  9,  2, -1,  3, $31, 7
+	dbsprite 10,  2, -1,  3, $32, 7
+	dbsprite 11,  2, -1,  3, $32, 7
+	dbsprite 12,  2, -1,  3, $32, 7
+	dbsprite 13,  2, -1,  3, $33, 7
+	dbsprite 16,  2, -2,  3, $33, 7 | X_FLIP
+	dbsprite 17,  2, -2,  3, $32, 7 | X_FLIP
+	dbsprite 18,  2, -2,  3, $32, 7 | X_FLIP
+	dbsprite 19,  2, -2,  3, $32, 7 | X_FLIP
+	dbsprite 20,  2, -2,  3, $31, 7 | X_FLIP
+	dbsprite 20,  3, -2,  3, $30, 7 | X_FLIP
+	dbsprite  9,  4, -1,  3, $30, 7 | Y_FLIP
+	dbsprite  9,  5, -1,  3, $31, 7 | Y_FLIP
+	dbsprite 10,  5, -1,  3, $32, 7 | Y_FLIP
+	dbsprite 11,  5, -1,  3, $32, 7 | Y_FLIP
+	dbsprite 12,  5, -1,  3, $32, 7 | Y_FLIP
+	dbsprite 13,  5, -1,  3, $33, 7 | Y_FLIP
+	dbsprite 16,  5, -2,  3, $33, 7 | X_FLIP | Y_FLIP
+	dbsprite 17,  5, -2,  3, $32, 7 | X_FLIP | Y_FLIP
+	dbsprite 18,  5, -2,  3, $32, 7 | X_FLIP | Y_FLIP
+	dbsprite 19,  5, -2,  3, $32, 7 | X_FLIP | Y_FLIP
+	dbsprite 20,  5, -2,  3, $31, 7 | X_FLIP | Y_FLIP
+	dbsprite 20,  4, -2,  3, $30, 7 | X_FLIP | Y_FLIP
 	db -1
 
 Pokedex_LoadCursorOAM:
@@ -2305,7 +2305,6 @@ Pokedex_FillBox:
 	jp FillBoxWithByte
 
 Pokedex_BlackOutBG:
-; Make BG palettes black so that the BG becomes all black.
 	ldh a, [rSVBK]
 	push af
 	ld a, BANK(wBGPals1)
@@ -2363,7 +2362,7 @@ Pokedex_LoadSelectedMonTiles:
 
 .QuestionMark:
 	ld a, BANK(sScratch)
-	call GetSRAMBank
+	call OpenSRAM
 	farcall LoadQuestionMarkPic
 	ld hl, vTiles2
 	ld de, sScratch
@@ -2479,7 +2478,7 @@ Pokedex_CheckSGB:
 
 Pokedex_LoadUnownFont:
 	ld a, BANK(sScratch)
-	call GetSRAMBank
+	call OpenSRAM
 	ld hl, UnownFont
 	ld de, sScratch + $188
 	ld bc, 39 tiles
@@ -2489,7 +2488,7 @@ Pokedex_LoadUnownFont:
 	ld bc, (NUM_UNOWN + 1) tiles
 	call Pokedex_InvertTiles
 	ld de, sScratch + $188
-	ld hl, vTiles2 tile $40
+	ld hl, vTiles2 tile FIRST_UNOWN_CHAR
 	lb bc, BANK(Pokedex_LoadUnownFont), NUM_UNOWN + 1
 	call Request2bpp
 	call CloseSRAM

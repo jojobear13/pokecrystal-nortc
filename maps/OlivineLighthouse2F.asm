@@ -25,7 +25,7 @@ TrainerSailorHuey:
 	loadvar VAR_CALLERID, PHONE_SAILOR_HUEY
 	endifjustbattled
 	opentext
-	checkflag ENGINE_HUEY
+	checkflag ENGINE_HUEY_READY_FOR_REMATCH
 	iftrue .WantsBattle
 	checkcellnum PHONE_SAILOR_HUEY
 	iftrue .NumberAccepted
@@ -67,7 +67,7 @@ TrainerSailorHuey:
 	startbattle
 	reloadmapafterbattle
 	loadmem wHueyFightCount, 1
-	clearflag ENGINE_HUEY
+	clearflag ENGINE_HUEY_READY_FOR_REMATCH
 	end
 
 .LoadFight1:
@@ -75,7 +75,7 @@ TrainerSailorHuey:
 	startbattle
 	reloadmapafterbattle
 	loadmem wHueyFightCount, 2
-	clearflag ENGINE_HUEY
+	clearflag ENGINE_HUEY_READY_FOR_REMATCH
 	end
 
 .LoadFight2:
@@ -83,14 +83,14 @@ TrainerSailorHuey:
 	startbattle
 	reloadmapafterbattle
 	loadmem wHueyFightCount, 3
-	clearflag ENGINE_HUEY
+	clearflag ENGINE_HUEY_READY_FOR_REMATCH
 	end
 
 .LoadFight3:
 	loadtrainer SAILOR, HUEY4
 	startbattle
 	reloadmapafterbattle
-	clearflag ENGINE_HUEY
+	clearflag ENGINE_HUEY_READY_FOR_REMATCH
 	checkevent EVENT_HUEY_PROTEIN
 	iftrue .HasProtein
 	checkevent EVENT_GOT_PROTEIN_FROM_HUEY
@@ -115,40 +115,40 @@ TrainerSailorHuey:
 	sjump .NumberAccepted
 
 .AskNumber1:
-	jumpstd asknumber1m
+	jumpstd AskNumber1MScript
 	end
 
 .AskNumber2:
-	jumpstd asknumber2m
+	jumpstd AskNumber2MScript
 	end
 
 .RegisteredNumber:
-	jumpstd registerednumberm
+	jumpstd RegisteredNumberMScript
 	end
 
 .NumberAccepted:
-	jumpstd numberacceptedm
+	jumpstd NumberAcceptedMScript
 	end
 
 .NumberDeclined:
-	jumpstd numberdeclinedm
+	jumpstd NumberDeclinedMScript
 	end
 
 .PhoneFull:
-	jumpstd phonefullm
+	jumpstd PhoneFullMScript
 	end
 
 .Rematch:
-	jumpstd rematchm
+	jumpstd RematchMScript
 	end
 
 .PackFull:
 	setevent EVENT_HUEY_PROTEIN
-	jumpstd packfullm
+	jumpstd PackFullMScript
 	end
 
 .RematchGift:
-	jumpstd rematchgiftm
+	jumpstd RematchGiftMScript
 	end
 
 SailorHueySeenText:

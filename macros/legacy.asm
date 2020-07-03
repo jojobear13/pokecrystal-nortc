@@ -6,8 +6,93 @@
 callba EQUS "farcall"
 callab EQUS "callfar"
 
+; macros/gfx.asm
+dsprite: MACRO
+	dbsprite \2, \4, \1, \3, \5, \6
+ENDM
+
 ; macros/scripts/audio.asm
+__ EQU 0
+CC EQU 13
+
+musicheader: MACRO
+	channel_count \1
+	channel \2, \3
+ENDM
+
+sound: MACRO
+	note \1, \2
+	db \3
+	dw \4
+ENDM
+
+noise: MACRO
+	note \1, \2
+	db \3
+	db \4
+ENDM
+
+notetype: MACRO
+IF _NARG >= 2
+	note_type \1, \2 >> 4, \2 & $0f
+ELSE
+	note_type \1
+ENDC
+ENDM
+
+pitchoffset: MACRO
+	transpose \1, \2 - 1
+ENDM
+
+dutycycle EQUS "duty_cycle"
+
+intensity: MACRO
+	volume_envelope \1 >> 4, \1 & $0f
+ENDM
+
+soundinput: MACRO
+	pitch_sweep \1 >> 4, \1 & $0f
+ENDM
+
 unknownmusic0xde EQUS "sound_duty"
+sound_duty: MACRO
+	db duty_cycle_pattern_cmd
+IF _NARG == 4
+	db \1 | (\2 << 2) | (\3 << 4) | (\4 << 6)
+ELSE
+	db \1
+ENDC
+ENDM
+
+togglesfx EQUS "toggle_sfx"
+
+slidepitchto: MACRO
+	pitch_slide \1, (8 - \2), \3
+ENDM
+
+togglenoise EQUS "toggle_noise"
+
+panning: MACRO
+	force_stereo_panning ((\1 >> 4) & 1), (\1 & 1)
+ENDM
+
+tone           EQUS "pitch_offset"
+restartchannel EQUS "restart_channel"
+newsong        EQUS "new_song"
+sfxpriorityon  EQUS "sfx_priority_on"
+sfxpriorityoff EQUS "sfx_priority_off"
+
+stereopanning: MACRO
+	stereo_panning ((\1 >> 4) & 1), (\1 & 1)
+ENDM
+
+sfxtogglenoise EQUS "sfx_toggle_noise"
+setcondition   EQUS "set_condition"
+jumpif         EQUS "sound_jump_if"
+jumpchannel    EQUS "sound_jump"
+loopchannel    EQUS "sound_loop"
+callchannel    EQUS "sound_call"
+endchannel     EQUS "sound_ret"
 
 ; macros/scripts/events.asm
 
@@ -96,6 +181,7 @@ loadmenuheader    EQUS "loadmenu"
 writebackup       EQUS "closewindow"
 interpretmenu     EQUS "_2dmenu"
 interpretmenu2    EQUS "verticalmenu"
+buttonsound       EQUS "promptbutton"
 battlecheck       EQUS "randomwildmon"
 loadtrainerdata   EQUS "loadtemptrainer"
 loadpokedata      EQUS "loadwildmon"
@@ -231,7 +317,9 @@ start_asm              EQUS "text_asm"
 deciram                EQUS "text_decimal"
 interpret_data         EQUS "text_pause"
 limited_interpret_data EQUS "text_dots"
-link_wait_button       EQUS "text_linkwaitbutton"
+text_waitbutton        EQUS "text_promptbutton"
+link_wait_button       EQUS "text_linkpromptbutton"
+text_linkwaitbutton    EQUS "text_linkpromptbutton"
 current_day            EQUS "text_today"
 text_jump              EQUS "text_far"
 
@@ -239,3 +327,60 @@ text_jump              EQUS "text_far"
 anim_enemyfeetobj  EQUS "anim_battlergfx_2row"
 anim_playerheadobj EQUS "anim_battlergfx_1row"
 anim_clearsprites  EQUS "anim_keepsprites"
+
+; engine/events/std_scripts.asm
+pokecenternurse       EQUS "PokecenterNurseScript"
+difficultbookshelf    EQUS "DifficultBookshelfScript"
+picturebookshelf      EQUS "PictureBookshelfScript"
+magazinebookshelf     EQUS "MagazineBookshelfScript"
+teamrocketoath        EQUS "TeamRocketOathScript"
+incenseburner         EQUS "IncenseBurnerScript"
+merchandiseshelf      EQUS "MerchandiseShelfScript"
+townmap               EQUS "TownMapScript"
+window                EQUS "WindowScript"
+tv                    EQUS "TVScript"
+homepage              EQUS "HomepageScript"
+radio1                EQUS "Radio1Script"
+radio2                EQUS "Radio2Script"
+trashcan              EQUS "TrashCanScript"
+strengthboulder       EQUS "StrengthBoulderScript"
+smashrock             EQUS "SmashRockScript"
+pokecentersign        EQUS "PokecenterSignScript"
+martsign              EQUS "MartSignScript"
+goldenrodrockets      EQUS "GoldenrodRocketsScript"
+radiotowerrockets     EQUS "RadioTowerRocketsScript"
+elevatorbutton        EQUS "ElevatorButtonScript"
+daytotext             EQUS "DayToTextScript"
+bugcontestresultswarp EQUS "BugContestResultsWarpScript"
+bugcontestresults     EQUS "BugContestResultsScript"
+initializeevents      EQUS "InitializeEventsScript"
+asknumber1m           EQUS "AskNumber1MScript"
+asknumber2m           EQUS "AskNumber2MScript"
+registerednumberm     EQUS "RegisteredNumberMScript"
+numberacceptedm       EQUS "NumberAcceptedMScript"
+numberdeclinedm       EQUS "NumberDeclinedMScript"
+phonefullm            EQUS "PhoneFullMScript"
+rematchm              EQUS "RematchMScript"
+giftm                 EQUS "GiftMScript"
+packfullm             EQUS "PackFullMScript"
+rematchgiftm          EQUS "RematchGiftMScript"
+asknumber1f           EQUS "AskNumber1FScript"
+asknumber2f           EQUS "AskNumber2FScript"
+registerednumberf     EQUS "RegisteredNumberFScript"
+numberacceptedf       EQUS "NumberAcceptedFScript"
+numberdeclinedf       EQUS "NumberDeclinedFScript"
+phonefullf            EQUS "PhoneFullFScript"
+rematchf              EQUS "RematchFScript"
+giftf                 EQUS "GiftFScript"
+packfullf             EQUS "PackFullFScript"
+rematchgiftf          EQUS "RematchGiftFScript"
+gymstatue1            EQUS "GymStatue1Script"
+gymstatue2            EQUS "GymStatue2Script"
+receiveitem           EQUS "ReceiveItemScript"
+receivetogepiegg      EQUS "ReceiveTogepiEggScript"
+pcscript              EQUS "PCScript"
+gamecornercoinvendor  EQUS "GameCornerCoinVendorScript"
+happinesschecknpc     EQUS "HappinessCheckScript"
+
+; constants/sprite_constants.asm
+SPRITE_BUENA EQUS "SPRITE_BEAUTY"

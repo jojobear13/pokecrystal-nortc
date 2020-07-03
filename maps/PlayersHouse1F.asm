@@ -35,7 +35,7 @@ MeetMomRightScript:
 MeetMomScript:
 	opentext
 	writetext ElmsLookingForYouText
-	buttonsound
+	promptbutton
 	getstring STRING_BUFFER_4, PokegearName
 	scall PlayersHouse1FReceiveItemStd
 	setflag ENGINE_POKEGEAR
@@ -45,7 +45,7 @@ MeetMomScript:
 	setevent EVENT_PLAYERS_HOUSE_MOM_1
 	clearevent EVENT_PLAYERS_HOUSE_MOM_2
 	writetext MomGivesPokegearText
-	buttonsound
+	promptbutton
 	special SetDayOfWeek
 .SetDayOfWeek:
 	writetext IsItDSTText
@@ -68,12 +68,12 @@ MeetMomScript:
 
 .KnowPhone:
 	writetext KnowTheInstructionsText
-	buttonsound
+	promptbutton
 	sjump .FinishPhone
 
 .ExplainPhone:
 	writetext DontKnowTheInstructionsText
-	buttonsound
+	promptbutton
 	sjump .FinishPhone
 
 .FinishPhone:
@@ -107,7 +107,7 @@ PokegearName:
 	db "#GEAR@"
 
 PlayersHouse1FReceiveItemStd:
-	jumpstd receiveitem
+	jumpstd ReceiveItemScript
 	end
 
 MomScript:
@@ -162,17 +162,17 @@ NeighborScript:
 
 .MornScript:
 	writetext NeighborMornIntroText
-	buttonsound
+	promptbutton
 	sjump .Main
 
 .DayScript:
 	writetext NeighborDayIntroText
-	buttonsound
+	promptbutton
 	sjump .Main
 
 .NiteScript:
 	writetext NeighborNiteIntroText
-	buttonsound
+	promptbutton
 	sjump .Main
 
 .Main:
@@ -182,17 +182,17 @@ NeighborScript:
 	turnobject PLAYERSHOUSE1F_POKEFAN_F, RIGHT
 	end
 
-TVScript:
-	jumptext TVText
+PlayersHouse1FTVScript:
+	jumptext PlayersHouse1FTVText
 
-StoveScript:
-	jumptext StoveText
+PlayersHouse1FStoveScript:
+	jumptext PlayersHouse1FStoveText
 
-SinkScript:
-	jumptext SinkText
+PlayersHouse1FSinkScript:
+	jumptext PlayersHouse1FSinkText
 
-FridgeScript:
-	jumptext FridgeText
+PlayersHouse1FFridgeScript:
+	jumptext PlayersHouse1FFridgeText
 
 MomTurnsTowardPlayerMovement:
 	turn_head RIGHT
@@ -351,20 +351,20 @@ NeighborText:
 	line "#MON!"
 	done
 
-StoveText:
+PlayersHouse1FStoveText:
 	text "Mom's specialty!"
 
 	para "CINNABAR VOLCANO"
 	line "BURGER!"
 	done
 
-SinkText:
+PlayersHouse1FSinkText:
 	text "The sink is spot-"
 	line "less. Mom likes it"
 	cont "clean."
 	done
 
-FridgeText:
+PlayersHouse1FFridgeText:
 	text "Let's see what's"
 	line "in the fridge…"
 
@@ -372,7 +372,7 @@ FridgeText:
 	line "tasty LEMONADE!"
 	done
 
-TVText:
+PlayersHouse1FTVText:
 	text "There's a movie on"
 	line "TV: Stars dot the"
 
@@ -396,10 +396,10 @@ PlayersHouse1F_MapEvents:
 	coord_event  9,  4, SCENE_DEFAULT, MeetMomRightScript
 
 	db 4 ; bg events
-	bg_event  0,  1, BGEVENT_READ, StoveScript
-	bg_event  1,  1, BGEVENT_READ, SinkScript
-	bg_event  2,  1, BGEVENT_READ, FridgeScript
-	bg_event  4,  1, BGEVENT_READ, TVScript
+	bg_event  0,  1, BGEVENT_READ, PlayersHouse1FStoveScript
+	bg_event  1,  1, BGEVENT_READ, PlayersHouse1FSinkScript
+	bg_event  2,  1, BGEVENT_READ, PlayersHouse1FFridgeScript
+	bg_event  4,  1, BGEVENT_READ, PlayersHouse1FTVScript
 
 	db 5 ; object events
 	object_event  7,  4, SPRITE_MOM, SPRITEMOVEDATA_STANDING_LEFT, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, MomScript, EVENT_PLAYERS_HOUSE_MOM_1

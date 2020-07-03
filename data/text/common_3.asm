@@ -228,8 +228,7 @@ _MoveMonWOMailSaveText::
 	cont "will be saved. OK?"
 	done
 
-; unused
-_WindowAreaExceededErrorText::
+_WindowAreaExceededErrorText:: ; unreferenced
 	text "The window save"
 	line "area was exceeded."
 	done
@@ -239,8 +238,7 @@ _WindowPoppingErrorText::
 	line "able for popping."
 	done
 
-; unused
-_CorruptedEventErrorText::
+_CorruptedEventText:: ; unreferenced
 	text "Corrupted event!"
 	prompt
 
@@ -452,7 +450,7 @@ _CongratulationsYourPokemonText::
 	text_ram wStringBuffer2
 	text_end
 
-	text_end ; unused
+	text_end ; unreferenced
 
 _EvolvedIntoText::
 	text_start
@@ -622,7 +620,7 @@ _PharmacyComeAgainText::
 	line "See you around."
 	done
 
-; unused
+; unreferenced
 _NothingToSellText::
 	text "You don't have"
 	line "anything to sell."
@@ -746,25 +744,25 @@ _MainMenuTimeUnknownText::
 	text "Clock time unknown"
 	done
 
-; unused mobile
+; unreferenced mobile
 _DeleteSavedLoginPasswordText::
 	text "Delete the saved"
 	line "LOG-IN PASSWORD?"
 	done
 
-; unused mobile
+; unreferenced mobile
 _DeletedTheLoginPasswordText::
 	text "Deleted the LOG-IN"
 	line "PASSWORD."
 	done
 
-; unused mobile
+; unreferenced mobile
 _MobilePickThreeMonForBattle::
 	text "Pick three #MON"
 	line "for battle."
 	prompt
 
-; unused mobile
+; unreferenced mobile
 _MobileUseTheseThreeMonText::
 	text_ram wMobileParticipant1Nickname
 	text ","
@@ -778,13 +776,13 @@ _MobileUseTheseThreeMonText::
 	para "Use these three?"
 	done
 
-; unused mobile
+; unreferenced mobile
 _MobileOnlyThreeMonMayEnterText::
 	text "Only three #MON"
 	line "may enter."
 	prompt
 
-; unused mobile
+; unreferenced mobile
 _MobileCardFolderIntro1Text::
 	text "The CARD FOLDER"
 	line "stores your and"
@@ -802,7 +800,7 @@ _MobileCardFolderIntro1Text::
 	para ""
 	done
 
-; unused mobile
+; unreferenced mobile
 _MobileCardFolderIntro2Text::
 	text "This is your CARD."
 
@@ -816,7 +814,7 @@ _MobileCardFolderIntro2Text::
 	para ""
 	done
 
-; unused mobile
+; unreferenced mobile
 _MobileCardFolderIntro3Text::
 	text "If you have your"
 	line "friend's CARD, you"
@@ -831,7 +829,7 @@ _MobileCardFolderIntro3Text::
 	para ""
 	done
 
-; unused mobile
+; unreferenced mobile
 _MobileCardFolderIntro4Text::
 	text "To safely store"
 	line "your collection of"
@@ -843,7 +841,7 @@ _MobileCardFolderIntro4Text::
 	para ""
 	done
 
-; unused mobile
+; unreferenced mobile
 _MobileCardFolderAskDeleteText::
 	text "If the CARD FOLDER"
 	line "is deleted, all"
@@ -860,13 +858,13 @@ _MobileCardFolderAskDeleteText::
 	line "your CARD FOLDER?"
 	done
 
-; unused mobile
+; unreferenced mobile
 _MobileCardFolderDeleteAreYouSureText::
 	text "Are you sure you"
 	line "want to delete it?"
 	done
 
-; unused mobile
+; unreferenced mobile
 _MobileCardFolderDeletedText::
 	text "The CARD FOLDER"
 	line "has been deleted."
@@ -874,7 +872,7 @@ _MobileCardFolderDeletedText::
 	para ""
 	done
 
-; unused mobile
+; unreferenced mobile
 _MobileCardFolderAskOpenOldText::
 	text "There is an older"
 	line "CARD FOLDER from a"
@@ -884,13 +882,13 @@ _MobileCardFolderAskOpenOldText::
 	line "open it?"
 	done
 
-; unused mobile
+; unreferenced mobile
 _MobileCardFolderAskDeleteOldText::
 	text "Delete the old"
 	line "CARD FOLDER?"
 	done
 
-; unused mobile
+; unreferenced mobile
 _MobileCardFolderFinishRegisteringCardsText::
 	text "Finish registering"
 	line "CARDS?"
@@ -923,8 +921,7 @@ _PhoneThankYouText::
 	text "Thank you!"
 	done
 
-; unused
-UnknownText_0x1c55d6::
+_SpaceSpaceColonText:: ; unreferenced
 	text "  :"
 	done
 
@@ -959,10 +956,10 @@ _LearnedMoveText::
 	text_ram wStringBuffer2
 	text "!@"
 	sound_dex_fanfare_50_79
-	text_waitbutton
+	text_promptbutton
 	text_end
 
-	text_end ; unused
+	text_end ; unreferenced
 
 _MoveAskForgetText::
 	text "Which move should"
@@ -1011,7 +1008,7 @@ Text_MoveForgetCount::
 	text_pause
 	text_end
 
-	text_end ; unused
+	text_end ; unreferenced
 
 _MoveForgotText::
 	text " Poof!@"
@@ -1072,7 +1069,7 @@ _GearTodayText::
 	text_today
 	text_end
 
-	text_end ; unused
+	text_end ; unreferenced
 
 _GearEllipseText::
 	text "<……>"
@@ -1241,13 +1238,13 @@ Text_BallCaught::
 	sound_caught_mon
 	text_end
 
-	text_end ; unused
+	text_end ; unreferenced
 
 _WaitButtonText::
-	text_waitbutton
+	text_promptbutton
 	text_end
 
-	text_end ; unused
+	text_end ; unreferenced
 
 _BallSentToPCText::
 	text_ram wMonOrItemNameBuffer
@@ -1261,10 +1258,10 @@ _NewDexDataText::
 	line "was newly added to"
 	cont "the #DEX.@"
 	sound_slot_machine_start
-	text_waitbutton
+	text_promptbutton
 	text_end
 
-	text_end ; unused
+	text_end ; unreferenced
 
 _AskGiveNicknameText::
 	text "Give a nickname to"
@@ -1308,10 +1305,10 @@ _FluteWakeUpText::
 Text_PlayedPokeFlute::
 	text "<PLAYER> played the"
 	line "# FLUTE.@"
-	text_waitbutton
+	text_promptbutton
 	text_end
 
-	text_end ; unused
+	text_end ; unreferenced
 
 _BlueCardBalanceText::
 	text "You now have"
@@ -1326,7 +1323,7 @@ _CoinCaseCountText::
 	text_decimal wCoins, 2, 4
 	text_end
 
-	text_end ; unused
+	text_end ; unreferenced
 
 _RaiseThePPOfWhichMoveText::
 	text "Raise the PP of"

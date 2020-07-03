@@ -17,11 +17,11 @@ MobileCheckOwnMonAnywhere:
 	ld bc, PARTYMON_STRUCT_LENGTH
 	add hl, bc
 	pop bc
-	call .CopyName
+	call .AdvanceOTName
 	dec d
 	jr nz, .asm_4a851
 	ld a, BANK(sBoxCount)
-	call GetSRAMBank
+	call OpenSRAM
 	ld a, [sBoxCount]
 	and a
 	jr z, .asm_4a888
@@ -39,7 +39,7 @@ MobileCheckOwnMonAnywhere:
 	ld bc, BOXMON_STRUCT_LENGTH
 	add hl, bc
 	pop bc
-	call .CopyName
+	call .AdvanceOTName
 	dec d
 	jr nz, .asm_4a873
 
@@ -57,7 +57,7 @@ MobileCheckOwnMonAnywhere:
 	add hl, bc
 	add hl, bc
 	ld a, [hli]
-	call GetSRAMBank
+	call OpenSRAM
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -90,7 +90,7 @@ MobileCheckOwnMonAnywhere:
 	ld bc, BOXMON_STRUCT_LENGTH
 	add hl, bc
 	pop bc
-	call .CopyName
+	call .AdvanceOTName
 	dec d
 	jr nz, .asm_4a8ba
 	pop bc
@@ -146,7 +146,7 @@ MobileCheckOwnMonAnywhere:
 	dba sBox13
 	dba sBox14
 
-.CopyName:
+.AdvanceOTName:
 	push hl
 	ld hl, NAME_LENGTH
 	add hl, bc
@@ -267,24 +267,24 @@ Function4a9d7:
 	call GetNick
 	ld h, d
 	ld l, e
-	ld de, wd006
-	ld bc, 6
+	ld de, wMobileParticipant1Nickname
+	ld bc, NAME_LENGTH_JAPANESE
 	call CopyBytes
 	ld a, [wd003]
 	ld hl, wPartyMonNicknames
 	call GetNick
 	ld h, d
 	ld l, e
-	ld de, wd00c
-	ld bc, 6
+	ld de, wMobileParticipant2Nickname
+	ld bc, NAME_LENGTH_JAPANESE
 	call CopyBytes
 	ld a, [wd004]
 	ld hl, wPartyMonNicknames
 	call GetNick
 	ld h, d
 	ld l, e
-	ld de, wd012
-	ld bc, 6
+	ld de, wMobileParticipant3Nickname
+	ld bc, NAME_LENGTH_JAPANESE
 	call CopyBytes
 	ld hl, MobileUseTheseThreeMonText
 	call PrintText

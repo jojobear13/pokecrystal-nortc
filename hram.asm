@@ -1,162 +1,170 @@
 SECTION "HRAM", HRAM
 
-hTransferVirtualOAM:: ds 10 ; ff80
+hTransferVirtualOAM:: ds 10
 
-hROMBankBackup:: db ; ff8a
-hBuffer:: db ; ff8b
-hFF8C:: db ; ff8c
+hROMBankBackup:: db
+hFarByte::
+hTempBank:: db
+hSRAMBank:: db
 
-hRTCDayHi::   db ; ff8d
-hRTCDayLo::   db ; ff8e
-hRTCHours::   db ; ff8f
-hRTCMinutes:: db ; ff90
-hRTCSeconds:: db ; ff91
+hRTCDayHi::   db
+hRTCDayLo::   db
+hRTCHours::   db
+hRTCMinutes:: db
+hRTCSeconds:: db
 
 	ds 2
 
-hHours:: db ; ff94
+hHours:: db
 	ds 1
-hMinutes:: db ; ff96
+hMinutes:: db
 	ds 1
-hSeconds:: db ; ff98
+hSeconds:: db
 	ds 1
-
-	ds 1
-
-hVBlankCounter:: db ; ff9b
 
 	ds 1
 
-hROMBank:: db ; ff9d
-hVBlank:: db ; ff9e
-hMapEntryMethod:: db ; ff9f
-hMenuReturn:: db ; ffa0
+hVBlankCounter:: db
 
 	ds 1
 
-hJoypadReleased:: db ; ffa2
-hJoypadPressed::  db ; ffa3
-hJoypadDown::     db ; ffa4
-hJoypadSum::      db ; ffa5
-hJoyReleased::    db ; ffa6
-hJoyPressed::     db ; ffa7
-hJoyDown::        db ; ffa8
-hJoyLast::        db ; ffa9
+hROMBank:: db
+hVBlank:: db
+hMapEntryMethod:: db
 
-hInMenu:: db ; ffaa
+hMenuReturn:: db
+hUnusedFFA1:: db
+
+hJoypadReleased:: db
+hJoypadPressed::  db
+hJoypadDown::     db
+hJoypadSum::      db
+hJoyReleased::    db
+hJoyPressed::     db
+hJoyDown::        db
+hJoyLast::        db
+
+hInMenu:: db
 
 	ds 1
 
-hPrinter:: db ; ffac
-hGraphicStartTile:: db ; ffad
-hMoveMon:: db ; ffae
+hPrinter:: db
+hGraphicStartTile:: db
+hMoveMon:: db
 
-UNION ; ffaf
-hMapObjectIndexBuffer:: db ; ffaf
-hObjectStructIndexBuffer:: db ; ffb0
-NEXTU ; ffaf
-hConnectionStripLength:: db ; ffaf
-hConnectedMapWidth:: db ; ffb0
-ENDU ; ffb1
+UNION
+hMapObjectIndexBuffer:: db
+hObjectStructIndexBuffer:: db
+NEXTU
+hConnectionStripLength:: db
+hConnectedMapWidth:: db
+ENDU
 
-hEnemyMonSpeed:: dw ; ffb1
+hEnemyMonSpeed:: dw
 
-UNION ; ffb3
+UNION
 ; math-related values
 
-UNION ; ffb3
+UNION
 ; inputs to Multiply
 	ds 1
-hMultiplicand:: ds 3 ; ffb4
-hMultiplier::   db   ; ffb7
-NEXTU ; ffb3
+hMultiplicand:: ds 3
+hMultiplier::   db
+NEXTU
 ; result of Multiply
-hProduct::      ds 4 ; ffb3
-NEXTU ; ffb3
+hProduct::      ds 4
+NEXTU
 ; inputs to Divide
-hDividend::     ds 4 ; ffb3
-hDivisor::      db   ; ffb7
-NEXTU ; ffb3
+hDividend::     ds 4
+hDivisor::      db
+NEXTU
 ; results of Divide
-hQuotient::     ds 4 ; ffb3
-hRemainder::    db   ; ffb7
-ENDU ; ffb8
+hQuotient::     ds 4
+hRemainder::    db
+ENDU
 
-hMathBuffer:: ds 5 ; ffb8
+hMathBuffer:: ds 5
 
-NEXTU ; ffb3
+NEXTU
 ; PrintNum scratch space
-hPrintNumBuffer:: ds 10 ; ffb3
+hPrintNumBuffer:: ds 10
 
-NEXTU ; ffb3
+NEXTU
 ; miscellaneous
     ds 9
-hMGStatusFlags:: db ; ffbc
-ENDU ; ffbd
+hMGStatusFlags:: db
+ENDU
 
-hUsedSpriteIndex:: db ; ffbd
-hUsedSpriteTile::  db ; ffbe
-hFFBF::            db ; ffbf
-hFFC0::            db ; ffc0
-hFFC1::            db ; ffc1
-hFFC2::            db ; ffc2
+UNION
+hUsedSpriteIndex:: db
+hUsedSpriteTile::  db
+NEXTU
+hCurSpriteXCoord::   db
+hCurSpriteYCoord::   db
+hCurSpriteXPixel::   db
+hCurSpriteYPixel::   db
+hCurSpriteTile::     db
+hCurSpriteOAMFlags:: db
+ENDU
 
-UNION ; ffc3
-hMoneyTemp:: ds 3 ; ffc3
-NEXTU ; ffc3
-hMGJoypadPressed::  db ; ffc3
-hMGJoypadReleased:: db ; ffc4
-ENDU ; ffc6
+UNION
+hMoneyTemp:: ds 3
+NEXTU
+hMGJoypadPressed::  db
+hMGJoypadReleased:: db
+hMGPrevTIMA::       db
+ENDU
 
-hLCDCPointer::     db ; ffc6
-hLYOverrideStart:: db ; ffc7
-hLYOverrideEnd::   db ; ffc8
+hLCDCPointer::     db
+hLYOverrideStart:: db
+hLYOverrideEnd::   db
 
-hMobileReceive::             db ; ffc9
-hSerialReceivedNewData::     db ; ffca
-hSerialConnectionStatus::    db ; ffcb
-hSerialIgnoringInitialData:: db ; ffcc
-hSerialSend::                db ; ffcd
-hSerialReceive::             db ; ffce
+hMobileReceive::             db
+hSerialReceivedNewData::     db
+hSerialConnectionStatus::    db
+hSerialIgnoringInitialData:: db
+hSerialSend::                db
+hSerialReceive::             db
 
-hSCX::           db ; ffcf
-hSCY::           db ; ffd0
-hWX::            db ; ffd1
-hWY::            db ; ffd2
-hTilesPerCycle:: db ; ffd3
-hBGMapMode::     db ; ffd4
-hBGMapThird::    db ; ffd5
-hBGMapAddress::  dw ; ffd6
+hSCX::           db
+hSCY::           db
+hWX::            db
+hWY::            db
+hTilesPerCycle:: db
+hBGMapMode::     db
+hBGMapThird::    db
+hBGMapAddress::  dw
 
-hOAMUpdate:: db ; ffd8
+hOAMUpdate:: db
 
-hSPBuffer::  dw ; ffd9
+hSPBuffer::  dw
 
-hBGMapUpdate::    db ; ffdb
-hBGMapTileCount:: db ; ffdc
+hBGMapUpdate::    db
+hBGMapTileCount:: db
 
 	ds 1
 
-hMapAnims::      db ; ffde
-hTileAnimFrame:: db ; ffdf
+hMapAnims::      db
+hTileAnimFrame:: db
 
-hLastTalked:: db ; ffe0
+hLastTalked:: db
 
-hRandom::
-hRandomAdd:: db ; ffe1
-hRandomSub:: db ; ffe2
+hRandomAdd:: db
+hRandomSub:: db
 
-hSecondsBackup:: db ; ffe3
+hUnusedBackup:: db
 
-hBattleTurn:: ; ffe4
+hBattleTurn::
 ; Which trainer's turn is it? 0: player, 1: opponent trainer
 	db
 
-hCGBPalUpdate:: db ; ffe5
-hCGB::          db ; ffe6
-hSGB::          db ; ffe7
+hCGBPalUpdate:: db
+hCGB::          db
+hSGB::          db
 
-hDMATransfer:: db ; ffe8
-hMobile:: db ; ffe9
-hSystemBooted:: db ; ffea
-hClockResetTrigger:: db ; ffeb
+hDMATransfer:: db
+hMobile:: db
+hSystemBooted:: db
+hClockResetTrigger:: db
+
+	ds 19

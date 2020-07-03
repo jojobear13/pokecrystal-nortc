@@ -2,10 +2,10 @@
 	const ROUTE38_STANDING_YOUNGSTER1
 	const ROUTE38_LASS
 	const ROUTE38_STANDING_YOUNGSTER2
-	const ROUTE38_BUENA1
+	const ROUTE38_BEAUTY1
 	const ROUTE38_SAILOR
 	const ROUTE38_FRUIT_TREE
-	const ROUTE38_BUENA2
+	const ROUTE38_BEAUTY2
 
 Route38_MapScripts:
 	db 0 ; scene scripts
@@ -41,7 +41,7 @@ TrainerLassDana1:
 	loadvar VAR_CALLERID, PHONE_LASS_DANA
 	endifjustbattled
 	opentext
-	checkflag ENGINE_DANA
+	checkflag ENGINE_DANA_READY_FOR_REMATCH
 	iftrue .DanaRematch
 	checkflag ENGINE_DANA_HAS_THUNDERSTONE
 	iftrue .TryGiveThunderstone
@@ -50,7 +50,7 @@ TrainerLassDana1:
 	checkevent EVENT_DANA_ASKED_FOR_PHONE_NUMBER
 	iftrue .SecondTimeAsking
 	writetext LassDanaMoomooMilkText
-	buttonsound
+	promptbutton
 	setevent EVENT_DANA_ASKED_FOR_PHONE_NUMBER
 	scall .AskNumber1F
 	sjump .AskForPhoneNumber
@@ -91,7 +91,7 @@ TrainerLassDana1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wDanaFightCount, 1
-	clearflag ENGINE_DANA
+	clearflag ENGINE_DANA_READY_FOR_REMATCH
 	end
 
 .LoadFight1:
@@ -99,7 +99,7 @@ TrainerLassDana1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wDanaFightCount, 2
-	clearflag ENGINE_DANA
+	clearflag ENGINE_DANA_READY_FOR_REMATCH
 	end
 
 .LoadFight2:
@@ -107,7 +107,7 @@ TrainerLassDana1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wDanaFightCount, 3
-	clearflag ENGINE_DANA
+	clearflag ENGINE_DANA_READY_FOR_REMATCH
 	end
 
 .LoadFight3:
@@ -115,14 +115,14 @@ TrainerLassDana1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wDanaFightCount, 4
-	clearflag ENGINE_DANA
+	clearflag ENGINE_DANA_READY_FOR_REMATCH
 	end
 
 .LoadFight4:
 	loadtrainer LASS, DANA5
 	startbattle
 	reloadmapafterbattle
-	clearflag ENGINE_DANA
+	clearflag ENGINE_DANA_READY_FOR_REMATCH
 	end
 
 .TryGiveThunderstone:
@@ -137,39 +137,39 @@ TrainerLassDana1:
 	sjump .PackFull
 
 .AskNumber1F:
-	jumpstd asknumber1f
+	jumpstd AskNumber1FScript
 	end
 
 .AskNumber2F:
-	jumpstd asknumber2f
+	jumpstd AskNumber2FScript
 	end
 
 .RegisteredPhoneNumber:
-	jumpstd registerednumberf
+	jumpstd RegisteredNumberFScript
 	end
 
 .NumberAccepted:
-	jumpstd numberacceptedf
+	jumpstd NumberAcceptedFScript
 	end
 
 .DeclinedPhoneNumber:
-	jumpstd numberdeclinedf
+	jumpstd NumberDeclinedFScript
 	end
 
 .PhoneFull:
-	jumpstd phonefullf
+	jumpstd PhoneFullFScript
 	end
 
 .Rematch:
-	jumpstd rematchf
+	jumpstd RematchFScript
 	end
 
 .Gift:
-	jumpstd giftf
+	jumpstd GiftFScript
 	end
 
 .PackFull:
-	jumpstd packfullf
+	jumpstd PackFullFScript
 	end
 
 TrainerSchoolboyChad1:
@@ -179,14 +179,14 @@ TrainerSchoolboyChad1:
 	loadvar VAR_CALLERID, PHONE_SCHOOLBOY_CHAD
 	endifjustbattled
 	opentext
-	checkflag ENGINE_CHAD
+	checkflag ENGINE_CHAD_READY_FOR_REMATCH
 	iftrue .ChadRematch
 	checkcellnum PHONE_SCHOOLBOY_CHAD
 	iftrue .HaveChadsNumber
 	checkevent EVENT_CHAD_ASKED_FOR_PHONE_NUMBER
 	iftrue .SecondTimeAsking
 	writetext SchoolboyChadSoManyTestsText
-	buttonsound
+	promptbutton
 	setevent EVENT_CHAD_ASKED_FOR_PHONE_NUMBER
 	scall .AskPhoneNumber1
 	sjump .AskToRegisterNumber
@@ -227,7 +227,7 @@ TrainerSchoolboyChad1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wChadFightCount, 1
-	clearflag ENGINE_CHAD
+	clearflag ENGINE_CHAD_READY_FOR_REMATCH
 	end
 
 .LoadFight1:
@@ -235,7 +235,7 @@ TrainerSchoolboyChad1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wChadFightCount, 2
-	clearflag ENGINE_CHAD
+	clearflag ENGINE_CHAD_READY_FOR_REMATCH
 	end
 
 .LoadFight2:
@@ -243,7 +243,7 @@ TrainerSchoolboyChad1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wChadFightCount, 3
-	clearflag ENGINE_CHAD
+	clearflag ENGINE_CHAD_READY_FOR_REMATCH
 	end
 
 .LoadFight3:
@@ -251,42 +251,42 @@ TrainerSchoolboyChad1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wChadFightCount, 4
-	clearflag ENGINE_CHAD
+	clearflag ENGINE_CHAD_READY_FOR_REMATCH
 	end
 
 .LoadFight4:
 	loadtrainer SCHOOLBOY, CHAD5
 	startbattle
 	reloadmapafterbattle
-	clearflag ENGINE_CHAD
+	clearflag ENGINE_CHAD_READY_FOR_REMATCH
 	end
 
 .AskPhoneNumber1:
-	jumpstd asknumber1m
+	jumpstd AskNumber1MScript
 	end
 
 .AskPhoneNumber2:
-	jumpstd asknumber2m
+	jumpstd AskNumber2MScript
 	end
 
 .RegisteredChad:
-	jumpstd registerednumberm
+	jumpstd RegisteredNumberMScript
 	end
 
 .HaveChadsNumber:
-	jumpstd numberacceptedm
+	jumpstd NumberAcceptedMScript
 	end
 
 .SaidNo:
-	jumpstd numberdeclinedm
+	jumpstd NumberDeclinedMScript
 	end
 
 .PhoneFull:
-	jumpstd phonefullm
+	jumpstd PhoneFullMScript
 	end
 
 .Rematch:
-	jumpstd rematchm
+	jumpstd RematchMScript
 	end
 
 TrainerBeautyValerie:
@@ -487,7 +487,7 @@ Route38_MapEvents:
 	object_event  4,  1, SPRITE_STANDING_YOUNGSTER, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_TRAINER, 1, TrainerSchoolboyChad1, -1
 	object_event 15,  3, SPRITE_LASS, SPRITEMOVEDATA_SPINRANDOM_FAST, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_TRAINER, 2, TrainerLassDana1, -1
 	object_event 12, 15, SPRITE_STANDING_YOUNGSTER, SPRITEMOVEDATA_SPINRANDOM_FAST, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_TRAINER, 1, TrainerBirdKeeperToby, -1
-	object_event 19,  9, SPRITE_BUENA, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_TRAINER, 1, TrainerBeautyValerie, -1
+	object_event 19,  9, SPRITE_BEAUTY, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_TRAINER, 1, TrainerBeautyValerie, -1
 	object_event 24,  5, SPRITE_SAILOR, SPRITEMOVEDATA_SPINCOUNTERCLOCKWISE, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_TRAINER, 2, TrainerSailorHarry, -1
 	object_event 12, 10, SPRITE_FRUIT_TREE, SPRITEMOVEDATA_STILL, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, Route38FruitTree, -1
-	object_event  5,  8, SPRITE_BUENA, SPRITEMOVEDATA_SPINRANDOM_FAST, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_TRAINER, 1, TrainerBeautyOlivia, -1
+	object_event  5,  8, SPRITE_BEAUTY, SPRITEMOVEDATA_SPINRANDOM_FAST, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_TRAINER, 1, TrainerBeautyOlivia, -1

@@ -56,7 +56,7 @@ GoldenrodVendingMachine:
 	pause 10
 	playsound SFX_ENTER_DOOR
 	writetext GoldenrodClangText
-	buttonsound
+	promptbutton
 	itemnotify
 	sjump .Start
 
@@ -94,7 +94,7 @@ GoldenrodDeptStore6FDirectory:
 	jumptext GoldenrodDeptStore6FDirectoryText
 
 GoldenrodDeptStore6FElevatorButton:
-	jumpstd elevatorbutton
+	jumpstd ElevatorButtonScript
 
 GoldenrodVendingText:
 	text "A vending machine!"

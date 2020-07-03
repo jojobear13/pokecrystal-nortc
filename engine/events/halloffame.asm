@@ -278,7 +278,7 @@ HOF_SlideBackpic:
 	ldh a, [hSCX]
 	cp $70
 	ret z
-	add $4
+	add 4
 	ldh [hSCX], a
 	call DelayFrame
 	jr .backpicloop
@@ -412,7 +412,7 @@ LoadHOFTeam:
 	ld bc, wHallOfFameTempEnd - wHallOfFameTemp + 1
 	call AddNTimes
 	ld a, BANK(sHallOfFame)
-	call GetSRAMBank
+	call OpenSRAM
 	ld a, [hl]
 	and a
 	jr z, .absent
@@ -449,7 +449,7 @@ DisplayHOFMon:
 	ld bc, MON_NAME_LENGTH - 1
 	call CopyBytes
 	ld a, "@"
-	ld [wStringBuffer2 + 10], a
+	ld [wStringBuffer2 + MON_NAME_LENGTH - 1], a
 	hlcoord 0, 0
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 	ld a, " "

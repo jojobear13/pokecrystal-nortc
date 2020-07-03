@@ -13,7 +13,7 @@ Route5CleanseTagHouseGrannyScript:
 	checkevent EVENT_GOT_CLEANSE_TAG
 	iftrue .GotCleanseTag
 	writetext Route5CleanseTagHouseGrannyText1
-	buttonsound
+	promptbutton
 	verbosegiveitem CLEANSE_TAG
 	iffalse .NoRoom
 	setevent EVENT_GOT_CLEANSE_TAG
@@ -28,7 +28,7 @@ Route5CleanseTagHouseTeacherScript:
 	jumptextfaceplayer Route5CleanseTagHouseTeacherText
 
 HouseForSaleBookshelf:
-	jumpstd difficultbookshelf
+	jumpstd DifficultBookshelfScript
 
 Route5CleanseTagHouseGrannyText1:
 	text "Eeyaaaah!"

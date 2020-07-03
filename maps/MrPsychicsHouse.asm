@@ -12,7 +12,7 @@ MrPsychic:
 	checkevent EVENT_GOT_TM29_PSYCHIC
 	iftrue .AlreadyGotItem
 	writetext MrPsychicText1
-	buttonsound
+	promptbutton
 	verbosegiveitem TM_PSYCHIC_M
 	iffalse .Done
 	setevent EVENT_GOT_TM29_PSYCHIC
@@ -24,7 +24,7 @@ MrPsychic:
 	end
 
 MrPsychicsHouseBookshelf:
-	jumpstd difficultbookshelf
+	jumpstd DifficultBookshelfScript
 
 MrPsychicText1:
 	text "…"

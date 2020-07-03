@@ -2,10 +2,9 @@ tilepal: MACRO
 ; used in gfx/tilesets/*_palette_map.asm
 ; vram bank, pals
 x = \1 << OAM_TILE_BANK
-rept (_NARG + -1) / 2
+rept (_NARG - 1) / 2
 	dn (x | PAL_BG_\3), (x | PAL_BG_\2)
-	shift
-	shift
+	shift 2
 endr
 ENDM
 
@@ -103,13 +102,14 @@ INCLUDE "gfx/tilesets/forest_palette_map.asm"
 TilesetPokeComCenterPalMap:
 INCLUDE "gfx/tilesets/pokecom_center_palette_map.asm"
 
-TilesetBattleTowerPalMap:
-INCLUDE "gfx/tilesets/battle_tower_palette_map.asm"
+TilesetBattleTowerInsidePalMap:
+INCLUDE "gfx/tilesets/battle_tower_inside_palette_map.asm"
 
 TilesetBattleTowerOutsidePalMap:
 INCLUDE "gfx/tilesets/battle_tower_outside_palette_map.asm"
 
-; unused
-rept 26
-	db $06
+MapGroupPalettes: ; unreferenced
+; entries correspond to GROUP_* constants
+rept NUM_MAP_GROUPS
+	db PAL_BG_ROOF
 endr

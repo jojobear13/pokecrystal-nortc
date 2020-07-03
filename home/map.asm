@@ -93,7 +93,7 @@ GetMapSceneID::
 
 OverworldTextModeSwitch::
 	call LoadMapPart
-	call FarCallSwapTextboxPalettes
+	call SwapTextboxPalettes
 	ret
 
 LoadMapPart::
@@ -163,7 +163,7 @@ LoadMetatiles::
 	ld h, a
 
 	; copy the 4x4 metatile
-rept METATILE_WIDTH + -1
+rept METATILE_WIDTH - 1
 rept METATILE_WIDTH
 	ld a, [hli]
 	ld [de], a
@@ -368,7 +368,7 @@ CheckIndoorMap::
 	cp GATE
 	ret
 
-; unused
+CheckUnknownMap:: ; unreferenced
 	cp INDOOR
 	ret z
 	cp GATE
@@ -380,11 +380,11 @@ LoadMapAttributes::
 	call CopyMapPartialAndAttributes
 	call SwitchToMapScriptsBank
 	call ReadMapScripts
-	xor a ; do not skip object_events
+	xor a ; do not skip object events
 	call ReadMapEvents
 	ret
 
-LoadMapAttributes_SkipPeople::
+LoadMapAttributes_SkipObjects::
 	call CopyMapPartialAndAttributes
 	call SwitchToMapScriptsBank
 	call ReadMapScripts
@@ -591,13 +591,12 @@ ReadObjectEvents::
 	jr z, .skip
 	; jr c, .skip
 
-; stupid waste of time and space
+	; could have done "inc hl" instead
 	ld bc, 1
 	add hl, bc
 ; Fill the remaining sprite IDs and y coords with 0 and -1, respectively.
-; Bleeds into wObjectMasks due to a bug.  Uncomment the above subtraction
-; to fix.
-	ld bc, OBJECT_LENGTH
+; Bleeds into wObjectMasks due to a bug.  Uncomment the above code to fix.
+	ld bc, MAPOBJECT_LENGTH
 .loop
 	ld [hl],  0
 	inc hl
@@ -631,7 +630,7 @@ CopyMapObjectEvents::
 	jr nz, .loop2
 
 	pop hl
-	ld bc, OBJECT_LENGTH
+	ld bc, MAPOBJECT_LENGTH
 	add hl, bc
 	pop bc
 	dec c
@@ -640,13 +639,13 @@ CopyMapObjectEvents::
 
 ClearObjectStructs::
 	ld hl, wObject1Struct
-	ld bc, OBJECT_STRUCT_LENGTH * (NUM_OBJECT_STRUCTS - 1)
+	ld bc, OBJECT_LENGTH * (NUM_OBJECT_STRUCTS - 1)
 	xor a
 	call ByteFill
 
 ; Just to make sure (this is rather pointless)
 	ld hl, wObject1Struct
-	ld de, OBJECT_STRUCT_LENGTH
+	ld de, OBJECT_LENGTH
 	ld c, NUM_OBJECT_STRUCTS - 1
 	xor a
 .loop
@@ -656,7 +655,7 @@ ClearObjectStructs::
 	jr nz, .loop
 	ret
 
-RestoreFacingAfterWarp::
+GetWarpDestCoords::
 	call GetMapScriptsBank
 	rst Bankswitch
 
@@ -684,7 +683,7 @@ endr
 	call .backup
 
 .skip
-	farcall GetCoordOfUpperLeftCorner
+	farcall GetMapScreenCoords
 	ret
 
 .backup
@@ -1042,10 +1041,10 @@ MapTextbox::
 Call_a_de::
 ; Call a:de.
 
-	ldh [hBuffer], a
+	ldh [hTempBank], a
 	ldh a, [hROMBank]
 	push af
-	ldh a, [hBuffer]
+	ldh a, [hTempBank]
 	rst Bankswitch
 
 	call .de
@@ -1110,14 +1109,14 @@ ObjectEventText::
 	text_far _ObjectEventText
 	text_end
 
-BGEvent::
+BGEvent:: ; unreferenced
 	jumptext BGEventText
 
 BGEventText::
 	text_far _BGEventText
 	text_end
 
-CoordinatesEvent::
+CoordinatesEvent:: ; unreferenced
 	jumptext CoordinatesEventText
 
 CoordinatesEventText::
@@ -1156,7 +1155,7 @@ ScrollMapUp::
 	ld de, wBGMapBuffer
 	call BackupBGMapRow
 	ld c, 2 * SCREEN_WIDTH
-	call FarCallScrollBGMapPalettes
+	call ScrollBGMapPalettes
 	ld a, [wBGMapAnchor]
 	ld e, a
 	ld a, [wBGMapAnchor + 1]
@@ -1171,7 +1170,7 @@ ScrollMapDown::
 	ld de, wBGMapBuffer
 	call BackupBGMapRow
 	ld c, 2 * SCREEN_WIDTH
-	call FarCallScrollBGMapPalettes
+	call ScrollBGMapPalettes
 	ld a, [wBGMapAnchor]
 	ld l, a
 	ld a, [wBGMapAnchor + 1]
@@ -1194,7 +1193,7 @@ ScrollMapLeft::
 	ld de, wBGMapBuffer
 	call BackupBGMapColumn
 	ld c, 2 * SCREEN_HEIGHT
-	call FarCallScrollBGMapPalettes
+	call ScrollBGMapPalettes
 	ld a, [wBGMapAnchor]
 	ld e, a
 	ld a, [wBGMapAnchor + 1]
@@ -1209,7 +1208,7 @@ ScrollMapRight::
 	ld de, wBGMapBuffer
 	call BackupBGMapColumn
 	ld c, 2 * SCREEN_HEIGHT
-	call FarCallScrollBGMapPalettes
+	call ScrollBGMapPalettes
 	ld a, [wBGMapAnchor]
 	ld e, a
 	and %11100000
@@ -1313,7 +1312,7 @@ UpdateBGMapColumn::
 	ldh [hBGMapTileCount], a
 	ret
 
-Unreferenced_Function2816::
+ClearBGMapBuffer:: ; unreferenced
 	ld hl, wBGMapBuffer
 	ld bc, wBGMapBufferEnd - wBGMapBuffer
 	xor a
@@ -1437,7 +1436,7 @@ SaveScreen::
 .vertical
 	ld b, SCREEN_META_WIDTH
 	ld c, SCREEN_META_HEIGHT - 1
-	jr SaveScreen_LoadNeighbor
+	jr SaveScreen_LoadConnection
 
 .left
 	ld de, wScreenSave + 1
@@ -1449,9 +1448,9 @@ SaveScreen::
 .horizontal
 	ld b, SCREEN_META_WIDTH - 1
 	ld c, SCREEN_META_HEIGHT
-	jr SaveScreen_LoadNeighbor
+	jr SaveScreen_LoadConnection
 
-LoadNeighboringBlockData::
+LoadConnectionBlockData::
 	ld hl, wOverworldMapAnchor
 	ld a, [hli]
 	ld h, [hl]
@@ -1463,7 +1462,7 @@ LoadNeighboringBlockData::
 	ld b, SCREEN_META_WIDTH
 	ld c, SCREEN_META_HEIGHT
 
-SaveScreen_LoadNeighbor::
+SaveScreen_LoadConnection::
 .row
 	push bc
 	push hl
@@ -1480,7 +1479,6 @@ SaveScreen_LoadNeighbor::
 	ld e, a
 	jr nc, .okay
 	inc d
-
 .okay
 	pop hl
 	ldh a, [hConnectionStripLength]
@@ -1905,7 +1903,7 @@ CloseSubmenu::
 	call ReloadTilesetAndPalettes
 	call UpdateSprites
 	call Call_ExitMenu
-	call ret_d90
+	call GSReloadPalettes
 	jr FinishExitMenu
 
 ExitAllMenus::
@@ -1913,7 +1911,7 @@ ExitAllMenus::
 	call Call_ExitMenu
 	call ReloadTilesetAndPalettes
 	call UpdateSprites
-	call ret_d90
+	call GSReloadPalettes
 FinishExitMenu::
 	ld b, SCGB_MAPPALS
 	call GetSGBLayout
@@ -2049,7 +2047,7 @@ SwitchToAnyMapAttributesBank::
 	rst Bankswitch
 	ret
 
-GetMapAttributesBank::
+GetMapAttributesBank:: ; unreferenced
 	ld a, [wMapGroup]
 	ld b, a
 	ld a, [wMapNumber]
@@ -2259,7 +2257,7 @@ GetFishingGroup::
 	pop de
 	ret
 
-LoadTileset::
+LoadMapTileset::
 	push hl
 	push bc
 
@@ -2276,4 +2274,13 @@ LoadTileset::
 
 	pop bc
 	pop hl
+	ret
+
+InexplicablyEmptyFunction::
+; unused
+; Inexplicably empty.
+; Seen in PredefPointers.
+rept 16
+	nop
+endr
 	ret

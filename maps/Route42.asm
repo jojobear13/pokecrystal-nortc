@@ -41,7 +41,7 @@ TrainerFisherTully:
 	loadvar VAR_CALLERID, PHONE_FISHER_TULLY
 	endifjustbattled
 	opentext
-	checkflag ENGINE_TULLY
+	checkflag ENGINE_TULLY_READY_FOR_REMATCH
 	iftrue .WantsBattle
 	checkflag ENGINE_TULLY_HAS_WATER_STONE
 	iftrue .HasWaterStone
@@ -50,7 +50,7 @@ TrainerFisherTully:
 	checkevent EVENT_TULLY_ASKED_FOR_PHONE_NUMBER
 	iftrue .AskedAlready
 	writetext FisherTullyAfterBattleText
-	buttonsound
+	promptbutton
 	setevent EVENT_TULLY_ASKED_FOR_PHONE_NUMBER
 	scall .AskNumber1
 	sjump .AskForNumber
@@ -87,7 +87,7 @@ TrainerFisherTully:
 	startbattle
 	reloadmapafterbattle
 	loadmem wTullyFightCount, 1
-	clearflag ENGINE_TULLY
+	clearflag ENGINE_TULLY_READY_FOR_REMATCH
 	end
 
 .LoadFight1:
@@ -95,7 +95,7 @@ TrainerFisherTully:
 	startbattle
 	reloadmapafterbattle
 	loadmem wTullyFightCount, 2
-	clearflag ENGINE_TULLY
+	clearflag ENGINE_TULLY_READY_FOR_REMATCH
 	end
 
 .LoadFight2:
@@ -103,14 +103,14 @@ TrainerFisherTully:
 	startbattle
 	reloadmapafterbattle
 	loadmem wTullyFightCount, 3
-	clearflag ENGINE_TULLY
+	clearflag ENGINE_TULLY_READY_FOR_REMATCH
 	end
 
 .LoadFight3:
 	loadtrainer FISHER, TULLY4
 	startbattle
 	reloadmapafterbattle
-	clearflag ENGINE_TULLY
+	clearflag ENGINE_TULLY_READY_FOR_REMATCH
 	end
 
 .HasWaterStone:
@@ -125,39 +125,39 @@ TrainerFisherTully:
 	sjump .PackFull
 
 .AskNumber1:
-	jumpstd asknumber1m
+	jumpstd AskNumber1MScript
 	end
 
 .AskNumber2:
-	jumpstd asknumber2m
+	jumpstd AskNumber2MScript
 	end
 
 .RegisteredNumber:
-	jumpstd registerednumberm
+	jumpstd RegisteredNumberMScript
 	end
 
 .NumberAccepted:
-	jumpstd numberacceptedm
+	jumpstd NumberAcceptedMScript
 	end
 
 .NumberDeclined:
-	jumpstd numberdeclinedm
+	jumpstd NumberDeclinedMScript
 	end
 
 .PhoneFull:
-	jumpstd phonefullm
+	jumpstd PhoneFullMScript
 	end
 
 .Rematch:
-	jumpstd rematchm
+	jumpstd RematchMScript
 	end
 
 .Gift:
-	jumpstd giftm
+	jumpstd GiftMScript
 	end
 
 .PackFull:
-	jumpstd packfullm
+	jumpstd PackFullMScript
 	end
 
 TrainerPokemaniacShane:

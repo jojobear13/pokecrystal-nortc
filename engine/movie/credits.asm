@@ -17,7 +17,7 @@ Credits::
 	ldh [rSVBK], a
 
 	call ClearBGPalettes
-	call ClearTileMap
+	call ClearTilemap
 	call ClearSprites
 
 	ld hl, wCreditsBlankFrame2bpp
@@ -80,12 +80,12 @@ Credits::
 	push af
 	ld a, $5
 	ldh [hVBlank], a
-	ld a, $1
+	ld a, TRUE
 	ldh [hInMenu], a
 	xor a
 	ldh [hBGMapMode], a
 	ld [wCreditsPos], a
-	ld [wCreditsUnusedCD21], a
+	ld [wCreditsPos + 1], a
 	ld [wCreditsTimer], a
 
 .execution_loop
@@ -198,7 +198,7 @@ Credits_UpdateGFXRequestPath:
 Credits_RequestGFX:
 	xor a
 	ldh [hBGMapMode], a
-	ld a, $8
+	ld a, 8
 	ld [wRequested2bpp], a
 	jp Credits_Next
 
@@ -245,7 +245,7 @@ ParseCredits:
 	xor a
 	ldh [hBGMapMode], a
 	hlcoord 0, 5
-	ld bc, 20 * 12
+	ld bc, SCREEN_WIDTH * 12
 	ld a, " "
 	call ByteFill
 
@@ -275,7 +275,7 @@ ParseCredits:
 	push af
 	ld e, a
 	ld d, 0
-	ld hl, CreditsStrings
+	ld hl, CreditsStringsPointers
 	add hl, de
 	add hl, de
 	ld a, [hli]
@@ -306,7 +306,7 @@ ParseCredits:
 .print
 ; Print strings spaced every two lines.
 	call .get
-	ld bc, 20 * 2
+	ld bc, SCREEN_WIDTH * 2
 	call AddNTimes
 	call PlaceString
 	jr .loop
@@ -419,22 +419,22 @@ ConstructCreditsTilemap:
 	ld a, $20
 	call DrawCreditsBorder
 
-	hlcoord 0, 0, wAttrMap
+	hlcoord 0, 0, wAttrmap
 	ld bc, 4 * SCREEN_WIDTH
 	xor a
 	call ByteFill
 
-	hlcoord 0, 4, wAttrMap
+	hlcoord 0, 4, wAttrmap
 	ld bc, SCREEN_WIDTH
 	ld a, $1
 	call ByteFill
 
-	hlcoord 0, 5, wAttrMap
+	hlcoord 0, 5, wAttrmap
 	ld bc, 12 * SCREEN_WIDTH
 	ld a, $2
 	call ByteFill
 
-	hlcoord 0, 17, wAttrMap
+	hlcoord 0, 17, wAttrmap
 	ld bc, SCREEN_WIDTH
 	ld a, $1
 	call ByteFill
@@ -572,14 +572,17 @@ Credits_LoadBorderGFX:
 	dw CreditsPichuGFX     + 16 tiles
 	dw CreditsPichuGFX     + 32 tiles
 	dw CreditsPichuGFX     + 48 tiles
+
 	dw CreditsSmoochumGFX
 	dw CreditsSmoochumGFX  + 16 tiles
 	dw CreditsSmoochumGFX  + 32 tiles
 	dw CreditsSmoochumGFX  + 48 tiles
+
 	dw CreditsDittoGFX
 	dw CreditsDittoGFX     + 16 tiles
 	dw CreditsDittoGFX     + 32 tiles
 	dw CreditsDittoGFX     + 48 tiles
+
 	dw CreditsIgglybuffGFX
 	dw CreditsIgglybuffGFX + 16 tiles
 	dw CreditsIgglybuffGFX + 32 tiles

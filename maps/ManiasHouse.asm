@@ -19,7 +19,7 @@ ManiaScript:
 	special GiveShuckle
 	iffalse .partyfull
 	writetext ManiaText_TakeCareOfShuckle
-	buttonsound
+	promptbutton
 	waitsfx
 	writetext ManiaText_GotShuckle
 	playsound SFX_KEY_ITEM
@@ -97,7 +97,7 @@ ManiaScript:
 
 ManiasHouseUnusedBookshelf:
 ; unused
-	jumpstd picturebookshelf
+	jumpstd PictureBookshelfScript
 
 ManiaText_AskLookAfterShuckle:
 	text "I, I'm in shock!"

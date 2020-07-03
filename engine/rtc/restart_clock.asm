@@ -36,7 +36,7 @@ RestartClock:
 	push af
 	set NO_TEXT_SCROLL, [hl]
 	call LoadStandardMenuHeader
-	call ClearTileMap
+	call ClearTilemap
 	ld hl, .ClockSetWithControlPadText
 	call PrintText
 	call .SetClock
@@ -206,8 +206,7 @@ RestartClock:
 	ld [wBuffer2], a
 	ret
 
-.unreferenced
-; unused
+.UnusedPlaceCharsFragment: ; unreferenced
 	ld a, [wBuffer3]
 	ld b, a
 	call Coord2Tile
@@ -227,10 +226,8 @@ RestartClock:
 	ld [hl], e
 	ret
 
-UnreferencedString_HourJP:
-; unused
+JPHourString: ; unreferenced
 	db "じ@" ; HR
 
-UnreferencedString_MinuteJP:
-; unused
+JPMinuteString: ; unreferenced
 	db "ふん@" ; MIN

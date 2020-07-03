@@ -65,14 +65,14 @@ GoldenrodDeptStore5FReceptionistScript:
 	iftrue .EventIsOver
 	special GetFirstPokemonHappiness
 	writetext GoldenrodDeptStore5FReceptionistOhYourMonDotDotDotText
-	buttonsound
+	promptbutton
 	ifgreater 150 - 1, .VeryHappy
 	ifgreater 50 - 1, .SomewhatHappy
 	sjump .NotVeryHappy
 
 .VeryHappy:
 	writetext GoldenrodDeptStore5FReceptionistThisMoveShouldBePerfectText
-	buttonsound
+	promptbutton
 	verbosegiveitem TM_RETURN
 	iffalse .Done
 	setflag ENGINE_GOLDENROD_DEPT_STORE_TM27_RETURN
@@ -87,7 +87,7 @@ GoldenrodDeptStore5FReceptionistScript:
 
 .NotVeryHappy:
 	writetext GoldenrodDeptStore5FReceptionistItLooksEvilHowAboutThisTMText
-	buttonsound
+	promptbutton
 	verbosegiveitem TM_FRUSTRATION
 	iffalse .Done
 	setflag ENGINE_GOLDENROD_DEPT_STORE_TM27_RETURN
@@ -136,7 +136,7 @@ GoldenrodDeptStore5FDirectory:
 	jumptext GoldenrodDeptStore5FDirectoryText
 
 GoldenrodDeptStore5FElevatorButton:
-	jumpstd elevatorbutton
+	jumpstd ElevatorButtonScript
 
 GoldenrodDeptStore5FReceptionistOhYourMonDotDotDotText:
 	text "Hello. Oh, your"

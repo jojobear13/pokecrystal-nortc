@@ -80,7 +80,7 @@ GetPlayerStandingTile::
 CheckOnWater::
 	ld a, [wPlayerStandingTile]
 	call GetTileCollision
-	sub WATERTILE
+	sub WATER_TILE
 	ret z
 	and a
 	ret
@@ -202,7 +202,7 @@ CheckStandingOnEntrance::
 GetMapObject::
 ; Return the location of map object a in bc.
 	ld hl, wMapObjects
-	ld bc, OBJECT_LENGTH
+	ld bc, MAPOBJECT_LENGTH
 	call AddNTimes
 	ld b, h
 	ld c, l
@@ -237,7 +237,7 @@ CheckObjectTime::
 	ld a, [hl]
 	cp -1
 	jr z, .timeofday_always
-	ld hl, .TimeOfDayValues_191e
+	ld hl, .TimesOfDay
 	ld a, [wTimeOfDay]
 	add l
 	ld l, a
@@ -257,7 +257,7 @@ CheckObjectTime::
 	and a
 	ret
 
-.TimeOfDayValues_191e:
+.TimesOfDay:
 ; entries correspond to TimeOfDay values
 	db MORN
 	db DAY
@@ -300,13 +300,13 @@ CheckObjectTime::
 	scf
 	ret
 
-; unused
+CopyMapObjectStruct:: ; unreferenced
 	ldh [hMapObjectIndexBuffer], a
 	call GetMapObject
 	call CopyObjectStruct
 	ret
 
-_CopyObjectStruct::
+UnmaskCopyMapObjectStruct::
 	ldh [hMapObjectIndexBuffer], a
 	call UnmaskObject
 	ldh a, [hMapObjectIndexBuffer]
@@ -358,11 +358,11 @@ CopyPlayerObjectTemplate::
 	ld [de], a
 	inc de
 	pop hl
-	ld bc, OBJECT_LENGTH - 1
+	ld bc, MAPOBJECT_LENGTH - 1
 	call CopyBytes
 	ret
 
-Unreferenced_Function19b8:
+DeleteFollowerMapObject: ; unreferenced
 	call GetMapObject
 	ld hl, MAPOBJECT_OBJECT_STRUCT_ID
 	add hl, bc
@@ -370,13 +370,13 @@ Unreferenced_Function19b8:
 	push af
 	ld [hl], -1
 	inc hl
-	ld bc, OBJECT_LENGTH - 1
+	ld bc, MAPOBJECT_LENGTH - 1
 	xor a
 	call ByteFill
 	pop af
 	cp -1
 	ret z
-	cp $d
+	cp NUM_OBJECT_STRUCTS
 	ret nc
 	ld b, a
 	ld a, [wObjectFollow_Leader]
@@ -424,7 +424,7 @@ FindFirstEmptyObjectStruct::
 	push bc
 	push de
 	ld hl, wObjectStructs
-	ld de, OBJECT_STRUCT_LENGTH
+	ld de, OBJECT_LENGTH
 	ld c, NUM_OBJECT_STRUCTS
 .loop
 	ld a, [hl]
@@ -574,12 +574,12 @@ _GetMovementByte::
 	ld a, h
 	ret
 
-SetVramState_Bit0::
+SetVramState_Bit0:: ; unreferenced
 	ld hl, wVramState
 	set 0, [hl]
 	ret
 
-ResetVramState_Bit0::
+ResetVramState_Bit0:: ; unreferenced
 	ld hl, wVramState
 	res 0, [hl]
 	ret
@@ -594,7 +594,7 @@ UpdateSprites::
 	ret
 
 GetObjectStruct::
-	ld bc, OBJECT_STRUCT_LENGTH
+	ld bc, OBJECT_LENGTH
 	ld hl, wObjectStructs
 	call AddNTimes
 	ld b, h

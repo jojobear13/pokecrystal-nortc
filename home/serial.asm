@@ -273,13 +273,13 @@ Serial_ExchangeLinkMenuSelection::
 	ret
 
 Serial_PrintWaitingTextAndSyncAndExchangeNybble::
-	call LoadTileMapToTempTileMap
+	call LoadTilemapToTempTilemap
 	callfar PlaceWaitingText
 	call WaitLinkTransfer
-	jp Call_LoadTempTileMapToTileMap
+	jp SafeLoadTempTilemapToTilemap
 
 Serial_SyncAndExchangeNybble::
-	call LoadTileMapToTempTileMap
+	call LoadTilemapToTempTilemap
 	callfar PlaceWaitingText
 	jp WaitLinkTransfer
 
@@ -388,7 +388,7 @@ LinkDataReceived::
 	ldh [rSC], a
 	ret
 
-Unreferenced_Function919::
+Function919:: ; unreferenced
 	ld a, [wLinkMode]
 	and a
 	ret nz

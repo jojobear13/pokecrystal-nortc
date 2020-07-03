@@ -52,7 +52,7 @@ EcruteakGymMortyScript:
 	setevent EVENT_BEAT_MEDIUM_MARTHA
 	setevent EVENT_BEAT_MEDIUM_GRACE
 	writetext MortyText_FogBadgeSpeech
-	buttonsound
+	promptbutton
 	verbosegiveitem TM_SHADOW_BALL
 	iffalse .NoRoomForShadowBall
 	setevent EVENT_GOT_TM30_SHADOW_BALL
@@ -74,10 +74,10 @@ EcruteakGymActivateRockets:
 	end
 
 .GoldenrodRockets:
-	jumpstd goldenrodrockets
+	jumpstd GoldenrodRocketsScript
 
 .RadioTowerRockets:
-	jumpstd radiotowerrockets
+	jumpstd RadioTowerRocketsScript
 
 EcruteakGymClosed:
 	applymovement PLAYER, EcruteakGymPlayerStepUpMovement
@@ -158,10 +158,10 @@ EcruteakGymGuyScript:
 EcruteakGymStatue:
 	checkflag ENGINE_FOGBADGE
 	iftrue .Beaten
-	jumpstd gymstatue1
+	jumpstd GymStatue1Script
 .Beaten:
 	gettrainername STRING_BUFFER_4, MORTY, MORTY1
-	jumpstd gymstatue2
+	jumpstd GymStatue2Script
 
 EcruteakGymPlayerStepUpMovement:
 	step UP

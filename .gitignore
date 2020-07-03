@@ -29,6 +29,9 @@
 baserom.txt
 pokecrystal.txt
 
+# used_space.py
+used_space.png
+
 # for vim configuration
 # url: http://www.vim.org/scripts/script.php?script_id=441
 .lvimrc
@@ -36,13 +39,17 @@ pokecrystal.txt
 .*.swp
 # swap files for gedit
 *~
+# osx files
+.DS_STORE
 
-*.dimensions
-*.gbcpal
-*.2bpp
+# compiled graphics
 *.1bpp
+*.2bpp
 *.lz
+*.gbcpal
+*.dimensions
 *.animated.tilemap
+*.sgb.tilemap
 gfx/pokemon/*/bitmask.asm
 gfx/pokemon/*/frames.asm
 !gfx/pokemon/unown/bitmask.asm

@@ -12,7 +12,7 @@ Route2NuggetHouseFisherScript:
 	checkevent EVENT_GOT_NUGGET_FROM_GUY
 	iftrue .GotNugget
 	writetext Route2NuggetHouseFisherText
-	buttonsound
+	promptbutton
 	verbosegiveitem NUGGET
 	iffalse .NoRoom
 	setevent EVENT_GOT_NUGGET_FROM_GUY
@@ -25,7 +25,7 @@ Route2NuggetHouseFisherScript:
 
 Route2NuggetHouseBookshelf:
 ; unused
-	jumpstd difficultbookshelf
+	jumpstd DifficultBookshelfScript
 
 Route2NuggetHouseFisherText:
 	text "Hi! Wow, I'm glad"

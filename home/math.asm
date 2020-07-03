@@ -1,13 +1,3 @@
-AddNTimes::
-; Add bc * a to hl.
-	and a
-	ret z
-.loop
-	add hl, bc
-	dec a
-	jr nz, .loop
-	ret
-
 SimpleMultiply::
 ; Return a * c.
 	and a
@@ -58,8 +48,8 @@ Divide::
 	pop hl
 	ret
 
-SubtractSigned::
-; Return a - b, sign in carry.
+SubtractAbsolute:: ; unreferenced
+; Return |a - b|, sign in carry.
 	sub b
 	ret nc
 	cpl

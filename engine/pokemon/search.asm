@@ -75,7 +75,7 @@ CheckOwnMonAnywhere:
 
 	; Run CheckOwnMon on each Pokémon in the PC.
 	ld a, BANK(sBoxCount)
-	call GetSRAMBank
+	call OpenSRAM
 	ld a, [sBoxCount]
 	and a
 	jr z, .boxes
@@ -113,13 +113,13 @@ CheckOwnMonAnywhere:
 	jr z, .loopbox
 
 	; Load the box.
-	ld hl, BoxAddressTable1
+	ld hl, BoxAddressTable
 	ld b, 0
 	add hl, bc
 	add hl, bc
 	add hl, bc
 	ld a, [hli]
-	call GetSRAMBank
+	call OpenSRAM
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -216,7 +216,7 @@ CheckOwnMon:
 
 	ld hl, wPlayerName
 
-rept NAME_LENGTH_JAPANESE + -2 ; should be PLAYER_NAME_LENGTH + -2
+rept NAME_LENGTH_JAPANESE - 2 ; should be PLAYER_NAME_LENGTH - 2
 	ld a, [de]
 	cp [hl]
 	jr nz, .notfound
@@ -244,7 +244,7 @@ endr
 	scf
 	ret
 
-BoxAddressTable1:
+BoxAddressTable:
 	dba sBox1
 	dba sBox2
 	dba sBox3

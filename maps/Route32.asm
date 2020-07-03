@@ -57,7 +57,7 @@ Route32CooltrainerMContinueScene:
 	closetext
 	end
 
-.Unreferenced:
+.GoToSproutTower: ; unreferenced
 	writetext Route32CooltrainerMText_UnusedSproutTower
 	waitbutton
 	closetext
@@ -65,7 +65,7 @@ Route32CooltrainerMContinueScene:
 
 .GiveMiracleSeed:
 	writetext Route32CooltrainerMText_HaveThisSeed
-	buttonsound
+	promptbutton
 	verbosegiveitem MIRACLE_SEED
 	iffalse .BagFull
 	setevent EVENT_GOT_MIRACLE_SEED_IN_ROUTE_32
@@ -106,7 +106,7 @@ Route32RoarTMGuyScript:
 	checkevent EVENT_GOT_TM05_ROAR
 	iftrue .AlreadyHaveRoar
 	writetext Text_RoarIntro
-	buttonsound
+	promptbutton
 	verbosegiveitem TM_ROAR
 	iffalse .Finish
 	setevent EVENT_GOT_TM05_ROAR
@@ -170,7 +170,7 @@ TrainerFisherRalph1:
 	loadvar VAR_CALLERID, PHONE_FISHER_RALPH
 	endifjustbattled
 	opentext
-	checkflag ENGINE_RALPH
+	checkflag ENGINE_RALPH_READY_FOR_REMATCH
 	iftrue .Rematch
 	checkflag ENGINE_FISH_SWARM
 	iftrue .Swarm
@@ -179,7 +179,7 @@ TrainerFisherRalph1:
 	checkevent EVENT_RALPH_ASKED_FOR_PHONE_NUMBER
 	iftrue .AskAgain
 	writetext FisherRalphAfterText
-	buttonsound
+	promptbutton
 	setevent EVENT_RALPH_ASKED_FOR_PHONE_NUMBER
 	scall .AskNumber1
 	sjump .AskForNumber
@@ -220,7 +220,7 @@ TrainerFisherRalph1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wRalphFightCount, 1
-	clearflag ENGINE_RALPH
+	clearflag ENGINE_RALPH_READY_FOR_REMATCH
 	end
 
 .LoadFight1:
@@ -228,7 +228,7 @@ TrainerFisherRalph1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wRalphFightCount, 2
-	clearflag ENGINE_RALPH
+	clearflag ENGINE_RALPH_READY_FOR_REMATCH
 	end
 
 .LoadFight2:
@@ -236,7 +236,7 @@ TrainerFisherRalph1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wRalphFightCount, 3
-	clearflag ENGINE_RALPH
+	clearflag ENGINE_RALPH_READY_FOR_REMATCH
 	end
 
 .LoadFight3:
@@ -244,14 +244,14 @@ TrainerFisherRalph1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wRalphFightCount, 4
-	clearflag ENGINE_RALPH
+	clearflag ENGINE_RALPH_READY_FOR_REMATCH
 	end
 
 .LoadFight4:
 	loadtrainer FISHER, RALPH5
 	startbattle
 	reloadmapafterbattle
-	clearflag ENGINE_RALPH
+	clearflag ENGINE_RALPH_READY_FOR_REMATCH
 	end
 
 .Swarm:
@@ -261,31 +261,31 @@ TrainerFisherRalph1:
 	end
 
 .AskNumber1:
-	jumpstd asknumber1m
+	jumpstd AskNumber1MScript
 	end
 
 .AskNumber2:
-	jumpstd asknumber2m
+	jumpstd AskNumber2MScript
 	end
 
 .RegisteredNumber:
-	jumpstd registerednumberm
+	jumpstd RegisteredNumberMScript
 	end
 
 .NumberAccepted:
-	jumpstd numberacceptedm
+	jumpstd NumberAcceptedMScript
 	end
 
 .NumberDeclined:
-	jumpstd numberdeclinedm
+	jumpstd NumberDeclinedMScript
 	end
 
 .PhoneFull:
-	jumpstd phonefullm
+	jumpstd PhoneFullMScript
 	end
 
 .RematchStd:
-	jumpstd rematchm
+	jumpstd RematchMScript
 	end
 
 TrainerFisherHenry:
@@ -306,14 +306,14 @@ TrainerPicnickerLiz1:
 	loadvar VAR_CALLERID, PHONE_PICNICKER_LIZ
 	endifjustbattled
 	opentext
-	checkflag ENGINE_LIZ
+	checkflag ENGINE_LIZ_READY_FOR_REMATCH
 	iftrue .Rematch
 	checkcellnum PHONE_PICNICKER_LIZ
 	iftrue .NumberAccepted
 	checkevent EVENT_LIZ_ASKED_FOR_PHONE_NUMBER
 	iftrue .AskAgain
 	writetext PicnickerLiz1AfterText
-	buttonsound
+	promptbutton
 	setevent EVENT_LIZ_ASKED_FOR_PHONE_NUMBER
 	scall .AskNumber1
 	sjump .AskForNumber
@@ -354,7 +354,7 @@ TrainerPicnickerLiz1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wLizFightCount, 1
-	clearflag ENGINE_LIZ
+	clearflag ENGINE_LIZ_READY_FOR_REMATCH
 	end
 
 .LoadFight1:
@@ -362,7 +362,7 @@ TrainerPicnickerLiz1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wLizFightCount, 2
-	clearflag ENGINE_LIZ
+	clearflag ENGINE_LIZ_READY_FOR_REMATCH
 	end
 
 .LoadFight2:
@@ -370,7 +370,7 @@ TrainerPicnickerLiz1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wLizFightCount, 3
-	clearflag ENGINE_LIZ
+	clearflag ENGINE_LIZ_READY_FOR_REMATCH
 	end
 
 .LoadFight3:
@@ -378,42 +378,42 @@ TrainerPicnickerLiz1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wLizFightCount, 4
-	clearflag ENGINE_LIZ
+	clearflag ENGINE_LIZ_READY_FOR_REMATCH
 	end
 
 .LoadFight4:
 	loadtrainer PICNICKER, LIZ5
 	startbattle
 	reloadmapafterbattle
-	clearflag ENGINE_LIZ
+	clearflag ENGINE_LIZ_READY_FOR_REMATCH
 	end
 
 .AskNumber1:
-	jumpstd asknumber1f
+	jumpstd AskNumber1FScript
 	end
 
 .AskNumber2:
-	jumpstd asknumber2f
+	jumpstd AskNumber2FScript
 	end
 
 .RegisteredNumber:
-	jumpstd registerednumberf
+	jumpstd RegisteredNumberFScript
 	end
 
 .NumberAccepted:
-	jumpstd numberacceptedf
+	jumpstd NumberAcceptedFScript
 	end
 
 .NumberDeclined:
-	jumpstd numberdeclinedf
+	jumpstd NumberDeclinedFScript
 	end
 
 .PhoneFull:
-	jumpstd phonefullf
+	jumpstd PhoneFullFScript
 	end
 
 .RematchStd:
-	jumpstd rematchf
+	jumpstd RematchFScript
 	end
 
 TrainerYoungsterAlbert:
@@ -459,11 +459,11 @@ FriedaScript:
 	checkevent EVENT_MET_FRIEDA_OF_FRIDAY
 	iftrue .MetFrieda
 	writetext MeetFriedaText
-	buttonsound
+	promptbutton
 	setevent EVENT_MET_FRIEDA_OF_FRIDAY
 .MetFrieda:
 	writetext FriedaGivesGiftText
-	buttonsound
+	promptbutton
 	verbosegiveitem POISON_BARB
 	iffalse .Done
 	setevent EVENT_GOT_POISON_BARB_FROM_FRIEDA
@@ -501,7 +501,7 @@ Route32UnionCaveSign:
 	jumptext Route32UnionCaveSignText
 
 Route32PokecenterSign:
-	jumpstd pokecentersign
+	jumpstd PokecenterSignScript
 
 Route32HiddenGreatBall:
 	hiddenitem GREAT_BALL, EVENT_ROUTE_32_HIDDEN_GREAT_BALL

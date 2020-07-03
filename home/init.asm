@@ -1,6 +1,6 @@
 Reset::
 	di
-	call MapSetup_Sound_Off
+	call InitSound
 	xor a
 	ldh [hMapAnims], a
 	call ClearPalettes
@@ -21,15 +21,15 @@ Reset::
 _Start::
 	cp $11
 	jr z, .cgb
-	xor a
+	xor a ; FALSE
 	jr .load
 
 .cgb
-	ld a, $1
+	ld a, TRUE
 
 .load
 	ldh [hCGB], a
-	ld a, $1
+	ld a, TRUE
 	ldh [hSystemBooted], a
 
 Init::
@@ -50,7 +50,7 @@ Init::
 	ldh [rOBP1], a
 	ldh [rTMA], a
 	ldh [rTAC], a
-	ld [WRAM1_Begin], a
+	ld [wd000], a
 
 	ld a, %100 ; Start timer at 4096Hz
 	ldh [rTAC], a
@@ -74,7 +74,7 @@ Init::
 	or c
 	jr nz, .ByteFill
 
-	ld sp, wStack
+	ld sp, wStackTop
 
 ; Clear HRAM
 	ldh a, [hCGB]
@@ -97,7 +97,7 @@ Init::
 	call ClearSprites
 	call ClearsScratch
 
-	ld a, BANK(GameInit) ; aka BANK(WriteOAMDMACodeToHRAM)
+	ld a, BANK(WriteOAMDMACodeToHRAM) ; aka BANK(GameInit)
 	rst Bankswitch
 
 	call WriteOAMDMACodeToHRAM
@@ -142,7 +142,7 @@ Init::
 
 	farcall StartClock
 
-	xor a
+	xor a ; SRAM_DISABLE
 	ld [MBC3LatchClock], a
 	ld [MBC3SRamEnable], a
 
@@ -160,9 +160,9 @@ Init::
 
 	call DelayFrame
 
-	predef InitSGBBorder ; SGB init
+	predef InitSGBBorder
 
-	call MapSetup_Sound_Off
+	call InitSound
 	xor a
 	ld [wMapMusic], a
 	jp GameInit
@@ -205,7 +205,7 @@ ClearsScratch::
 ; Wipe the first 32 bytes of sScratch
 
 	ld a, BANK(sScratch)
-	call GetSRAMBank
+	call OpenSRAM
 	ld hl, sScratch
 	ld bc, $20
 	xor a

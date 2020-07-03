@@ -28,9 +28,9 @@ Script_BattleRoomLoop:
 	applymovement BATTLETOWERBATTLEROOM_YOUNGSTER, MovementData_BattleTowerBattleRoomOpponentWalksIn
 	opentext
 	battletowertext BATTLETOWERTEXT_INTRO
-	buttonsound
+	promptbutton
 	closetext
-	special BattleTowerBattle ; calls predef startbattle
+	special BattleTowerBattle ; predef StartBattle
 	special FadeOutPalettes
 	reloadmap
 	ifnotequal $0, Script_FailedBattleTowerChallenge
@@ -110,7 +110,7 @@ Script_BeatenAllTrainers2:
 	writetext Text_CongratulationsYouveBeatenAllTheTrainers
 	sjump Script_GivePlayerHisPrize
 
-UnreferencedScript_0x9f4eb:
+Script_TooMuchTimeElapsedNoRegister: ; unreferenced
 	setval BATTLETOWERACTION_CHALLENGECANCELED
 	special BattleTowerAction
 	opentext
@@ -119,7 +119,7 @@ UnreferencedScript_0x9f4eb:
 	closetext
 	end
 
-UnreferencedScript_0x9f4f7:
+Script_ChallengeCanceled: ; unreferenced
 	setval BATTLETOWERACTION_CHALLENGECANCELED
 	special BattleTowerAction
 	setval BATTLETOWERACTION_06

@@ -15,7 +15,7 @@ GoodRodGuru:
 	yesorno
 	iffalse .DontWantIt
 	writetext GiveGoodRodText
-	buttonsound
+	promptbutton
 	verbosegiveitem GOOD_ROD
 	writetext GaveGoodRodText
 	waitbutton
@@ -37,7 +37,7 @@ GoodRodGuru:
 
 GoodRodHouseBookshelf:
 ; unused
-	jumpstd picturebookshelf
+	jumpstd PictureBookshelfScript
 
 OfferGoodRodText:
 	text "OLIVINE is on the"

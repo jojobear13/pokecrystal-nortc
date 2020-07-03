@@ -1510,10 +1510,10 @@ Tackle_BGEffect25_2d_two:
 
 Functionc88a5:
 	push af
-	ld a, [wFXAnimID + 1] ; FXAnimID + 1
+	ld a, [wFXAnimID + 1]
 	or a
 	jr nz, .not_rollout
-	ld a, [wFXAnimID] ; FXAnimID
+	ld a, [wFXAnimID]
 	cp ROLLOUT
 	jr z, .rollout
 .not_rollout
@@ -2606,7 +2606,7 @@ BattleBGEffect_GetNextDMGPal:
 BattleBGEffects_ClearLYOverrides:
 	xor a
 BattleBGEffects_SetLYOverrides:
-	ld hl, wLYOverrides ; wListPointer
+	ld hl, wLYOverrides
 	ld e, $99
 .loop1
 	ld [hli], a
@@ -2839,7 +2839,8 @@ BGEffect_FillLYOverridesBackup:
 	ret
 
 BGEffect_DisplaceLYOverridesBackup:
-	; e = a; d = [hLYOverrideEnd] - [hLYOverrideStart] - a
+	; e = a
+	; d = [hLYOverrideEnd] - [hLYOverrideStart] - a
 	push af
 	ld e, a
 	ldh a, [hLYOverrideStart]

@@ -120,7 +120,7 @@ DoPlayerMovement::
 	ld c, a
 	call CheckWhirlpoolTile
 	jr c, .not_whirlpool
-	ld a, 3
+	ld a, PLAYERMOVEMENT_FORCE_TURN
 	scf
 	ret
 
@@ -222,7 +222,7 @@ DoPlayerMovement::
 .continue_walk
 	ld a, STEP_WALK
 	call .DoStep
-	ld a, 5
+	ld a, PLAYERMOVEMENT_CONTINUE
 	scf
 	ret
 
@@ -247,7 +247,7 @@ DoPlayerMovement::
 
 	ld a, STEP_TURN
 	call .DoStep
-	ld a, 2
+	ld a, PLAYERMOVEMENT_TURN
 	scf
 	ret
 
@@ -345,7 +345,7 @@ DoPlayerMovement::
 	call PlayMapMusic
 	ld a, STEP_WALK
 	call .DoStep
-	ld a, 6
+	ld a, PLAYERMOVEMENT_EXIT_WATER
 	scf
 	ret
 
@@ -374,7 +374,7 @@ DoPlayerMovement::
 	call PlaySFX
 	ld a, STEP_LEDGE
 	call .DoStep
-	ld a, 7
+	ld a, PLAYERMOVEMENT_JUMP
 	scf
 	ret
 
@@ -428,11 +428,11 @@ DoPlayerMovement::
 
 	call .StandInPlace
 	scf
-	ld a, 1
+	ld a, PLAYERMOVEMENT_WARP
 	ret
 
 .not_warp
-	xor a
+	xor a ; PLAYERMOVEMENT_NORMAL
 	ret
 
 .EdgeWarps:
@@ -465,7 +465,7 @@ DoPlayerMovement::
 	ld a, [hl]
 	ld [wPlayerTurningDirection], a
 
-	ld a, 4
+	ld a, PLAYERMOVEMENT_FINISH
 	ret
 
 .Steps:
@@ -577,11 +577,14 @@ DoPlayerMovement::
 ; Standing
 	jr .update
 
-.d_down 	add hl, de
-.d_up   	add hl, de
-.d_left 	add hl, de
-.d_right	add hl, de
-
+.d_down
+	add hl, de
+.d_up
+	add hl, de
+.d_left
+	add hl, de
+.d_right
+	add hl, de
 .update
 	ld a, [hli]
 	ld [wWalkingDirection], a
@@ -738,7 +741,7 @@ ENDM
 ; Return 0 if tile a is land. Otherwise, return carry.
 
 	call GetTileCollision
-	and a ; LANDTILE?
+	and a ; LAND_TILE
 	ret z
 	scf
 	ret
@@ -748,11 +751,11 @@ ENDM
 ; Otherwise, return carry.
 
 	call GetTileCollision
-	cp WATERTILE
+	cp WATER_TILE
 	jr z, .Water
 
 ; Can walk back onto land from water.
-	and a ; LANDTILE?
+	and a ; LAND_TILE
 	jr z, .Land
 
 	jr .Neither
@@ -781,7 +784,7 @@ ENDM
 	push bc
 	ld a, PLAYER_NORMAL
 	ld [wPlayerState], a
-	call ReplaceKrisSprite ; UpdateSprites
+	call UpdatePlayerSprite ; UpdateSprites
 	pop bc
 	ret
 

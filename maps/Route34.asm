@@ -92,7 +92,7 @@ TrainerCamperTodd1:
 	loadvar VAR_CALLERID, PHONE_CAMPER_TODD
 	endifjustbattled
 	opentext
-	checkflag ENGINE_TODD
+	checkflag ENGINE_TODD_READY_FOR_REMATCH
 	iftrue .Rematch
 	checkflag ENGINE_GOLDENROD_DEPT_STORE_SALE_IS_ON
 	iftrue .SaleIsOn
@@ -101,7 +101,7 @@ TrainerCamperTodd1:
 	checkevent EVENT_TODD_ASKED_FOR_PHONE_NUMBER
 	iftrue .AskAgain
 	writetext CamperTodd1AfterText
-	buttonsound
+	promptbutton
 	setevent EVENT_TODD_ASKED_FOR_PHONE_NUMBER
 	scall .AskNumber
 	sjump .FinishAsk
@@ -142,7 +142,7 @@ TrainerCamperTodd1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wToddFightCount, 1
-	clearflag ENGINE_TODD
+	clearflag ENGINE_TODD_READY_FOR_REMATCH
 	end
 
 .LoadFight1:
@@ -150,7 +150,7 @@ TrainerCamperTodd1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wToddFightCount, 2
-	clearflag ENGINE_TODD
+	clearflag ENGINE_TODD_READY_FOR_REMATCH
 	end
 
 .LoadFight2:
@@ -158,7 +158,7 @@ TrainerCamperTodd1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wToddFightCount, 3
-	clearflag ENGINE_TODD
+	clearflag ENGINE_TODD_READY_FOR_REMATCH
 	end
 
 .LoadFight3:
@@ -166,14 +166,14 @@ TrainerCamperTodd1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wToddFightCount, 4
-	clearflag ENGINE_TODD
+	clearflag ENGINE_TODD_READY_FOR_REMATCH
 	end
 
 .LoadFight4:
 	loadtrainer CAMPER, TODD5
 	startbattle
 	reloadmapafterbattle
-	clearflag ENGINE_TODD
+	clearflag ENGINE_TODD_READY_FOR_REMATCH
 	end
 
 .SaleIsOn:
@@ -183,31 +183,31 @@ TrainerCamperTodd1:
 	end
 
 .AskNumber:
-	jumpstd asknumber1m
+	jumpstd AskNumber1MScript
 	end
 
 .AskNumber2:
-	jumpstd asknumber2m
+	jumpstd AskNumber2MScript
 	end
 
 .RegisteredNumber:
-	jumpstd registerednumberm
+	jumpstd RegisteredNumberMScript
 	end
 
 .NumberAccepted:
-	jumpstd numberacceptedm
+	jumpstd NumberAcceptedMScript
 	end
 
 .NumberDeclined:
-	jumpstd numberdeclinedm
+	jumpstd NumberDeclinedMScript
 	end
 
 .PhoneFull:
-	jumpstd phonefullm
+	jumpstd PhoneFullMScript
 	end
 
 .RematchStd:
-	jumpstd rematchm
+	jumpstd RematchMScript
 	end
 
 TrainerPicnickerGina1:
@@ -217,7 +217,7 @@ TrainerPicnickerGina1:
 	loadvar VAR_CALLERID, PHONE_PICNICKER_GINA
 	endifjustbattled
 	opentext
-	checkflag ENGINE_GINA
+	checkflag ENGINE_GINA_READY_FOR_REMATCH
 	iftrue .Rematch
 	checkflag ENGINE_GINA_HAS_LEAF_STONE
 	iftrue .LeafStone
@@ -226,7 +226,7 @@ TrainerPicnickerGina1:
 	checkevent EVENT_GINA_ASKED_FOR_PHONE_NUMBER
 	iftrue .AskAgain
 	writetext PicnickerGina1AfterText
-	buttonsound
+	promptbutton
 	setevent EVENT_GINA_ASKED_FOR_PHONE_NUMBER
 	scall .AskNumber1
 	sjump .FinishAsk
@@ -267,7 +267,7 @@ TrainerPicnickerGina1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wGinaFightCount, 1
-	clearflag ENGINE_GINA
+	clearflag ENGINE_GINA_READY_FOR_REMATCH
 	end
 
 .LoadFight1:
@@ -275,7 +275,7 @@ TrainerPicnickerGina1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wGinaFightCount, 2
-	clearflag ENGINE_GINA
+	clearflag ENGINE_GINA_READY_FOR_REMATCH
 	end
 
 .LoadFight2:
@@ -283,7 +283,7 @@ TrainerPicnickerGina1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wGinaFightCount, 3
-	clearflag ENGINE_GINA
+	clearflag ENGINE_GINA_READY_FOR_REMATCH
 	end
 
 .LoadFight3:
@@ -291,14 +291,14 @@ TrainerPicnickerGina1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wGinaFightCount, 4
-	clearflag ENGINE_GINA
+	clearflag ENGINE_GINA_READY_FOR_REMATCH
 	end
 
 .LoadFight4:
 	loadtrainer PICNICKER, GINA5
 	startbattle
 	reloadmapafterbattle
-	clearflag ENGINE_GINA
+	clearflag ENGINE_GINA_READY_FOR_REMATCH
 	end
 
 .LeafStone:
@@ -313,39 +313,39 @@ TrainerPicnickerGina1:
 	sjump .PackFull
 
 .AskNumber1:
-	jumpstd asknumber1f
+	jumpstd AskNumber1FScript
 	end
 
 .AskNumber2:
-	jumpstd asknumber2f
+	jumpstd AskNumber2FScript
 	end
 
 .RegisteredNumber:
-	jumpstd registerednumberf
+	jumpstd RegisteredNumberFScript
 	end
 
 .NumberAccepted:
-	jumpstd numberacceptedf
+	jumpstd NumberAcceptedFScript
 	end
 
 .NumberDeclined:
-	jumpstd numberdeclinedf
+	jumpstd NumberDeclinedFScript
 	end
 
 .PhoneFull:
-	jumpstd phonefullf
+	jumpstd PhoneFullFScript
 	end
 
 .RematchStd:
-	jumpstd rematchf
+	jumpstd RematchFScript
 	end
 
 .Gift:
-	jumpstd giftf
+	jumpstd GiftFScript
 	end
 
 .PackFull:
-	jumpstd packfullf
+	jumpstd PackFullFScript
 	end
 
 OfficerKeithScript:
@@ -459,7 +459,7 @@ TrainerCooltrainerfKate:
 	checkevent EVENT_GOT_SOFT_SAND_FROM_KATE
 	iftrue .GotSoftSand
 	writetext CooltrainerfKateOfferSoftSandText
-	buttonsound
+	promptbutton
 	verbosegiveitem SOFT_SAND
 	iffalse .BagFull
 	setevent EVENT_GOT_SOFT_SAND_FROM_KATE

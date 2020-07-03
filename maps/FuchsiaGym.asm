@@ -47,7 +47,7 @@ FuchsiaGymJanineScript:
 	checkevent EVENT_GOT_TM06_TOXIC
 	iftrue .AfterTM
 	writetext JanineText_ToxicSpeech
-	buttonsound
+	promptbutton
 	verbosegiveitem TM_TOXIC
 	iffalse .AfterTM
 	setevent EVENT_GOT_TM06_TOXIC
@@ -212,10 +212,10 @@ FuchsiaGymGuyScript:
 FuchsiaGymStatue:
 	checkflag ENGINE_SOULBADGE
 	iftrue .Beaten
-	jumpstd gymstatue1
+	jumpstd GymStatue1Script
 .Beaten:
 	gettrainername STRING_BUFFER_4, JANINE, JANINE1
-	jumpstd gymstatue2
+	jumpstd GymStatue2Script
 
 Movement_NinjaSpin:
 	turn_head DOWN

@@ -13,7 +13,7 @@ MomPhoneCalleeScript:
 	checkevent EVENT_TEMPORARY_UNTIL_MAP_RELOAD_8
 	iftrue MomPhoneHangUpScript
 	farwritetext MomPhoneGreetingText
-	buttonsound
+	promptbutton
 	getcurlandmarkname STRING_BUFFER_3
 	readvar VAR_ROOFPALETTE
 	ifequal 1, MomPhonePalette1
@@ -22,7 +22,7 @@ MomPhoneCalleeScript:
 
 MomPhoneLandmark:
 	farwritetext MomPhoneLandmarkText
-	buttonsound
+	promptbutton
 	sjump MomSavingMoney
 
 MomPhonePalette1:
@@ -33,37 +33,37 @@ MomPhonePalette1:
 	ifequal GROUP_AZALEA_TOWN, .azalea
 	ifequal GROUP_GOLDENROD_CITY, .goldenrod
 	farwritetext MomPhoneGenericAreaText
-	buttonsound
+	promptbutton
 	sjump MomSavingMoney
 
 .newbark
 	farwritetext MomPhoneNewBarkText
-	buttonsound
+	promptbutton
 	sjump MomSavingMoney
 
 .cherrygrove
 	farwritetext MomPhoneCherrygroveText
-	buttonsound
+	promptbutton
 	sjump MomSavingMoney
 
 .violet
-	getlandmarkname STRING_BUFFER_4, SPROUT_TOWER
+	getlandmarkname STRING_BUFFER_4, LANDMARK_SPROUT_TOWER
 	sjump MomPhoneLandmark
 .azalea
-	getlandmarkname STRING_BUFFER_4, SLOWPOKE_WELL
+	getlandmarkname STRING_BUFFER_4, LANDMARK_SLOWPOKE_WELL
 	sjump MomPhoneLandmark
 .goldenrod
-	getlandmarkname STRING_BUFFER_4, RADIO_TOWER
+	getlandmarkname STRING_BUFFER_4, LANDMARK_RADIO_TOWER
 	sjump MomPhoneLandmark
 
 MomPhonePalette2:
 	farwritetext MomOtherAreaText
-	buttonsound
+	promptbutton
 	sjump MomSavingMoney
 
 MomPhoneOther:
 	farwritetext MomDeterminedText
-	buttonsound
+	promptbutton
 	sjump MomSavingMoney
 
 MomSavingMoney:
@@ -107,13 +107,13 @@ MomSavingMoney:
 MomPhoneSaveMoneyScript:
 	setflag ENGINE_MOM_SAVING_MONEY
 	farwritetext MomOKIllSaveText
-	buttonsound
+	promptbutton
 	sjump MomPhoneHangUpScript
 
 MomPhoneWontSaveMoneyScript:
 	clearflag ENGINE_MOM_SAVING_MONEY
 	farwritetext MomPhoneWontSaveMoneyText
-	buttonsound
+	promptbutton
 	sjump MomPhoneHangUpScript
 
 MomPhoneHangUpScript:

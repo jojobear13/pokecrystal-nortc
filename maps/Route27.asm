@@ -25,18 +25,18 @@ Route27_MapScripts:
 FirstStepIntoKantoLeftScene:
 	turnobject ROUTE27_FISHER, LEFT
 	showemote EMOTE_SHOCK, ROUTE27_FISHER, 15
-	applymovement ROUTE27_FISHER, MovementData_0x1a0a66
+	applymovement ROUTE27_FISHER, Route27FisherStepLeftTwiceMovement
 	sjump FirstStepIntoKantoScene_Continue
 
 FirstStepIntoKantoRightScene:
 	turnobject ROUTE27_FISHER, LEFT
 	showemote EMOTE_SHOCK, ROUTE27_FISHER, 15
-	applymovement ROUTE27_FISHER, MovementData_0x1a0a69
+	applymovement ROUTE27_FISHER, Route27FisherStepLeftOnceMovement
 FirstStepIntoKantoScene_Continue:
 	turnobject PLAYER, RIGHT
 	opentext
 	writetext Route27FisherHeyText
-	buttonsound
+	promptbutton
 	writetext Route27FisherText
 	waitbutton
 	closetext
@@ -64,7 +64,7 @@ TrainerBirdKeeperJose2:
 	loadvar VAR_CALLERID, PHONE_BIRDKEEPER_JOSE
 	endifjustbattled
 	opentext
-	checkflag ENGINE_JOSE
+	checkflag ENGINE_JOSE_READY_FOR_REMATCH
 	iftrue .WantsBattle
 	checkflag ENGINE_JOSE_HAS_STAR_PIECE
 	iftrue .HasStarPiece
@@ -73,7 +73,7 @@ TrainerBirdKeeperJose2:
 	checkevent EVENT_JOSE_ASKED_FOR_PHONE_NUMBER
 	iftrue .AskedAlready
 	writetext BirdKeeperJose2AfterBattleText
-	buttonsound
+	promptbutton
 	setevent EVENT_JOSE_ASKED_FOR_PHONE_NUMBER
 	scall .AskNumber1
 	sjump .AskForNumber
@@ -106,7 +106,7 @@ TrainerBirdKeeperJose2:
 	startbattle
 	reloadmapafterbattle
 	loadmem wJoseFightCount, 1
-	clearflag ENGINE_JOSE
+	clearflag ENGINE_JOSE_READY_FOR_REMATCH
 	end
 
 .LoadFight1:
@@ -114,14 +114,14 @@ TrainerBirdKeeperJose2:
 	startbattle
 	reloadmapafterbattle
 	loadmem wJoseFightCount, 2
-	clearflag ENGINE_JOSE
+	clearflag ENGINE_JOSE_READY_FOR_REMATCH
 	end
 
 .LoadFight2:
 	loadtrainer BIRD_KEEPER, JOSE3
 	startbattle
 	reloadmapafterbattle
-	clearflag ENGINE_JOSE
+	clearflag ENGINE_JOSE_READY_FOR_REMATCH
 	end
 
 .HasStarPiece:
@@ -135,39 +135,39 @@ TrainerBirdKeeperJose2:
 	sjump .PackFull
 
 .AskNumber1:
-	jumpstd asknumber1m
+	jumpstd AskNumber1MScript
 	end
 
 .AskNumber2:
-	jumpstd asknumber2m
+	jumpstd AskNumber2MScript
 	end
 
 .RegisteredNumber:
-	jumpstd registerednumberm
+	jumpstd RegisteredNumberMScript
 	end
 
 .NumberAccepted:
-	jumpstd numberacceptedm
+	jumpstd NumberAcceptedMScript
 	end
 
 .NumberDeclined:
-	jumpstd numberdeclinedm
+	jumpstd NumberDeclinedMScript
 	end
 
 .PhoneFull:
-	jumpstd phonefullm
+	jumpstd PhoneFullMScript
 	end
 
 .Rematch:
-	jumpstd rematchm
+	jumpstd RematchMScript
 	end
 
 .Gift:
-	jumpstd giftm
+	jumpstd GiftMScript
 	end
 
 .PackFull:
-	jumpstd packfullm
+	jumpstd PackFullMScript
 	end
 
 TrainerCooltrainermBlake:
@@ -199,14 +199,14 @@ TrainerCooltrainerfReena:
 	loadvar VAR_CALLERID, PHONE_COOLTRAINERF_REENA
 	endifjustbattled
 	opentext
-	checkflag ENGINE_REENA
+	checkflag ENGINE_REENA_READY_FOR_REMATCH
 	iftrue .WantsBattle
 	checkcellnum PHONE_COOLTRAINERF_REENA
 	iftrue .NumberAccepted
 	checkevent EVENT_REENA_ASKED_FOR_PHONE_NUMBER
 	iftrue .AskedAlready
 	writetext CooltrainerfReenaAfterBattleText
-	buttonsound
+	promptbutton
 	setevent EVENT_REENA_ASKED_FOR_PHONE_NUMBER
 	scall .AskNumber1
 	sjump .AskForNumber
@@ -239,7 +239,7 @@ TrainerCooltrainerfReena:
 	startbattle
 	reloadmapafterbattle
 	loadmem wReenaFightCount, 1
-	clearflag ENGINE_REENA
+	clearflag ENGINE_REENA_READY_FOR_REMATCH
 	end
 
 .LoadFight1:
@@ -247,42 +247,42 @@ TrainerCooltrainerfReena:
 	startbattle
 	reloadmapafterbattle
 	loadmem wReenaFightCount, 2
-	clearflag ENGINE_REENA
+	clearflag ENGINE_REENA_READY_FOR_REMATCH
 	end
 
 .LoadFight2:
 	loadtrainer COOLTRAINERF, REENA3
 	startbattle
 	reloadmapafterbattle
-	clearflag ENGINE_REENA
+	clearflag ENGINE_REENA_READY_FOR_REMATCH
 	end
 
 .AskNumber1:
-	jumpstd asknumber1f
+	jumpstd AskNumber1FScript
 	end
 
 .AskNumber2:
-	jumpstd asknumber2f
+	jumpstd AskNumber2FScript
 	end
 
 .RegisteredNumber:
-	jumpstd registerednumberf
+	jumpstd RegisteredNumberFScript
 	end
 
 .NumberAccepted:
-	jumpstd numberacceptedf
+	jumpstd NumberAcceptedFScript
 	end
 
 .NumberDeclined:
-	jumpstd numberdeclinedf
+	jumpstd NumberDeclinedFScript
 	end
 
 .PhoneFull:
-	jumpstd phonefullf
+	jumpstd PhoneFullFScript
 	end
 
 .Rematch:
-	jumpstd rematchf
+	jumpstd RematchFScript
 	end
 
 TrainerCooltrainerfMegan:
@@ -305,12 +305,12 @@ Route27TMSolarbeam:
 Route27RareCandy:
 	itemball RARE_CANDY
 
-MovementData_0x1a0a66:
+Route27FisherStepLeftTwiceMovement:
 	step LEFT
 	step LEFT
 	step_end
 
-MovementData_0x1a0a69:
+Route27FisherStepLeftOnceMovement:
 	step LEFT
 	step_end
 

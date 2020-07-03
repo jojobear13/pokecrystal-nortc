@@ -13,7 +13,7 @@ GoldenrodHappinessRaterTeacherScript:
 	opentext
 	special GetFirstPokemonHappiness
 	writetext GoldenrodHappinessRaterTeacherText
-	buttonsound
+	promptbutton
 	ifgreater 250 - 1, .LovesYouALot
 	ifgreater 200 - 1, .ReallyTrustsYou
 	ifgreater 150 - 1, .SortOfHappy
@@ -64,10 +64,10 @@ GoldenrodHappinessRaterTwinScript:
 	jumptextfaceplayer GoldenrodHappinessRaterTwinText
 
 HappinessRatersHouseBookshelf:
-	jumpstd difficultbookshelf
+	jumpstd DifficultBookshelfScript
 
 HappinessRatersHouseRadio:
-	jumpstd radio2
+	jumpstd Radio2Script
 
 GoldenrodHappinessRaterTeacherText:
 	text "If you treat your"

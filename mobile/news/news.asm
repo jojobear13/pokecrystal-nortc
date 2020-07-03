@@ -1,12 +1,12 @@
 ; http://forums.glitchcity.info/index.php?topic=7509.msg206449#msg206449
 
-	db $cc, $6b, $1e ; unused
+	dab Doll1Script ; related to "My Room" in Stadium 2?
 
-Unreferenced_Function1f4003:
-	ld a, $6
-	call GetSRAMBank
+Function1f4003: ; unreferenced
+	ld a, BANK(s6_a000)
+	call OpenSRAM
 	ld hl, .news_data
-	ld de, $a000
+	ld de, s6_a000
 	ld bc, $1000
 	call CopyBytes
 	call CloseSRAM
@@ -15,11 +15,11 @@ Unreferenced_Function1f4003:
 .news_data
 INCBIN "mobile/news/news_1.bin"
 
-Unreferenced_Function1f4dbe:
-	ld a, $6
-	call GetSRAMBank
+Function1f4dbe: ; unreferenced
+	ld a, BANK(s6_a000)
+	call OpenSRAM
 	ld hl, .news_data
-	ld de, $a000
+	ld de, s6_a000
 	ld bc, $1000
 	call CopyBytes
 	call CloseSRAM
@@ -29,10 +29,10 @@ Unreferenced_Function1f4dbe:
 INCBIN "mobile/news/news_2.bin"
 
 Function1f5d9f:
-	ld a, $6
-	call GetSRAMBank
+	ld a, BANK(s6_a000)
+	call OpenSRAM
 	ld hl, .news_data
-	ld de, $a000
+	ld de, s6_a000
 	ld bc, $1000
 	call CopyBytes
 	call CloseSRAM

@@ -46,7 +46,7 @@ LakeOfRageLanceScript:
 	iftrue .AskAgainForHelp
 	opentext
 	writetext LakeOfRageLanceForcedToEvolveText
-	buttonsound
+	promptbutton
 	faceplayer
 	writetext LakeOfRageLanceIntroText
 	yesorno
@@ -56,7 +56,7 @@ LakeOfRageLanceScript:
 	waitbutton
 	closetext
 	playsound SFX_WARP_TO
-	applymovement LAKEOFRAGE_LANCE, MovementData_0x70155
+	applymovement LAKEOFRAGE_LANCE, LakeOfRageLanceTeleportIntoSkyMovement
 	disappear LAKEOFRAGE_LANCE
 	clearevent EVENT_MAHOGANY_MART_LANCE_AND_DRAGONITE
 	setevent EVENT_DECIDED_TO_HELP_LANCE
@@ -138,7 +138,7 @@ MagikarpHouseSignScript:
 	end
 
 .MagikarpLengthRecord:
-	buttonsound
+	promptbutton
 	special MagikarpHouseSign
 	closetext
 	end
@@ -197,12 +197,12 @@ WesleyScript:
 	checkevent EVENT_MET_WESLEY_OF_WEDNESDAY
 	iftrue .MetWesley
 	writetext MeetWesleyText
-	buttonsound
+	promptbutton
 	setevent EVENT_MET_WESLEY_OF_WEDNESDAY
 .MetWesley:
 	writetext WesleyGivesGiftText
-	buttonsound
-	verbosegiveitem BLACKBELT
+	promptbutton
+	verbosegiveitem BLACKBELT_I
 	iffalse WesleyDoneScript
 	setevent EVENT_GOT_BLACKBELT_FROM_WESLEY
 	writetext WesleyGaveGiftText
@@ -238,7 +238,7 @@ LakeOfRageHiddenRareCandy:
 LakeOfRageHiddenMaxPotion:
 	hiddenitem MAX_POTION, EVENT_LAKE_OF_RAGE_HIDDEN_MAX_POTION
 
-MovementData_0x70155:
+LakeOfRageLanceTeleportIntoSkyMovement:
 	teleport_from
 	step_end
 

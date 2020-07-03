@@ -39,7 +39,7 @@ TrainerPokefanmDerek:
 	checkevent EVENT_DEREK_ASKED_FOR_PHONE_NUMBER
 	iftrue .AskedAlready
 	writetext PokefanMDerekText_NotBragging
-	buttonsound
+	promptbutton
 	setevent EVENT_DEREK_ASKED_FOR_PHONE_NUMBER
 	scall .AskNumber1
 	sjump .AskForNumber
@@ -71,35 +71,35 @@ TrainerPokefanmDerek:
 	end
 
 .AskNumber1:
-	jumpstd asknumber1m
+	jumpstd AskNumber1MScript
 	end
 
 .AskNumber2:
-	jumpstd asknumber2m
+	jumpstd AskNumber2MScript
 	end
 
 .RegisteredNumber:
-	jumpstd registerednumberm
+	jumpstd RegisteredNumberMScript
 	end
 
 .NumberAccepted:
-	jumpstd numberacceptedm
+	jumpstd NumberAcceptedMScript
 	end
 
 .NumberDeclined:
-	jumpstd numberdeclinedm
+	jumpstd NumberDeclinedMScript
 	end
 
 .PhoneFull:
-	jumpstd phonefullm
+	jumpstd PhoneFullMScript
 	end
 
 .Gift:
-	jumpstd giftm
+	jumpstd GiftMScript
 	end
 
 .PackFull:
-	jumpstd packfullm
+	jumpstd PackFullMScript
 	end
 
 TrainerPokefanfRuth:

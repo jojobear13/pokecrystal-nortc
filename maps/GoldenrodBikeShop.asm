@@ -6,7 +6,7 @@ GoldenrodBikeShop_MapScripts:
 
 	db 0 ; callbacks
 
-.UnreferencedDummyScene:
+.DummyScene: ; unreferenced
 	end
 
 GoldenrodBikeShopClerkScript:
@@ -18,7 +18,7 @@ GoldenrodBikeShopClerkScript:
 	yesorno
 	iffalse .Refused
 	writetext GoldenrodBikeShopClerkAgreedText
-	buttonsound
+	promptbutton
 	waitsfx
 	giveitem BICYCLE
 	writetext BorrowedABicycleText

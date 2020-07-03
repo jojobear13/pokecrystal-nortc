@@ -161,7 +161,7 @@ Buena:
 
 .Introduction:
 	writetext RadioTower2FBuenaShowIntroductionText
-	buttonsound
+	promptbutton
 	setevent EVENT_MET_BUENA
 	verbosegiveitem BLUE_CARD
 .TuneIn:
@@ -285,7 +285,7 @@ Buena:
 	writetext RadioTower2FRegisteredBuenasNumberText
 	playsound SFX_REGISTER_PHONE_NUMBER
 	waitsfx
-	buttonsound
+	promptbutton
 	writetext RadioTower2FBuenaCallMeText
 	waitbutton
 	closetext
@@ -314,14 +314,14 @@ RadioTowerBuenaPrizeReceptionist:
 	checkitem BLUE_CARD
 	iffalse .NoCard
 	writetext RadioTower2FBuenaReceptionistPointsForPrizesText
-	buttonsound
+	promptbutton
 	special BuenaPrize
 	closetext
 	end
 
 .NoCard:
 	writetext RadioTower2FBuenaReceptionistNoCardText
-	buttonsound
+	promptbutton
 	closetext
 	end
 
@@ -335,7 +335,7 @@ RadioTower2FPokemonRadioSign:
 	jumptext RadioTower2FPokemonRadioSignText
 
 RadioTower2FBookshelf:
-	jumpstd magazinebookshelf
+	jumpstd MagazineBookshelfScript
 
 RadioTower2FPlayerWalksToMicrophoneMovement:
 	slow_step DOWN
@@ -736,5 +736,5 @@ RadioTower2F_MapEvents:
 	object_event  0,  1, SPRITE_BLACK_BELT, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, RadioTower2FBlackBelt1Script, EVENT_RADIO_TOWER_BLACKBELT_BLOCKS_STAIRS
 	object_event  1,  1, SPRITE_BLACK_BELT, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, RadioTower2FBlackBelt2Script, EVENT_RADIO_TOWER_CIVILIANS_AFTER
 	object_event 12,  1, SPRITE_JIGGLYPUFF, SPRITEMOVEDATA_POKEMON, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, RadioTowerJigglypuff, -1
-	object_event 14,  5, SPRITE_BUENA, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, PAL_NPC_RED, OBJECTTYPE_SCRIPT, 0, Buena, -1
+	object_event 14,  5, SPRITE_BEAUTY, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, PAL_NPC_RED, OBJECTTYPE_SCRIPT, 0, Buena, -1
 	object_event 12,  7, SPRITE_RECEPTIONIST, SPRITEMOVEDATA_STANDING_RIGHT, 0, 0, -1, -1, PAL_NPC_GREEN, OBJECTTYPE_SCRIPT, 0, RadioTowerBuenaPrizeReceptionist, EVENT_GOLDENROD_CITY_CIVILIANS

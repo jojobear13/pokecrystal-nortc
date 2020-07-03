@@ -29,14 +29,14 @@ TrainerPicnickerErin1:
 	loadvar VAR_CALLERID, PHONE_PICNICKER_ERIN
 	endifjustbattled
 	opentext
-	checkflag ENGINE_ERIN
+	checkflag ENGINE_ERIN_READY_FOR_REMATCH
 	iftrue .WantsBattle
 	checkcellnum PHONE_PICNICKER_ERIN
 	iftrue Route46NumberAcceptedF
 	checkevent EVENT_ERIN_ASKED_FOR_PHONE_NUMBER
 	iftrue .AskedAlready
 	writetext PicnickerErinAfterBattleText
-	buttonsound
+	promptbutton
 	setevent EVENT_ERIN_ASKED_FOR_PHONE_NUMBER
 	scall Route46AskNumber1F
 	sjump .AskForNumber
@@ -69,7 +69,7 @@ TrainerPicnickerErin1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wErinFightCount, 1
-	clearflag ENGINE_ERIN
+	clearflag ENGINE_ERIN_READY_FOR_REMATCH
 	end
 
 .LoadFight1:
@@ -77,14 +77,14 @@ TrainerPicnickerErin1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wErinFightCount, 2
-	clearflag ENGINE_ERIN
+	clearflag ENGINE_ERIN_READY_FOR_REMATCH
 	end
 
 .LoadFight2:
 	loadtrainer PICNICKER, ERIN3
 	startbattle
 	reloadmapafterbattle
-	clearflag ENGINE_ERIN
+	clearflag ENGINE_ERIN_READY_FOR_REMATCH
 	checkevent EVENT_ERIN_CALCIUM
 	iftrue .HasCalcium
 	checkevent EVENT_GOT_CALCIUM_FROM_ERIN
@@ -109,40 +109,40 @@ TrainerPicnickerErin1:
 	sjump Route46NumberAcceptedF
 
 Route46AskNumber1F:
-	jumpstd asknumber1f
+	jumpstd AskNumber1FScript
 	end
 
 Route46AskNumber2F:
-	jumpstd asknumber2f
+	jumpstd AskNumber2FScript
 	end
 
 Route46RegisteredNumberF:
-	jumpstd registerednumberf
+	jumpstd RegisteredNumberFScript
 	end
 
 Route46NumberAcceptedF:
-	jumpstd numberacceptedf
+	jumpstd NumberAcceptedFScript
 	end
 
 Route46NumberDeclinedF:
-	jumpstd numberdeclinedf
+	jumpstd NumberDeclinedFScript
 	end
 
 Route46PhoneFullF:
-	jumpstd phonefullf
+	jumpstd PhoneFullFScript
 	end
 
 Route46RematchF:
-	jumpstd rematchf
+	jumpstd RematchFScript
 	end
 
 ErinNoRoomForCalcium:
 	setevent EVENT_ERIN_CALCIUM
-	jumpstd packfullf
+	jumpstd PackFullFScript
 	end
 
 Route46RematchGiftF:
-	jumpstd rematchgiftf
+	jumpstd RematchGiftFScript
 	end
 
 TrainerHikerBailey:

@@ -247,7 +247,7 @@ FixPicBank:
 ; This is a thing for some reason.
 
 PICS_FIX EQU $36
-GLOBAL PICS_FIX
+EXPORT PICS_FIX
 
 	push hl
 	push bc
@@ -287,7 +287,7 @@ GLOBAL PICS_FIX
 	db BANK("Pics 23") ; BANK("Pics 1") + 22
 	db BANK("Pics 24") ; BANK("Pics 1") + 23
 
-Function511ec:
+GSIntro_GetMonFrontpic: ; unreferenced
 	ld a, c
 	push de
 	ld hl, PokemonPicPointers
@@ -344,12 +344,12 @@ GetTrainerPic:
 	pop af
 	ldh [rSVBK], a
 	call WaitBGMap
-	ld a, $1
+	ld a, 1
 	ldh [hBGMapMode], a
 	ret
 
 DecompressGet2bpp:
-; Decompress lz data from b:hl to scratch space at 6:d000, then copy it to address de.
+; Decompress lz data from b:hl to wDecompressScratch, then copy it to address de.
 
 	ldh a, [rSVBK]
 	push af

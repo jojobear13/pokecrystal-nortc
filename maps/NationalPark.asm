@@ -31,7 +31,7 @@ NationalParkTeacher1Script:
 	checkevent EVENT_GOT_QUICK_CLAW
 	iftrue .GotQuickClaw
 	writetext NationalParkTeacher1Text
-	buttonsound
+	promptbutton
 	verbosegiveitem QUICK_CLAW
 	iffalse .NoRoom
 	setevent EVENT_GOT_QUICK_CLAW
@@ -76,14 +76,14 @@ TrainerSchoolboyJack1:
 	loadvar VAR_CALLERID, PHONE_SCHOOLBOY_JACK
 	endifjustbattled
 	opentext
-	checkflag ENGINE_JACK
+	checkflag ENGINE_JACK_READY_FOR_REMATCH
 	iftrue .Rematch
 	checkcellnum PHONE_SCHOOLBOY_JACK
 	iftrue .NumberAccepted
 	checkevent EVENT_JACK_ASKED_FOR_PHONE_NUMBER
 	iftrue .AskAgain
 	writetext SchoolboyJackTradeMonText
-	buttonsound
+	promptbutton
 	setevent EVENT_JACK_ASKED_FOR_PHONE_NUMBER
 	scall .AskNumber1
 	sjump .RequestNumber
@@ -124,7 +124,7 @@ TrainerSchoolboyJack1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wJackFightCount, 1
-	clearflag ENGINE_JACK
+	clearflag ENGINE_JACK_READY_FOR_REMATCH
 	end
 
 .LoadFight1:
@@ -132,7 +132,7 @@ TrainerSchoolboyJack1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wJackFightCount, 2
-	clearflag ENGINE_JACK
+	clearflag ENGINE_JACK_READY_FOR_REMATCH
 	end
 
 .LoadFight2:
@@ -140,7 +140,7 @@ TrainerSchoolboyJack1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wJackFightCount, 3
-	clearflag ENGINE_JACK
+	clearflag ENGINE_JACK_READY_FOR_REMATCH
 	end
 
 .LoadFight3:
@@ -148,42 +148,42 @@ TrainerSchoolboyJack1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wJackFightCount, 4
-	clearflag ENGINE_JACK
+	clearflag ENGINE_JACK_READY_FOR_REMATCH
 	end
 
 .LoadFight4:
 	loadtrainer SCHOOLBOY, JACK5
 	startbattle
 	reloadmapafterbattle
-	clearflag ENGINE_JACK
+	clearflag ENGINE_JACK_READY_FOR_REMATCH
 	end
 
 .AskNumber1:
-	jumpstd asknumber1m
+	jumpstd AskNumber1MScript
 	end
 
 .AskNumber2:
-	jumpstd asknumber2m
+	jumpstd AskNumber2MScript
 	end
 
 .RegisteredNumber:
-	jumpstd registerednumberm
+	jumpstd RegisteredNumberMScript
 	end
 
 .NumberAccepted:
-	jumpstd numberacceptedm
+	jumpstd NumberAcceptedMScript
 	end
 
 .NumberDeclined:
-	jumpstd numberdeclinedm
+	jumpstd NumberDeclinedMScript
 	end
 
 .PhoneFull:
-	jumpstd phonefullm
+	jumpstd PhoneFullMScript
 	end
 
 .RematchStd:
-	jumpstd rematchm
+	jumpstd RematchMScript
 	end
 
 TrainerPokefanmWilliam:
@@ -213,7 +213,7 @@ TrainerPokefanfBeverly1:
 	checkevent EVENT_BEVERLY_ASKED_FOR_PHONE_NUMBER
 	iftrue .AskAgain
 	writetext PokefanBeverlyCuteMonText
-	buttonsound
+	promptbutton
 	setevent EVENT_BEVERLY_ASKED_FOR_PHONE_NUMBER
 	scall .AskNumber1
 	sjump .RequestNumber
@@ -245,35 +245,35 @@ TrainerPokefanfBeverly1:
 	end
 
 .AskNumber1:
-	jumpstd asknumber1f
+	jumpstd AskNumber1FScript
 	end
 
 .AskNumber2:
-	jumpstd asknumber2f
+	jumpstd AskNumber2FScript
 	end
 
 .RegisteredNumber:
-	jumpstd registerednumberf
+	jumpstd RegisteredNumberFScript
 	end
 
 .NumberAccepted:
-	jumpstd numberacceptedf
+	jumpstd NumberAcceptedFScript
 	end
 
 .NumberDeclined:
-	jumpstd numberdeclinedf
+	jumpstd NumberDeclinedFScript
 	end
 
 .PhoneFull:
-	jumpstd phonefullf
+	jumpstd PhoneFullFScript
 	end
 
 .Gift:
-	jumpstd giftf
+	jumpstd GiftFScript
 	end
 
 .PackFull:
-	jumpstd packfullf
+	jumpstd PackFullFScript
 	end
 
 TrainerLassKrise:

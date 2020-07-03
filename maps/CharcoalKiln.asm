@@ -46,7 +46,7 @@ CharcoalKilnApprentice:
 
 .Thanks:
 	writetext CharcoalKilnApprenticeText2
-	buttonsound
+	promptbutton
 	verbosegiveitem CHARCOAL
 	iffalse .Done
 	setevent EVENT_GOT_CHARCOAL_IN_CHARCOAL_KILN
@@ -70,10 +70,10 @@ CharcoalKilnFarfetchd:
 	end
 
 CharcoalKilnBookshelf:
-	jumpstd magazinebookshelf
+	jumpstd MagazineBookshelfScript
 
 CharcoalKilnRadio:
-	jumpstd radio2
+	jumpstd Radio2Script
 
 CharcoalKilnBossText1:
 	text "All the SLOWPOKE"

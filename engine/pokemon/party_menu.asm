@@ -105,11 +105,11 @@ PlacePartyNicknames:
 .end
 	dec hl
 	dec hl
-	ld de, .CANCEL
+	ld de, .CancelString
 	call PlaceString
 	ret
 
-.CANCEL:
+.CancelString:
 	db "CANCEL@"
 
 PlacePartyHPBar:
@@ -246,10 +246,10 @@ PlacePartyMonLevel:
 	jr nc, .ThreeDigits
 	ld a, "<LV>"
 	ld [hli], a
-	lb bc, PRINTNUM_RIGHTALIGN | 1, 2
+	lb bc, PRINTNUM_LEFTALIGN | 1, 2
 	; jr .okay
 .ThreeDigits:
-	lb bc, PRINTNUM_RIGHTALIGN | 1, 3
+	lb bc, PRINTNUM_LEFTALIGN | 1, 3
 ; .okay
 	call PrintNum
 

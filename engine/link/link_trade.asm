@@ -18,7 +18,7 @@ Function16d42e:
 Function16d43b:
 	call LoadStandardMenuHeader
 	call ClearBGPalettes
-	call ClearTileMap
+	call ClearTilemap
 	call ClearSprites
 	farcall __LoadTradeScreenBorder ; useless to farcall
 	farcall Function16d42e ; useless to farcall
@@ -48,7 +48,7 @@ _LinkTextbox:
 	pop hl
 	pop bc
 
-	ld de, wAttrMap - wTileMap
+	ld de, wAttrmap - wTilemap
 	add hl, de
 	inc b
 	inc b
@@ -115,11 +115,11 @@ InitTradeSpeciesList:
 	farcall InitMG_Mobile_LinkTradePalMap
 	farcall PlaceTradePartnerNamesAndParty
 	hlcoord 10, 17
-	ld de, .CANCEL
+	ld de, .CancelString
 	call PlaceString
 	ret
 
-.CANCEL:
+.CancelString:
 	db "CANCEL@"
 
 _LoadTradeScreenBorder:
@@ -240,7 +240,7 @@ LinkTradeMenu:
 	ret
 
 .loop2
-	call RTC
+	call UpdateTimeAndPals
 	call .TryAnims
 	ret c
 	ld a, [w2DMenuFlags1]

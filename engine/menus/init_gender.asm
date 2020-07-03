@@ -10,12 +10,11 @@ InitCrystalData:
 	ld [wd478], a
 	ld [wd002], a
 	ld [wd003], a
-	; could have done "ld a, [wd479] \ and %11111100", saved four operations
 	ld a, [wd479]
-	res 0, a
+	res 0, a ; ???
 	ld [wd479], a
 	ld a, [wd479]
-	res 1, a
+	res 1, a ; ???
 	ld [wd479], a
 	ret
 
@@ -60,9 +59,9 @@ AreYouABoyOrAreYouAGirlText:
 InitGenderScreen:
 	ld a, $10
 	ld [wMusicFade], a
-	ld a, MUSIC_NONE
+	ld a, LOW(MUSIC_NONE)
 	ld [wMusicFadeID], a
-	ld a, $0
+	ld a, HIGH(MUSIC_NONE)
 	ld [wMusicFadeID + 1], a
 	ld c, 8
 	call DelayFrames
@@ -73,7 +72,7 @@ InitGenderScreen:
 	ld bc, SCREEN_HEIGHT * SCREEN_WIDTH
 	ld a, $0
 	call ByteFill
-	hlcoord 0, 0, wAttrMap
+	hlcoord 0, 0, wAttrmap
 	ld bc, SCREEN_HEIGHT * SCREEN_WIDTH
 	xor a
 	call ByteFill

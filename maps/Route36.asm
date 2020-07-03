@@ -137,7 +137,7 @@ Route36RockSmashGuyScript:
 
 .ClearedSudowoodo:
 	writetext RockSmashGuyText2
-	buttonsound
+	promptbutton
 	verbosegiveitem TM_ROCK_SMASH
 	iffalse .NoRoomForTM
 	setevent EVENT_GOT_TM08_ROCK_SMASH
@@ -171,7 +171,7 @@ TrainerSchoolboyAlan1:
 	loadvar VAR_CALLERID, PHONE_SCHOOLBOY_ALAN
 	endifjustbattled
 	opentext
-	checkflag ENGINE_ALAN
+	checkflag ENGINE_ALAN_READY_FOR_REMATCH
 	iftrue .ChooseRematch
 	checkflag ENGINE_ALAN_HAS_FIRE_STONE
 	iftrue .GiveFireStone
@@ -180,7 +180,7 @@ TrainerSchoolboyAlan1:
 	checkevent EVENT_ALAN_ASKED_FOR_PHONE_NUMBER
 	iftrue .AskAgainForPhoneNumber
 	writetext SchoolboyAlanBooksText
-	buttonsound
+	promptbutton
 	setevent EVENT_ALAN_ASKED_FOR_PHONE_NUMBER
 	scall .AskNumber1
 	sjump .ContinueAskForPhoneNumber
@@ -221,7 +221,7 @@ TrainerSchoolboyAlan1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wAlanFightCount, 1
-	clearflag ENGINE_ALAN
+	clearflag ENGINE_ALAN_READY_FOR_REMATCH
 	end
 
 .LoadFight1:
@@ -229,7 +229,7 @@ TrainerSchoolboyAlan1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wAlanFightCount, 2
-	clearflag ENGINE_ALAN
+	clearflag ENGINE_ALAN_READY_FOR_REMATCH
 	end
 
 .LoadFight2:
@@ -237,7 +237,7 @@ TrainerSchoolboyAlan1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wAlanFightCount, 3
-	clearflag ENGINE_ALAN
+	clearflag ENGINE_ALAN_READY_FOR_REMATCH
 	end
 
 .LoadFight3:
@@ -245,14 +245,14 @@ TrainerSchoolboyAlan1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wAlanFightCount, 4
-	clearflag ENGINE_ALAN
+	clearflag ENGINE_ALAN_READY_FOR_REMATCH
 	end
 
 .LoadFight4:
 	loadtrainer SCHOOLBOY, ALAN5
 	startbattle
 	reloadmapafterbattle
-	clearflag ENGINE_ALAN
+	clearflag ENGINE_ALAN_READY_FOR_REMATCH
 	end
 
 .GiveFireStone:
@@ -267,39 +267,39 @@ TrainerSchoolboyAlan1:
 	sjump .PackFull
 
 .AskNumber1:
-	jumpstd asknumber1m
+	jumpstd AskNumber1MScript
 	end
 
 .AskNumber2:
-	jumpstd asknumber2m
+	jumpstd AskNumber2MScript
 	end
 
 .RegisteredNumber:
-	jumpstd registerednumberm
+	jumpstd RegisteredNumberMScript
 	end
 
 .NumberAccepted:
-	jumpstd numberacceptedm
+	jumpstd NumberAcceptedMScript
 	end
 
 .NumberDeclined:
-	jumpstd numberdeclinedm
+	jumpstd NumberDeclinedMScript
 	end
 
 .PhoneFull:
-	jumpstd phonefullm
+	jumpstd PhoneFullMScript
 	end
 
 .Rematch:
-	jumpstd rematchm
+	jumpstd RematchMScript
 	end
 
 .Gift:
-	jumpstd giftm
+	jumpstd GiftMScript
 	end
 
 .PackFull:
-	jumpstd packfullm
+	jumpstd PackFullMScript
 	end
 
 TrainerPsychicMark:
@@ -323,11 +323,11 @@ ArthurScript:
 	checkevent EVENT_MET_ARTHUR_OF_THURSDAY
 	iftrue .MetArthur
 	writetext MeetArthurText
-	buttonsound
+	promptbutton
 	setevent EVENT_MET_ARTHUR_OF_THURSDAY
 .MetArthur:
 	writetext ArthurGivesGiftText
-	buttonsound
+	promptbutton
 	verbosegiveitem HARD_STONE
 	iffalse .BagFull
 	setevent EVENT_GOT_HARD_STONE_FROM_ARTHUR
@@ -365,7 +365,7 @@ Route36FruitTree:
 	fruittree FRUITTREE_ROUTE_36
 
 SudowoodoShakeMovement:
-	tree_shake ; shake
+	tree_shake
 	step_end
 
 WeirdTreeMovement_Flee:

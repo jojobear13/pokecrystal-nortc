@@ -371,13 +371,13 @@ Gen2ToGen2LinkComms:
 	jr z, .next
 	sub $3
 	jr nc, .skip
-	farcall DeutenEnglischenPost
+	farcall ConvertEnglishMailToFrenchGerman
 	jr .next
 
 .skip
 	cp $2
 	jr nc, .next
-	farcall HandleSpanishItalianMail
+	farcall ConvertEnglishMailToSpanishItalian
 
 .next
 	pop de
@@ -835,7 +835,7 @@ Link_PrepPartyData_Gen2:
 
 ; Copy all the mail messages to wc9f9
 	ld a, BANK(sPartyMail)
-	call GetSRAMBank
+	call OpenSRAM
 	ld hl, sPartyMail
 	ld b, PARTY_LENGTH
 .loop2
@@ -875,13 +875,13 @@ Link_PrepPartyData_Gen2:
 	jr z, .next
 	sub $3
 	jr nc, .italian_spanish
-	farcall HandleFrenchGermanMail
+	farcall ConvertFrenchGermanMailToEnglish
 	jr .next
 
 .italian_spanish
 	cp $2
 	jr nc, .next
-	farcall HandleSpanishItalianMail
+	farcall ConvertSpanishItalianMailToEnglish
 
 .next
 	pop de
@@ -1328,7 +1328,7 @@ LinkTradePartiesMenuMasterLoop:
 	jp LinkTradeOTPartymonMenuLoop  ; OTPARTYMON
 
 Function28926:
-	call LoadTileMapToTempTileMap
+	call LoadTilemapToTempTilemap
 	ld a, [wMenuCursorY]
 	push af
 	hlcoord 0, 15
@@ -1369,7 +1369,7 @@ Function28926:
 .b_button
 	pop af
 	ld [wMenuCursorY], a
-	call Call_LoadTempTileMapToTileMap
+	call SafeLoadTempTilemapToTilemap
 	jp LinkTrade_PlayerPartyMenu
 
 .d_right
@@ -1407,7 +1407,7 @@ Function28926:
 	ld [wInitListType], a
 	callfar InitList
 	farcall LinkMonStatsScreen
-	call Call_LoadTempTileMapToTileMap
+	call SafeLoadTempTilemapToTilemap
 	hlcoord 6, 1
 	lb bc, 6, 1
 	ld a, " "
@@ -1561,7 +1561,7 @@ Function28b22:
 	ldh [rSC], a
 	ret
 
-Unreferenced_Function28b42:
+Function28b42: ; unreferenced
 	hlcoord 0, 16
 	ld a, "┘"
 	ld bc, 2 * SCREEN_WIDTH
@@ -1571,10 +1571,10 @@ Unreferenced_Function28b42:
 	ld bc, SCREEN_WIDTH - 2
 	call ByteFill
 	hlcoord 2, 16
-	ld de, .Cancel
+	ld de, .CancelString
 	jp PlaceString
 
-.Cancel:
+.CancelString:
 	db "CANCEL@"
 
 Function28b68:
@@ -1706,7 +1706,7 @@ LinkTrade:
 	ld bc, MAIL_STRUCT_LENGTH
 	call AddNTimes
 	ld a, BANK(sPartyMail)
-	call GetSRAMBank
+	call OpenSRAM
 	ld d, h
 	ld e, l
 	ld bc, MAIL_STRUCT_LENGTH
@@ -1844,7 +1844,7 @@ LinkTrade:
 	ld [wd003], a
 	ld c, 100
 	call DelayFrames
-	call ClearTileMap
+	call ClearTilemap
 	call LoadFontsBattleExtra
 	ld b, SCGB_DIPLOMA
 	call GetSGBLayout
@@ -1971,7 +1971,7 @@ SetTradeRoomBGPals:
 	call SetPalettes
 	ret
 
-Unreferenced_Function28f09:
+Function28f09: ; unreferenced
 	hlcoord 0, 0
 	ld b, 6
 	ld c, 18
@@ -2088,7 +2088,7 @@ EnterTimeCapsule:
 	call DelayFrames
 	xor a
 	ldh [hVBlank], a
-	inc a
+	inc a ; LINK_TIMECAPSULE
 	ld [wLinkMode], a
 	ret
 
@@ -2503,12 +2503,12 @@ CableClubCheckWhichChris:
 	ld [wScriptVar], a
 	ret
 
-Unreferenced_Gen1LinkCommsBorderGFX:
-INCBIN "gfx/trade/unused_gen_1_border_tiles.2bpp"
+GSLinkCommsBorderGFX: ; unreferenced
+INCBIN "gfx/trade/unused_gs_border_tiles.2bpp"
 
-Unreferenced_Function29fe4:
+Function29fe4: ; unreferenced
 	ld a, BANK(sPartyMail)
-	call GetSRAMBank
+	call OpenSRAM
 	ld d, FALSE
 	ld b, CHECK_FLAG
 	predef SmallFarFlagAction

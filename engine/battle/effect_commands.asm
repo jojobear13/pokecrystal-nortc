@@ -1108,7 +1108,7 @@ CheckMimicUsed:
 	call GetBattleVar
 	cp MIMIC
 	jr z, .mimic
-;
+
 	ld b, 0
 	add hl, bc
 	ld a, [hl]
@@ -1543,7 +1543,7 @@ BattleCommand_DamageVariation:
 	call Multiply
 
 ; ...divide by 100%...
-	ld a, $ff ; 100%
+	ld a, 100 percent
 	ldh [hDivisor], a
 	ld b, $4
 	call Divide
@@ -5079,7 +5079,7 @@ BattleCommand_ForceSwitch:
 	call UpdateBattleMonInParty
 	xor a
 	ld [wNumHits], a
-	inc a
+	inc a ; TRUE
 	ld [wForcedSwitch], a
 	call SetBattleDraw
 	ld a, [wPlayerMoveStructAnimation]
@@ -5172,7 +5172,7 @@ BattleCommand_ForceSwitch:
 	call UpdateBattleMonInParty
 	xor a
 	ld [wNumHits], a
-	inc a
+	inc a ; TRUE
 	ld [wForcedSwitch], a
 	call SetBattleDraw
 	ld a, [wEnemyMoveStructAnimation]

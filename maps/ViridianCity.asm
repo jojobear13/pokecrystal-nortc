@@ -53,7 +53,7 @@ ViridianCityDreamEaterFisher:
 	checkevent EVENT_GOT_TM42_DREAM_EATER
 	iftrue .GotDreamEater
 	writetext ViridianCityDreamEaterFisherText
-	buttonsound
+	promptbutton
 	verbosegiveitem TM_DREAM_EATER
 	iffalse .NoRoomForDreamEater
 	setevent EVENT_GOT_TM42_DREAM_EATER
@@ -80,10 +80,10 @@ TrainerHouseSign:
 	jumptext TrainerHouseSignText
 
 ViridianCityPokecenterSign:
-	jumpstd pokecentersign
+	jumpstd PokecenterSignScript
 
 ViridianCityMartSign:
-	jumpstd martsign
+	jumpstd MartSignScript
 
 ViridianCityCoffeeGrampsQuestionText:
 	text "Hey, kid! I just"

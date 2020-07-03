@@ -57,7 +57,7 @@ BattleTower1FReceptionistScript:
 	ifequal $3, Script_BeatenAllTrainers2 ; maps/BattleTowerBattleRoom.asm
 	opentext
 	writetext Text_BattleTowerWelcomesYou
-	buttonsound
+	promptbutton
 	setval BATTLETOWERACTION_CHECK_EXPLANATION_READ ; if new save file: bit 1, [sBattleTowerSaveFileFlags]
 	special BattleTowerAction
 	ifnotequal $0, Script_Menu_ChallengeExplanationCancel
@@ -154,7 +154,7 @@ Script_BattleTowerHopeToServeYouAgain:
 	closetext
 	end
 
-UnreferencedScript_0x9e4b6:
+Script_MobileError2: ; unreferenced
 	special BattleTowerMobileError
 	closetext
 	end
@@ -164,7 +164,7 @@ Script_WaitButton:
 	closetext
 	end
 
-UnreferencedScript_0x9e4be:
+Script_ChooseChallenge2: ; unreferenced
 	writetext Text_SaveBeforeEnteringBattleRoom
 	yesorno
 	iffalse Script_Menu_ChallengeExplanationCancel
@@ -183,7 +183,7 @@ UnreferencedScript_0x9e4be:
 	closetext
 	end
 
-UnreferencedScript_0x9e4ea:
+Script_StartChallenge: ; unreferenced
 	setval BATTLETOWERACTION_LEVEL_CHECK
 	special BattleTowerAction
 	ifnotequal $0, Script_AMonLevelExceeds
@@ -196,11 +196,11 @@ UnreferencedScript_0x9e4ea:
 	special BattleTowerAction
 	ifequal $0, .zero
 	writetext Text_CantBeRegistered_PreviousRecordDeleted
-	sjump continue
+	sjump .continue
 
 .zero
 	writetext Text_CantBeRegistered
-continue:
+.continue
 	yesorno
 	iffalse Script_Menu_ChallengeExplanationCancel
 	writetext Text_SaveBeforeReentry
@@ -218,7 +218,7 @@ continue:
 	waitbutton
 	sjump Script_ResumeBattleTowerChallenge
 
-UnreferencedScript_0x9e53b:
+Script_ReachedBattleLimit: ; unreferenced
 	writetext Text_FiveDayBattleLimit_Mobile
 	waitbutton
 	sjump Script_BattleTowerHopeToServeYouAgain
@@ -528,7 +528,7 @@ Text_PlayerGotFive:
 	text_ram wStringBuffer4
 	text "!@"
 	sound_item
-	text_waitbutton
+	text_promptbutton
 	text_end
 
 Text_YourPackIsStuffedFull:

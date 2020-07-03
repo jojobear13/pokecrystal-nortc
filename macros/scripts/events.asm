@@ -80,13 +80,13 @@ ENDM
 	enum jumpstd_command ; $0c
 jumpstd: MACRO
 	db jumpstd_command
-	dw \1 ; predefined_script
+	dw (\1StdScript - StdScripts) / 3
 ENDM
 
 	enum callstd_command ; $0d
 callstd: MACRO
 	db callstd_command
-	dw \1 ; predefined_script
+	dw (\1StdScript - StdScripts) / 3
 ENDM
 
 	enum callasm_command ; $0e
@@ -553,9 +553,9 @@ waitbutton: MACRO
 	db waitbutton_command
 ENDM
 
-	enum buttonsound_command ; $55
-buttonsound: MACRO
-	db buttonsound_command
+	enum promptbutton_command ; $55
+promptbutton: MACRO
+	db promptbutton_command
 ENDM
 
 	enum pokepic_command ; $56

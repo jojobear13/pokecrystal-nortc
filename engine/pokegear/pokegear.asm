@@ -6,6 +6,8 @@
 	const POKEGEARCARD_RADIO ; 3
 NUM_POKEGEAR_CARDS EQU const_value
 
+PHONE_DISPLAY_HEIGHT EQU 4
+
 ; PokegearJumptable.Jumptable indexes
 	const_def
 	const POKEGEARSTATE_CLOCKINIT       ; 0
@@ -70,7 +72,7 @@ PokeGear:
 
 .InitTilemap:
 	call ClearBGPalettes
-	call ClearTileMap
+	call ClearTilemap
 	call ClearSprites
 	call DisableLCD
 	xor a
@@ -128,7 +130,7 @@ Pokegear_LoadGFX:
 	ld a, [wMapNumber]
 	ld c, a
 	call GetWorldMapLocation
-	cp FAST_SHIP
+	cp LANDMARK_FAST_SHIP
 	jr z, .ssaqua
 	farcall GetPlayerIcon
 	push de
@@ -163,7 +165,7 @@ INCBIN "gfx/pokegear/fast_ship.2bpp"
 InitPokegearModeIndicatorArrow:
 	depixel 4, 2, 4, 0
 	ld a, SPRITE_ANIM_INDEX_POKEGEAR_ARROW
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_TILE_ID
 	add hl, bc
 	ld [hl], $0
@@ -193,7 +195,7 @@ TownMap_GetCurrentLandmark:
 	ld a, [wMapNumber]
 	ld c, a
 	call GetWorldMapLocation
-	cp SPECIAL_MAP
+	cp LANDMARK_SPECIAL
 	ret nz
 	ld a, [wBackupMapGroup]
 	ld b, a
@@ -208,9 +210,9 @@ TownMap_InitCursorAndPlayerIconPositions:
 	ld a, [wMapNumber]
 	ld c, a
 	call GetWorldMapLocation
-	cp FAST_SHIP
+	cp LANDMARK_FAST_SHIP
 	jr z, .FastShip
-	cp SPECIAL_MAP
+	cp LANDMARK_SPECIAL
 	jr nz, .LoadLandmark
 	ld a, [wBackupMapGroup]
 	ld b, a
@@ -224,7 +226,7 @@ TownMap_InitCursorAndPlayerIconPositions:
 
 .FastShip:
 	ld [wPokegearMapPlayerIconLandmark], a
-	ld a, NEW_BARK_TOWN
+	ld a, LANDMARK_NEW_BARK_TOWN
 	ld [wPokegearMapCursorLandmark], a
 	ret
 
@@ -322,7 +324,7 @@ InitPokegearTilemap:
 
 .Map:
 	ld a, [wPokegearMapPlayerIconLandmark]
-	cp FAST_SHIP
+	cp LANDMARK_FAST_SHIP
 	jr z, .johto
 	cp KANTO_LANDMARK
 	jr nc, .kanto
@@ -430,16 +432,7 @@ Pokegear_FinishTilemap:
 	ret
 
 PokegearJumptable:
-	ld a, [wJumptableIndex]
-	ld e, a
-	ld d, 0
-	ld hl, .Jumptable
-	add hl, de
-	add hl, de
-	ld a, [hli]
-	ld h, [hl]
-	ld l, a
-	jp hl
+	jumptable .Jumptable, wJumptableIndex
 
 .Jumptable:
 ; entries correspond to POKEGEARSTATE_* constants
@@ -537,7 +530,7 @@ Pokegear_UpdateClock:
 
 PokegearMap_CheckRegion:
 	ld a, [wPokegearMapPlayerIconLandmark]
-	cp FAST_SHIP
+	cp LANDMARK_FAST_SHIP
 	jr z, .johto
 	cp KANTO_LANDMARK
 	jr nc, .kanto
@@ -572,8 +565,8 @@ PokegearMap_KantoMap:
 	jr PokegearMap_ContinueMap
 
 PokegearMap_JohtoMap:
-	ld d, SILVER_CAVE
-	ld e, NEW_BARK_TOWN
+	ld d, LANDMARK_SILVER_CAVE
+	ld e, LANDMARK_NEW_BARK_TOWN
 PokegearMap_ContinueMap:
 	ld hl, hJoyLast
 	ld a, [hl]
@@ -669,7 +662,7 @@ PokegearMap_InitPlayerIcon:
 	ld b, SPRITE_ANIM_INDEX_BLUE_WALK
 .got_gender
 	ld a, b
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_TILE_ID
 	add hl, bc
 	ld [hl], $10
@@ -690,7 +683,7 @@ PokegearMap_InitCursor:
 	push af
 	depixel 0, 0
 	ld a, SPRITE_ANIM_INDEX_POKEGEAR_ARROW
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_TILE_ID
 	add hl, bc
 	ld [hl], $04
@@ -735,20 +728,20 @@ TownMap_GetKantoLandmarkLimits:
 	ld a, [wStatusFlags]
 	bit STATUSFLAGS_HALL_OF_FAME_F, a
 	jr z, .not_hof
-	ld d, ROUTE_28
-	ld e, PALLET_TOWN
+	ld d, LANDMARK_ROUTE_28
+	ld e, LANDMARK_PALLET_TOWN
 	ret
 
 .not_hof
-	ld d, ROUTE_28
-	ld e, VICTORY_ROAD
+	ld d, LANDMARK_ROUTE_28
+	ld e, LANDMARK_VICTORY_ROAD
 	ret
 
 PokegearRadio_Init:
 	call InitPokegearTilemap
 	depixel 4, 10, 4, 4
 	ld a, SPRITE_ANIM_INDEX_RADIO_TUNING_KNOB
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_TILE_ID
 	add hl, bc
 	ld [hl], $08
@@ -878,7 +871,7 @@ PokegearPhone_Joypad:
 	ld [wPokegearPhoneSelectedPerson], a
 	hlcoord 1, 4
 	ld a, [wPokegearPhoneCursorPosition]
-	ld bc, 20 * 2
+	ld bc, SCREEN_WIDTH * 2
 	call AddNTimes
 	ld [hl], "▷"
 	call PokegearPhoneContactSubmenu
@@ -982,7 +975,7 @@ PokegearPhone_GetDPad:
 .down
 	ld hl, wPokegearPhoneCursorPosition
 	ld a, [hl]
-	cp 3
+	cp PHONE_DISPLAY_HEIGHT - 1
 	jr nc, .scroll_page_down
 	inc [hl]
 	jr .done_joypad_same_page
@@ -990,7 +983,7 @@ PokegearPhone_GetDPad:
 .scroll_page_down
 	ld hl, wPokegearPhoneScrollPosition
 	ld a, [hl]
-	cp 6
+	cp CONTACT_LIST_SIZE - PHONE_DISPLAY_HEIGHT
 	ret nc
 	inc [hl]
 	jr .done_joypad_update_page
@@ -1011,14 +1004,12 @@ PokegearPhone_GetDPad:
 
 PokegearPhone_UpdateCursor:
 	ld a, " "
-	hlcoord 1, 4
+x = 4
+rept PHONE_DISPLAY_HEIGHT
+	hlcoord 1, x
 	ld [hl], a
-	hlcoord 1, 6
-	ld [hl], a
-	hlcoord 1, 8
-	ld [hl], a
-	hlcoord 1, 10
-	ld [hl], a
+x = x + 2
+endr
 	hlcoord 1, 4
 	ld a, [wPokegearPhoneCursorPosition]
 	ld bc, 2 * SCREEN_WIDTH
@@ -1028,10 +1019,10 @@ PokegearPhone_UpdateCursor:
 
 PokegearPhone_UpdateDisplayList:
 	hlcoord 1, 3
-	ld b, 9
+	ld b, PHONE_DISPLAY_HEIGHT * 2 + 1
 	ld a, " "
 .row
-	ld c, 18
+	ld c, SCREEN_WIDTH - 2
 .col
 	ld [hli], a
 	dec c
@@ -1042,7 +1033,7 @@ PokegearPhone_UpdateDisplayList:
 	jr nz, .row
 	ld a, [wPokegearPhoneScrollPosition]
 	ld e, a
-	ld d, $0
+	ld d, 0
 	ld hl, wPhoneList
 	add hl, de
 	xor a
@@ -1064,7 +1055,7 @@ PokegearPhone_UpdateDisplayList:
 	ld a, [wPokegearPhoneLoadNameBuffer]
 	inc a
 	ld [wPokegearPhoneLoadNameBuffer], a
-	cp 4
+	cp PHONE_DISPLAY_HEIGHT
 	jr c, .loop
 	call PokegearPhone_UpdateCursor
 	ret
@@ -1128,7 +1119,7 @@ PokegearPhoneContactSubmenu:
 	ld h, a
 	inc de
 	push hl
-	ld bc, hBGMapAddress + 1
+	bccoord -1, -2, 0
 	add hl, bc
 	ld a, [de]
 	inc de
@@ -1309,7 +1300,7 @@ ExitPokegearRadio_HandleMusic:
 	cp RESTART_MAP_MUSIC
 	jr z, .restart_map_music
 	cp ENTER_MAP_MUSIC
-	call z, EnterMapMusic
+	call z, PlayMapMusicBike
 	xor a
 	ld [wPokegearRadioMusicPlaying], a
 	ret
@@ -1463,15 +1454,15 @@ RadioChannels:
 ; entries correspond to constants/radio_constants.asm
 
 ; frequency value given here = 4 × ingame_frequency − 2
-	dbw 16, .PKMNTalkAndPokedexShow
-	dbw 28, .PokemonMusic
-	dbw 32, .LuckyChannel
-	dbw 40, .BuenasPassword
-	dbw 52, .RuinsOfAlphRadio
-	dbw 64, .PlacesAndPeople
-	dbw 72, .LetsAllSing
-	dbw 78, .PokeFluteRadio
-	dbw 80, .EvolutionRadio
+	dbw 16, .PKMNTalkAndPokedexShow ; 04.5
+	dbw 28, .PokemonMusic           ; 07.5
+	dbw 32, .LuckyChannel           ; 08.5
+	dbw 40, .BuenasPassword         ; 10.5
+	dbw 52, .RuinsOfAlphRadio       ; 13.5
+	dbw 64, .PlacesAndPeople        ; 16.5
+	dbw 72, .LetsAllSing            ; 18.5
+	dbw 78, .PokeFluteRadio         ; 20.0
+	dbw 80, .EvolutionRadio         ; 20.5
 	db -1
 
 .PKMNTalkAndPokedexShow:
@@ -1502,7 +1493,7 @@ RadioChannels:
 
 .RuinsOfAlphRadio:
 	ld a, [wPokegearMapPlayerIconLandmark]
-	cp RUINS_OF_ALPH
+	cp LANDMARK_RUINS_OF_ALPH
 	jr nz, .NoSignal
 	jp LoadStation_UnownRadio
 
@@ -1536,11 +1527,11 @@ RadioChannels:
 	bit STATUSFLAGS_ROCKET_SIGNAL_F, a
 	jr z, .NoSignal
 	ld a, [wPokegearMapPlayerIconLandmark]
-	cp MAHOGANY_TOWN
+	cp LANDMARK_MAHOGANY_TOWN
 	jr z, .ok
-	cp ROUTE_43
+	cp LANDMARK_ROUTE_43
 	jr z, .ok
-	cp LAKE_OF_RAGE
+	cp LANDMARK_LAKE_OF_RAGE
 	jr nz, .NoSignal
 .ok
 	jp LoadStation_EvolutionRadio
@@ -1554,7 +1545,7 @@ RadioChannels:
 
 ; otherwise clear carry
 	ld a, [wPokegearMapPlayerIconLandmark]
-	cp FAST_SHIP
+	cp LANDMARK_FAST_SHIP
 	jr z, .johto
 	cp KANTO_LANDMARK
 	jr c, .johto
@@ -1693,7 +1684,7 @@ LoadStation_EvolutionRadio:
 	ld de, UnownStationName
 	ret
 
-Unreferenced_LoadStation:
+DummyLoadStation: ; unreferenced
 	ret
 
 RadioMusicRestartDE:
@@ -1783,7 +1774,7 @@ _TownMap:
 	ld [wVramState], a
 
 	call ClearBGPalettes
-	call ClearTileMap
+	call ClearTilemap
 	call ClearSprites
 	call DisableLCD
 	call Pokegear_LoadGFX
@@ -2035,7 +2026,7 @@ PokegearMap:
 
 _FlyMap:
 	call ClearBGPalettes
-	call ClearTileMap
+	call ClearTilemap
 	call ClearSprites
 	ld hl, hInMenu
 	ld a, [hl]
@@ -2266,7 +2257,7 @@ FlyMap:
 	call GetWorldMapLocation
 ; If we're not in a valid location, i.e. Pokecenter floor 2F,
 ; the backup map information is used.
-	cp SPECIAL_MAP
+	cp LANDMARK_SPECIAL
 	jr nz, .CheckRegion
 	ld a, [wBackupMapGroup]
 	ld b, a
@@ -2497,7 +2488,7 @@ Pokedex_GetArea:
 .GetAndPlaceNest:
 	ld [wTownMapCursorLandmark], a
 	ld e, a
-	farcall FindNest ; load nest landmarks into wTileMap[0,0]
+	farcall FindNest ; load nest landmarks into wTilemap[0,0]
 	decoord 0, 0
 	ld hl, wVirtualOAMSprite00
 .nestloop
@@ -2589,7 +2580,7 @@ Pokedex_GetArea:
 ; not in the same region as what's currently
 ; on the screen.
 	ld a, [wTownMapPlayerIconLandmark]
-	cp FAST_SHIP
+	cp LANDMARK_FAST_SHIP
 	jr z, .johto
 	cp KANTO_LANDMARK
 	jr c, .johto
@@ -2617,7 +2608,7 @@ Pokedex_GetArea:
 
 .GetPlayerOrFastShipIcon:
 	ld a, [wTownMapPlayerIconLandmark]
-	cp FAST_SHIP
+	cp LANDMARK_FAST_SHIP
 	jr z, .FastShip
 	farcall GetPlayerIcon
 	ret
@@ -2675,7 +2666,7 @@ FillTownMap:
 TownMapPals:
 ; Assign palettes based on tile ids
 	hlcoord 0, 0
-	decoord 0, 0, wAttrMap
+	decoord 0, 0, wAttrmap
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 .loop
 ; Current tile
@@ -2743,7 +2734,7 @@ TownMapMon:
 ; Animation/palette
 	depixel 0, 0
 	ld a, SPRITE_ANIM_INDEX_PARTY_MON
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_TILE_ID
 	add hl, bc
 	ld [hl], $08
@@ -2778,7 +2769,7 @@ TownMapPlayerIcon:
 	ld b, SPRITE_ANIM_INDEX_BLUE_WALK ; Female
 .got_gender
 	ld a, b
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_TILE_ID
 	add hl, bc
 	ld [hl], $10
@@ -2813,11 +2804,11 @@ INCBIN "gfx/pokegear/dexmap_nest_icon.2bpp"
 FlyMapLabelBorderGFX:
 INCBIN "gfx/pokegear/flymap_label_border.1bpp"
 
-Unreferenced_Function92311:
+Function92311:
 	xor a
 	ld [wTownMapPlayerIconLandmark], a
 	call ClearBGPalettes
-	call ClearTileMap
+	call ClearTilemap
 	call ClearSprites
 	ld hl, hInMenu
 	ld a, [hl]

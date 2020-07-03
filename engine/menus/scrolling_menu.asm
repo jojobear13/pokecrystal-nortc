@@ -78,7 +78,7 @@ ScrollingMenuJoyAction:
 	jp nz, .d_down
 	jr .loop
 
-.unreferenced ; unused
+.no_zero_no_carry ; unreferenced
 	ld a, -1
 	and a
 	ret
@@ -244,16 +244,16 @@ InitScrollingMenuCursor:
 	ld a, [wScrollingMenuListSize]
 	inc a
 	cp b
-	jr c, .asm_2475a
-	jr nc, .asm_24763
+	jr c, .wrap
+	jr nc, .done
 
-.asm_2475a
+.wrap
 	xor a
 	ld [wMenuScrollPosition], a
 	ld a, $1
 	ld [wMenuCursorBuffer], a
 
-.asm_24763
+.done
 	ret
 
 ScrollingMenu_InitFlags:
@@ -401,11 +401,11 @@ ScrollingMenu_UpdateDisplay:
 	ld a, [wMenuDataFlags]
 	bit 0, a ; call function on cancel
 	jr nz, .call_function
-	ld de, .string_2485f
+	ld de, .CancelString
 	call PlaceString
 	ret
 
-.string_2485f
+.CancelString
 	db "CANCEL@"
 
 .call_function

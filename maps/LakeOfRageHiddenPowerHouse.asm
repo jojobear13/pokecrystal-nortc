@@ -12,7 +12,7 @@ HiddenPowerGuy:
 	checkevent EVENT_GOT_TM10_HIDDEN_POWER
 	iftrue .AlreadyGotItem
 	writetext HiddenPowerGuyText1
-	buttonsound
+	promptbutton
 	verbosegiveitem TM_HIDDEN_POWER
 	iffalse .Done
 	setevent EVENT_GOT_TM10_HIDDEN_POWER
@@ -28,7 +28,7 @@ HiddenPowerGuy:
 	end
 
 HiddenPowerHouseBookshelf:
-	jumpstd difficultbookshelf
+	jumpstd DifficultBookshelfScript
 
 HiddenPowerGuyText1:
 	text "…You have strayed"

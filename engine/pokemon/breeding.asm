@@ -782,7 +782,7 @@ EggHatch_CrackShell:
 	ld d, a
 	ld e, 11 * 8
 	ld a, SPRITE_ANIM_INDEX_EGG_CRACK
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_TILE_ID
 	add hl, bc
 	ld [hl], $0
@@ -810,7 +810,7 @@ Hatch_InitShellFragments:
 	push bc
 
 	ld a, SPRITE_ANIM_INDEX_EGG_HATCH
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 
 	ld hl, SPRITEANIMSTRUCT_TILE_ID
 	add hl, bc
@@ -869,7 +869,7 @@ DayCareMon1:
 	ld a, [wDayCareLady]
 	bit DAYCARELADY_HAS_MON_F, a
 	jr z, DayCareMonCursor
-	call ButtonSound
+	call PromptButton
 	ld hl, wBreedMon2Nick
 	call DayCareMonCompatibilityText
 	jp PrintText
@@ -882,7 +882,7 @@ DayCareMon2:
 	ld a, [wDayCareMan]
 	bit DAYCAREMAN_HAS_MON_F, a
 	jr z, DayCareMonCursor
-	call ButtonSound
+	call PromptButton
 	ld hl, wBreedMon1Nick
 	call DayCareMonCompatibilityText
 	jp PrintText
@@ -943,7 +943,7 @@ DayCareMonCompatibilityText:
 	text_far _BreedShowsInterestText
 	text_end
 
-Unreferenced_DayCareMonPrintEmptyString:
+DayCareMonPrintEmptyString: ; unreferenced
 	ld hl, .string
 	ret
 

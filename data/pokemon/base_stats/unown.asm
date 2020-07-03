@@ -3,7 +3,7 @@
 	db  48,  72,  48,  48,  72,  48
 	;   hp  atk  def  spd  sat  sdf
 
-	db PSYCHIC, PSYCHIC ; type
+	db PSYCHIC_TYPE, PSYCHIC_TYPE ; type
 	db 225 ; catch rate
 	db 61 ; base exp
 	db NO_ITEM, NO_ITEM ; items
@@ -12,7 +12,7 @@
 	db 40 ; step cycles to hatch
 	db 5 ; unknown 2
 	INCBIN "gfx/pokemon/unown_a/front.dimensions"
-	db 0, 0, 0, 0 ; padding
+	dw NULL, NULL ; unused (beta front/back pics)
 	db GROWTH_MEDIUM_FAST ; growth rate
 	dn EGG_NONE, EGG_NONE ; egg groups
 

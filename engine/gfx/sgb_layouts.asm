@@ -333,7 +333,7 @@ endr
 
 .SGB_BetaPoker:
 	ld hl, BlkPacket_9a86
-	ld de, wPlayerLightScreenCount ; ???
+	ld de, wBetaPokerSGBPals
 	ld bc, PALPACKET_LENGTH
 	call CopyBytes
 	ld hl, PalPacket_BetaPoker
@@ -547,7 +547,7 @@ endr
 	ret
 
 .route
-	ld a, PREDEFPAL_00
+	ld a, PREDEFPAL_ROUTES
 	ret
 
 .cave

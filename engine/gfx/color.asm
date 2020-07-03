@@ -76,7 +76,7 @@ Unused_CheckShininess:
 	and a
 	ret
 
-Unreferenced_Function8aa4:
+SGB_ApplyCreditsPals: ; unreferenced
 	push de
 	push bc
 	ld hl, PalPacket_9ce6
@@ -103,7 +103,7 @@ InitPartyMenuPalettes:
 	ld hl, PalPacket_PartyMenu + 1
 	call CopyFourPalettes
 	call InitPartyMenuOBPals
-	call WipeAttrMap
+	call WipeAttrmap
 	ret
 
 ; SGB layout for SCGB_PARTY_MENU_HP_PALS
@@ -133,7 +133,7 @@ SGB_ApplyPartyMenuHPPals:
 	ld [hl], e
 	ret
 
-Unreferenced_Function8b07:
+Function8b07: ; unreferenced
 	call CheckCGB
 	ret z
 ; CGB only
@@ -166,7 +166,7 @@ Unreferenced_Function8b07:
 	RGB 08, 16, 28
 	RGB 00, 00, 00
 
-Unreferenced_Function8b3f:
+Function8b3f: ; unreferenced
 	call CheckCGB
 	ret nz
 	ldh a, [hSGB]
@@ -175,7 +175,7 @@ Unreferenced_Function8b3f:
 	ld hl, BlkPacket_9a86
 	jp PushSGBPals
 
-Unreferenced_Function8b4d:
+Function8b4d: ; unreferenced
 	call CheckCGB
 	jr nz, .cgb
 	ldh a, [hSGB]
@@ -190,7 +190,7 @@ Unreferenced_Function8b4d:
 	call GetPredefPal
 	jp LoadHLPaletteIntoDE
 
-Unreferenced_Function8b67:
+Function8b67: ; unreferenced
 	call CheckCGB
 	jr nz, .cgb
 	ldh a, [hSGB]
@@ -205,7 +205,7 @@ Unreferenced_Function8b67:
 	call GetPredefPal
 	jp LoadHLPaletteIntoDE
 
-Unreferenced_Function8b81:
+GSIntro_LoadMonPalette: ; unreferenced
 	call CheckCGB
 	jr nz, .cgb
 	ldh a, [hSGB]
@@ -241,21 +241,21 @@ LoadTrainerClassPaletteAsNthBGPal:
 	ld a, [wTrainerClass]
 	call GetTrainerPalettePointer
 	ld a, e
-	jr got_palette_pointer_8bd7
+	jr LoadNthMiddleBGPal
 
 LoadMonPaletteAsNthBGPal:
 	ld a, [wCurPartySpecies]
 	call _GetMonPalettePointer
 	ld a, e
 	bit 7, a
-	jr z, got_palette_pointer_8bd7
+	jr z, LoadNthMiddleBGPal
 	and $7f
 	inc hl
 	inc hl
 	inc hl
 	inc hl
 
-got_palette_pointer_8bd7
+LoadNthMiddleBGPal:
 	push hl
 	ld hl, wBGPals1
 	ld de, 1 palettes
@@ -273,18 +273,18 @@ got_palette_pointer_8bd7
 	call LoadPalette_White_Col1_Col2_Black
 	ret
 
-Unreferenced_Function8bec:
+Function8bec: ; unreferenced
 	ldh a, [hCGB]
 	and a
 	jr nz, .cgb
-	ld hl, wPlayerLightScreenCount
+	ld hl, wBetaPokerSGBPals
 	jp PushSGBPals
 
 .cgb
-	ld a, [wEnemyLightScreenCount] ; col
+	ld a, [wBetaPokerSGBCol]
 	ld c, a
-	ld a, [wEnemyReflectCount] ; row
-	hlcoord 0, 0, wAttrMap
+	ld a, [wBetaPokerSGBRow]
+	hlcoord 0, 0, wAttrmap
 	ld de, SCREEN_WIDTH
 .loop
 	and a
@@ -294,10 +294,10 @@ Unreferenced_Function8bec:
 	jr .loop
 
 .done
-	ld b, $0
+	ld b, 0
 	add hl, bc
 	lb bc, 6, 4
-	ld a, [wEnemySafeguardCount] ; value
+	ld a, [wBetaPokerSGBAttr]
 	and $3
 	call FillBoxCGB
 	call CopyTilemapAtOnce
@@ -320,8 +320,8 @@ ApplyMonOrTrainerPals:
 .load_palettes
 	ld de, wBGPals1
 	call LoadPalette_White_Col1_Col2_Black
-	call WipeAttrMap
-	call ApplyAttrMap
+	call WipeAttrmap
+	call ApplyAttrmap
 	call ApplyPals
 	ret
 
@@ -359,7 +359,7 @@ ApplyHPBarPals:
 .PartyMenu:
 	ld e, c
 	inc e
-	hlcoord 11, 1, wAttrMap
+	hlcoord 11, 1, wAttrmap
 	ld bc, 2 * SCREEN_WIDTH
 	ld a, [wCurPartyMon]
 .loop
@@ -437,31 +437,14 @@ LoadMailPalettes:
 	ld a, BANK(wBGPals1)
 	call FarCopyWRAM
 	call ApplyPals
-	call WipeAttrMap
-	call ApplyAttrMap
+	call WipeAttrmap
+	call ApplyAttrmap
 	ret
 
 .MailPals:
 INCLUDE "gfx/mail/mail.pal"
 
 INCLUDE "engine/gfx/cgb_layouts.asm"
-
-Unreferenced_Function95f0:
-	ld hl, .Palette
-	ld de, wBGPals1
-	ld bc, 1 palettes
-	ld a, BANK(wBGPals1)
-	call FarCopyWRAM
-	call ApplyPals
-	call WipeAttrMap
-	call ApplyAttrMap
-	ret
-
-.Palette:
-	RGB 31, 31, 31
-	RGB 09, 31, 31
-	RGB 10, 12, 31
-	RGB 00, 03, 19
 
 CopyFourPalettes:
 	ld de, wBGPals1
@@ -590,8 +573,8 @@ ResetBGPals:
 	pop af
 	ret
 
-WipeAttrMap:
-	hlcoord 0, 0, wAttrMap
+WipeAttrmap:
+	hlcoord 0, 0, wAttrmap
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 	xor a
 	call ByteFill
@@ -605,7 +588,7 @@ ApplyPals:
 	call FarCopyWRAM
 	ret
 
-ApplyAttrMap:
+ApplyAttrmap:
 	ldh a, [rLCDC]
 	bit rLCDC_ENABLE, a
 	jr z, .UpdateVBank1
@@ -622,7 +605,7 @@ ApplyAttrMap:
 	ret
 
 .UpdateVBank1:
-	hlcoord 0, 0, wAttrMap
+	hlcoord 0, 0, wAttrmap
 	debgcoord 0, 0
 	ld b, SCREEN_HEIGHT
 	ld a, $1
@@ -659,7 +642,7 @@ CGB_ApplyPartyMenuHPPals:
 	ld a, [de]
 	inc a
 	ld e, a
-	hlcoord 11, 2, wAttrMap
+	hlcoord 11, 2, wAttrmap
 	ld bc, 2 * SCREEN_WIDTH
 	ld a, [wSGBPals]
 .loop
@@ -736,7 +719,7 @@ GetMonPalettePointer:
 	call _GetMonPalettePointer
 	ret
 
-Unreferenced_Function9779:
+Function9779: ; unreferenced
 	ret
 	call CheckCGB
 	ret z
@@ -759,7 +742,7 @@ Unreferenced_Function9779:
 BattleObjectPals:
 INCLUDE "gfx/battle_anims/battle_anims.pal"
 
-Unreferenced_Function97cc:
+Function97cc: ; unreferenced
 	call CheckCGB
 	ret z
 	ld a, $90
@@ -969,7 +952,7 @@ _InitSGBBorderPals:
 	dw DataSndPacket7
 	dw DataSndPacket8
 
-Unreferenced_Function9911:
+Function9911: ; unreferenced
 	di
 	xor a
 	ldh [rJOYP], a
@@ -992,7 +975,7 @@ PushSGBBorder:
 	ret
 
 .LoadSGBBorderPointers:
-	ld hl, SGBBorder
+	ld hl, SGBBorderGFX
 	ld de, SGBBorderMap
 	ret
 
@@ -1075,21 +1058,21 @@ SGBBorder_MorePalPushing:
 	ld a, $e4
 	ldh [rBGP], a
 	ld de, vTiles1
-	ld bc, 20 tiles
+	ld bc, (6 + SCREEN_WIDTH + 6) * 5 * 2
 	call CopyData
-	ld b, 18
+	ld b, SCREEN_HEIGHT
 .loop
 	push bc
-	ld bc, $c
+	ld bc, 6 * 2
 	call CopyData
-	ld bc, $28
+	ld bc, SCREEN_WIDTH * 2
 	call ClearBytes
-	ld bc, $c
+	ld bc, 6 * 2
 	call CopyData
 	pop bc
 	dec b
 	jr nz, .loop
-	ld bc, $140
+	ld bc, (6 + SCREEN_WIDTH + 6) * 5 * 2
 	call CopyData
 	ld bc, $100
 	call ClearBytes
@@ -1191,13 +1174,14 @@ PredefPals:
 INCLUDE "gfx/sgb/predef.pal"
 
 SGBBorderMap:
-; interleaved tile ids and palette ids
-INCBIN "gfx/sgb/sgb_border.bin"
+; interleaved tile ids and palette ids, without the center 20x18 screen area
+INCBIN "gfx/sgb/sgb_border.sgb.tilemap"
 
 SGBBorderPalettes:
+; assumed to come after SGBBorderMap
 INCLUDE "gfx/sgb/sgb_border.pal"
 
-SGBBorder:
+SGBBorderGFX:
 INCBIN "gfx/sgb/sgb_border.2bpp"
 
 HPBarPals:
@@ -1236,7 +1220,6 @@ LoadMapPals:
 	add hl, de
 	ld e, l
 	ld d, h
-	; Switch to palettes WRAM bank
 	ldh a, [rSVBK]
 	push af
 	ld a, BANK(wBGPals1)
@@ -1332,6 +1315,9 @@ INCLUDE "gfx/diploma/diploma.pal"
 
 PartyMenuOBPals:
 INCLUDE "gfx/stats/party_menu_ob.pal"
+
+UnusedBattleObjectPals:
+INCLUDE "gfx/battle_anims/unused_battle_anims.pal"
 
 UnusedGSTitleBGPals:
 INCLUDE "gfx/title/unused_gs_bg.pal"

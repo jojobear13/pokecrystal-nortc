@@ -167,7 +167,7 @@ NamingScreen:
 	ld [hl], a
 	depixel 4, 4, 4, 0
 	ld a, SPRITE_ANIM_INDEX_RED_WALK
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_FRAMESET_ID
 	add hl, bc
 	ld [hl], $0
@@ -193,7 +193,7 @@ NamingScreen:
 .LoadSprite:
 	push de
 	ld hl, vTiles0 tile $00
-	ld c, $4
+	ld c, 4
 	push bc
 	call Request2bpp
 	pop bc
@@ -219,7 +219,7 @@ NamingScreen:
 .not_kris
 	ld a, b
 	depixel 4, 4, 4, 0
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ret
 
 .StoreMonIconParams:
@@ -363,16 +363,7 @@ NamingScreenJoypadLoop:
 	ret
 
 .RunJumptable:
-	ld a, [wJumptableIndex]
-	ld e, a
-	ld d, $0
-	ld hl, .Jumptable
-	add hl, de
-	add hl, de
-	ld a, [hli]
-	ld h, [hl]
-	ld l, a
-	jp hl
+	jumptable .Jumptable, wJumptableIndex
 
 .Jumptable:
 	dw .InitCursor
@@ -385,7 +376,7 @@ NamingScreenJoypadLoop:
 	ld d, 8 * 8
 .got_cursor_position
 	ld a, SPRITE_ANIM_INDEX_NAMING_SCREEN_CURSOR
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld a, c
 	ld [wNamingScreenCursorObjectPointer], a
 	ld a, b
@@ -698,7 +689,7 @@ NamingScreen_AdvanceCursor_CheckEndOfString:
 	scf
 	ret
 
-; unused
+AddDakutenToCharacter: ; unreferenced
 	ld a, [wNamingScreenCurNameLength]
 	and a
 	ret z
@@ -711,7 +702,7 @@ NamingScreen_AdvanceCursor_CheckEndOfString:
 
 .loop
 	ld a, [hli]
-	cp $ff
+	cp -1
 	jr z, NamingScreen_AdvanceCursor_CheckEndOfString
 	cp c
 	jr z, .done
@@ -940,7 +931,7 @@ _ComposeMailMessage:
 	; init mail icon
 	depixel 3, 2
 	ld a, SPRITE_ANIM_INDEX_PARTY_MON
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 
 	ld hl, SPRITEANIMSTRUCT_ANIM_SEQ_ID
 	add hl, bc
@@ -975,7 +966,7 @@ INCBIN "gfx/icons/mail_big.2bpp"
 	ld [wNamingScreenMaxNameLength], a
 	ret
 
-.UnusedString11f7a:
+.PleaseWriteAMailString: ; unreferenced
 	db "メールを　かいてね@"
 
 .InitCharset:
@@ -1050,16 +1041,7 @@ INCBIN "gfx/icons/mail_big.2bpp"
 	ret
 
 .DoJumptable:
-	ld a, [wJumptableIndex]
-	ld e, a
-	ld d, 0
-	ld hl, .Jumptable
-	add hl, de
-	add hl, de
-	ld a, [hli]
-	ld h, [hl]
-	ld l, a
-	jp hl
+	jumptable .Jumptable, wJumptableIndex
 
 .Jumptable:
 	dw .init_blinking_cursor
@@ -1068,7 +1050,7 @@ INCBIN "gfx/icons/mail_big.2bpp"
 .init_blinking_cursor
 	depixel 9, 2
 	ld a, SPRITE_ANIM_INDEX_COMPOSE_MAIL_CURSOR
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld a, c
 	ld [wNamingScreenCursorObjectPointer], a
 	ld a, b

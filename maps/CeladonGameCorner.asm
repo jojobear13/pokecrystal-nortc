@@ -15,7 +15,7 @@ CeladonGameCorner_MapScripts:
 	db 0 ; callbacks
 
 CeladonGameCornerClerkScript:
-	jumpstd gamecornercoinvendor
+	jumpstd GameCornerCoinVendorScript
 
 CeladonGameCornerReceptionistScript:
 	jumptextfaceplayer CeladonGameCornerReceptionistText
@@ -53,7 +53,7 @@ CeladonGameCornerFisherScript:
 	checkevent EVENT_GOT_COINS_FROM_GAMBLER_AT_CELADON
 	iftrue .GotCoins
 	writetext CeladonGameCornerFisherText1
-	buttonsound
+	promptbutton
 	checkitem COIN_CASE
 	iffalse .NoCoinCase
 	checkcoins MAX_COINS - 1
@@ -70,7 +70,7 @@ CeladonGameCornerFisherScript:
 	end
 
 .GiveCoins:
-	jumpstd receiveitem
+	jumpstd ReceiveItemScript
 	end
 
 .coinname

@@ -239,7 +239,7 @@ BillsPCDepositMenuHeader:
 	db "RELEASE@"
 	db "CANCEL@"
 
-Unreferenced_BillsPCClearThreeBoxes:
+BillsPCClearThreeBoxes: ; unreferenced
 	hlcoord 0, 0
 	ld b, 4
 	ld c, 8
@@ -774,7 +774,7 @@ _MovePKMNWithoutMail:
 BillsPC_InitRAM:
 	call ClearBGPalettes
 	call ClearSprites
-	call ClearTileMap
+	call ClearTilemap
 	call BillsPC_InitGFX
 	ld hl, wBillsPCData
 	ld bc, wBillsPCDataEnd - wBillsPCData
@@ -1127,7 +1127,7 @@ BillsPC_LoadMonStats:
 	ld b, a
 	call GetBoxPointer
 	ld a, b
-	call GetSRAMBank
+	call OpenSRAM
 	push hl
 	ld bc, sBoxMon1Level - sBox
 	add hl, bc
@@ -1187,7 +1187,7 @@ BillsPC_LoadMonStats:
 
 .sBox
 	ld a, BANK(sBox)
-	call GetSRAMBank
+	call OpenSRAM
 	ld hl, sBoxMon1Level
 	ld bc, BOXMON_STRUCT_LENGTH
 	ld a, e
@@ -1282,7 +1282,7 @@ BillsPC_RefreshTextboxes:
 	push hl
 	call GetBoxPointer
 	ld a, b
-	call GetSRAMBank
+	call OpenSRAM
 	push hl
 	ld bc, sBoxMons - sBox
 	add hl, bc
@@ -1339,7 +1339,7 @@ BillsPC_RefreshTextboxes:
 .sBox
 	push hl
 	ld a, BANK(sBox)
-	call GetSRAMBank
+	call OpenSRAM
 	ld hl, sBoxSpecies
 	ld d, $0
 	add hl, de
@@ -1421,7 +1421,7 @@ CopyBoxmonSpecies:
 	ld b, a
 	call GetBoxPointer
 	ld a, b
-	call GetSRAMBank
+	call OpenSRAM
 	inc hl
 	copy_box_data 1
 	ret
@@ -1433,7 +1433,7 @@ CopyBoxmonSpecies:
 
 .sBox
 	ld a, BANK(sBox)
-	call GetSRAMBank
+	call OpenSRAM
 	ld hl, sBoxSpecies
 	copy_box_data 1
 	ret
@@ -1472,7 +1472,7 @@ BillsPC_UpdateSelectionCursor:
 	inc hl
 	ld [de], a ; y
 	inc de
-rept SPRITEOAMSTRUCT_LENGTH + -1
+rept SPRITEOAMSTRUCT_LENGTH - 1
 	ld a, [hli]
 	ld [de], a
 	inc de
@@ -1480,30 +1480,30 @@ endr
 	jr .loop
 
 .OAM:
-	dsprite 4, 6, 10, 0, $00, 0
-	dsprite 4, 6, 11, 0, $00, 0
-	dsprite 4, 6, 12, 0, $00, 0
-	dsprite 4, 6, 13, 0, $00, 0
-	dsprite 4, 6, 14, 0, $00, 0
-	dsprite 4, 6, 15, 0, $00, 0
-	dsprite 4, 6, 16, 0, $00, 0
-	dsprite 4, 6, 17, 0, $00, 0
-	dsprite 4, 6, 18, 0, $00, 0
-	dsprite 4, 6, 18, 7, $00, 0
-	dsprite 7, 1, 10, 0, $00, 0 | Y_FLIP
-	dsprite 7, 1, 11, 0, $00, 0 | Y_FLIP
-	dsprite 7, 1, 12, 0, $00, 0 | Y_FLIP
-	dsprite 7, 1, 13, 0, $00, 0 | Y_FLIP
-	dsprite 7, 1, 14, 0, $00, 0 | Y_FLIP
-	dsprite 7, 1, 15, 0, $00, 0 | Y_FLIP
-	dsprite 7, 1, 16, 0, $00, 0 | Y_FLIP
-	dsprite 7, 1, 17, 0, $00, 0 | Y_FLIP
-	dsprite 7, 1, 18, 0, $00, 0 | Y_FLIP
-	dsprite 7, 1, 18, 7, $00, 0 | Y_FLIP
-	dsprite 5, 6,  9, 6, $01, 0
-	dsprite 6, 1,  9, 6, $01, 0 | Y_FLIP
-	dsprite 5, 6, 19, 1, $01, 0 | X_FLIP
-	dsprite 6, 1, 19, 1, $01, 0 | X_FLIP | Y_FLIP
+	dbsprite 10, 4, 0, 6, $00, 0
+	dbsprite 11, 4, 0, 6, $00, 0
+	dbsprite 12, 4, 0, 6, $00, 0
+	dbsprite 13, 4, 0, 6, $00, 0
+	dbsprite 14, 4, 0, 6, $00, 0
+	dbsprite 15, 4, 0, 6, $00, 0
+	dbsprite 16, 4, 0, 6, $00, 0
+	dbsprite 17, 4, 0, 6, $00, 0
+	dbsprite 18, 4, 0, 6, $00, 0
+	dbsprite 18, 4, 7, 6, $00, 0
+	dbsprite 10, 7, 0, 1, $00, 0 | Y_FLIP
+	dbsprite 11, 7, 0, 1, $00, 0 | Y_FLIP
+	dbsprite 12, 7, 0, 1, $00, 0 | Y_FLIP
+	dbsprite 13, 7, 0, 1, $00, 0 | Y_FLIP
+	dbsprite 14, 7, 0, 1, $00, 0 | Y_FLIP
+	dbsprite 15, 7, 0, 1, $00, 0 | Y_FLIP
+	dbsprite 16, 7, 0, 1, $00, 0 | Y_FLIP
+	dbsprite 17, 7, 0, 1, $00, 0 | Y_FLIP
+	dbsprite 18, 7, 0, 1, $00, 0 | Y_FLIP
+	dbsprite 18, 7, 7, 1, $00, 0 | Y_FLIP
+	dbsprite  9, 5, 6, 6, $01, 0
+	dbsprite  9, 6, 6, 1, $01, 0 | Y_FLIP
+	dbsprite 19, 5, 1, 6, $01, 0 | X_FLIP
+	dbsprite 19, 6, 1, 1, $01, 0 | X_FLIP | Y_FLIP
 	db -1
 
 BillsPC_UpdateInsertCursor:
@@ -1520,7 +1520,7 @@ BillsPC_UpdateInsertCursor:
 	inc hl
 	ld [de], a ; y
 	inc de
-rept SPRITEOAMSTRUCT_LENGTH + -1
+rept SPRITEOAMSTRUCT_LENGTH - 1
 	ld a, [hli]
 	ld [de], a
 	inc de
@@ -1528,19 +1528,19 @@ endr
 	jr .loop
 
 .OAM:
-	dsprite 4, 7, 10, 0, $06, 0
-	dsprite 5, 3, 11, 0, $00, 0 | Y_FLIP
-	dsprite 5, 3, 12, 0, $00, 0 | Y_FLIP
-	dsprite 5, 3, 13, 0, $00, 0 | Y_FLIP
-	dsprite 5, 3, 14, 0, $00, 0 | Y_FLIP
-	dsprite 5, 3, 15, 0, $00, 0 | Y_FLIP
-	dsprite 5, 3, 16, 0, $00, 0 | Y_FLIP
-	dsprite 5, 3, 17, 0, $00, 0 | Y_FLIP
-	dsprite 5, 3, 18, 0, $00, 0 | Y_FLIP
-	dsprite 4, 7, 19, 0, $07, 0
+	dbsprite 10, 4, 0, 7, $06, 0
+	dbsprite 11, 5, 0, 3, $00, 0 | Y_FLIP
+	dbsprite 12, 5, 0, 3, $00, 0 | Y_FLIP
+	dbsprite 13, 5, 0, 3, $00, 0 | Y_FLIP
+	dbsprite 14, 5, 0, 3, $00, 0 | Y_FLIP
+	dbsprite 15, 5, 0, 3, $00, 0 | Y_FLIP
+	dbsprite 16, 5, 0, 3, $00, 0 | Y_FLIP
+	dbsprite 17, 5, 0, 3, $00, 0 | Y_FLIP
+	dbsprite 18, 5, 0, 3, $00, 0 | Y_FLIP
+	dbsprite 19, 4, 0, 7, $07, 0
 	db -1
 
-Unreferenced_BillsPC_FillBox:
+BillsPC_FillBox: ; unreferenced
 .row
 	push bc
 	push hl
@@ -1652,7 +1652,7 @@ BillsPC_IsMonAnEgg:
 BillsPC_StatsScreen:
 	call LowVolume
 	call BillsPC_CopyMon
-	ld a, $3
+	ld a, TEMPMON
 	ld [wMonType], a
 	predef StatsScreenInit
 	call BillsPC_InitGFX
@@ -1704,7 +1704,7 @@ BillsPC_CopyMon:
 	cp NUM_BOXES + 1
 	jr nz, .box
 	ld a, BANK(sBox)
-	call GetSRAMBank
+	call OpenSRAM
 	ld hl, sBoxSpecies
 	call CopySpeciesToTemp
 	ld hl, sBoxMonNicknames
@@ -1742,7 +1742,7 @@ BillsPC_CopyMon:
 	ld b, a
 	call GetBoxPointer
 	ld a, b
-	call GetSRAMBank
+	call OpenSRAM
 	push hl
 	inc hl
 	call CopySpeciesToTemp
@@ -1823,7 +1823,7 @@ TryWithdrawPokemon:
 	add [hl]
 	ld [wCurPartyMon], a
 	ld a, BANK(sBoxMonNicknames)
-	call GetSRAMBank
+	call OpenSRAM
 	ld a, [wCurPartyMon]
 	ld hl, sBoxMonNicknames
 	call GetNick
@@ -2046,7 +2046,7 @@ MovePKMNWitoutMail_InsertMon:
 	add [hl]
 	ld [wCurPartyMon], a
 	ld a, BANK(sBox)
-	call GetSRAMBank
+	call OpenSRAM
 	ld hl, sBoxSpecies
 	call CopySpeciesToTemp
 	ld hl, sBoxMonNicknames
@@ -2348,7 +2348,7 @@ GetBoxCount:
 	add hl, bc
 	ld a, [hli]
 	ld b, a
-	call GetSRAMBank
+	call OpenSRAM
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -2368,7 +2368,7 @@ GetBoxCount:
 .activebox
 	ld a, BANK(sBoxCount)
 	ld b, a
-	call GetSRAMBank
+	call OpenSRAM
 	ld hl, sBoxCount
 	ld a, [hl]
 	call CloseSRAM
@@ -2457,7 +2457,7 @@ BillsPC_ChangeBoxSubmenu:
 	ld b, NAME_BOX
 	ld de, wd002
 	farcall NamingScreen
-	call ClearTileMap
+	call ClearTilemap
 	call LoadStandardFont
 	call LoadFontsBattleExtra
 	ld a, [wMenuSelection]

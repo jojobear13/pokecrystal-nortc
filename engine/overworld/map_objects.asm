@@ -10,7 +10,7 @@ DeleteMapObject::
 	push af
 	ld h, b
 	ld l, c
-	ld bc, OBJECT_STRUCT_LENGTH
+	ld bc, OBJECT_LENGTH
 	xor a
 	call ByteFill
 	pop af
@@ -402,7 +402,7 @@ UpdatePlayerStep:
 	set PLAYERSTEP_CONTINUE_F, [hl]
 	ret
 
-Unreferenced_Function4759:
+Function4759: ; unreferenced
 	push bc
 	ld e, a
 	ld d, 0
@@ -1846,7 +1846,7 @@ Function5015:
 	ld e, [hl]
 	inc [hl]
 	ld d, 0
-	ld hl, wc2e2
+	ld hl, wMovementObject
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -2082,11 +2082,11 @@ DespawnEmote:
 	jr z, .next
 	push bc
 	xor a
-	ld bc, OBJECT_STRUCT_LENGTH
+	ld bc, OBJECT_LENGTH
 	call ByteFill
 	pop bc
 .next
-	ld hl, OBJECT_STRUCT_LENGTH
+	ld hl, OBJECT_LENGTH
 	add hl, de
 	ld d, h
 	ld e, l
@@ -2149,7 +2149,7 @@ Function55e0::
 	jr z, .ok
 	call Function565c
 .ok
-	ld hl, OBJECT_STRUCT_LENGTH
+	ld hl, OBJECT_LENGTH
 	add hl, bc
 	ld b, h
 	ld c, l
@@ -2205,7 +2205,7 @@ Function5645:
 .loop
 	ldh [hMapObjectIndexBuffer], a
 	call SetFacing_Standing
-	ld hl, OBJECT_STRUCT_LENGTH
+	ld hl, OBJECT_LENGTH
 	add hl, bc
 	ld b, h
 	ld c, l
@@ -2318,7 +2318,7 @@ Function56cd:
 	jr c, .ok3
 	sub BG_MAP_WIDTH
 .ok3
-	ldh [hUsedSpriteIndex], a
+	ldh [hCurSpriteXCoord], a
 	ld a, [wPlayerBGMapOffsetY]
 	ld e, a
 	ld hl, OBJECT_SPRITE_Y_OFFSET
@@ -2347,7 +2347,7 @@ Function56cd:
 	jr c, .ok6
 	sub BG_MAP_HEIGHT
 .ok6
-	ldh [hUsedSpriteTile], a
+	ldh [hCurSpriteYCoord], a
 	ld hl, OBJECT_PALETTE
 	add hl, bc
 	bit BIG_OBJECT_F, [hl]
@@ -2360,18 +2360,18 @@ Function56cd:
 	ld e, a
 .ok7
 	ld a, d
-	ldh [hFFBF], a
+	ldh [hCurSpriteXPixel], a
 .loop
-	ldh a, [hFFBF]
+	ldh a, [hCurSpriteXPixel]
 	ld d, a
-	ldh a, [hUsedSpriteTile]
+	ldh a, [hCurSpriteYCoord]
 	add e
 	dec a
 	cp SCREEN_HEIGHT
 	jr nc, .ok9
 	ld b, a
 .next
-	ldh a, [hUsedSpriteIndex]
+	ldh a, [hCurSpriteXCoord]
 	add d
 	dec a
 	cp SCREEN_WIDTH
@@ -2421,7 +2421,7 @@ HandleNPCStep::
 	jr z, .next
 	call Function437b
 .next
-	ld hl, OBJECT_STRUCT_LENGTH
+	ld hl, OBJECT_LENGTH
 	add hl, bc
 	ld b, h
 	ld c, l
@@ -2582,7 +2582,7 @@ Function587a:
 	add hl, bc
 	set OBJ_FLAGS2_5, [hl]
 .next
-	ld hl, OBJECT_STRUCT_LENGTH
+	ld hl, OBJECT_LENGTH
 	add hl, bc
 	ld b, h
 	ld c, l
@@ -2625,7 +2625,7 @@ Function58b9::
 	add hl, bc
 	res OBJ_FLAGS2_5, [hl]
 .next
-	ld hl, OBJECT_STRUCT_LENGTH
+	ld hl, OBJECT_LENGTH
 	add hl, bc
 	ld b, h
 	ld c, l
@@ -2750,7 +2750,7 @@ ApplyBGMapAnchorToObjects:
 	add e
 	ld [hl], a
 .skip
-	ld hl, OBJECT_STRUCT_LENGTH
+	ld hl, OBJECT_LENGTH
 	add hl, bc
 	ld b, h
 	ld c, l
@@ -2781,12 +2781,12 @@ InitSprites:
 
 .DeterminePriorities:
 	xor a
-	ld hl, wMovementPointer
+	ld hl, wObjectPriorities
 	ld bc, NUM_OBJECT_STRUCTS
 	call ByteFill
 	ld d, 0
 	ld bc, wObjectStructs
-	ld hl, wMovementPointer
+	ld hl, wObjectPriorities
 .loop
 	push hl
 	call DoesObjectHaveASprite
@@ -2809,7 +2809,7 @@ InitSprites:
 	jr .add
 
 .skip
-	ld hl, OBJECT_STRUCT_LENGTH
+	ld hl, OBJECT_LENGTH
 	add hl, bc
 	ld b, h
 	ld c, l
@@ -2817,7 +2817,7 @@ InitSprites:
 	jr .next
 
 .add
-	ld hl, OBJECT_STRUCT_LENGTH
+	ld hl, OBJECT_LENGTH
 	add hl, bc
 	ld b, h
 	ld c, l
@@ -2833,7 +2833,7 @@ InitSprites:
 	ret
 
 .InitSpritesByPriority:
-	ld hl, wMovementPointer
+	ld hl, wObjectPriorities
 .next_sprite
 	ld a, [hli]
 	ld d, a
@@ -2856,7 +2856,7 @@ InitSprites:
 	add hl, bc
 	ld a, [hl]
 	and $ff ^ (1 << 7)
-	ldh [hFFC1], a
+	ldh [hCurSpriteTile], a
 	xor a
 	bit 7, [hl]
 	jr nz, .skip1
@@ -2885,7 +2885,7 @@ InitSprites:
 	jr z, .skip4
 	or PRIORITY
 .skip4
-	ldh [hFFC2], a
+	ldh [hCurSpriteOAMFlags], a
 	ld hl, OBJECT_SPRITE_X
 	add hl, bc
 	ld a, [hl]
@@ -2896,7 +2896,7 @@ InitSprites:
 	ld e, a
 	ld a, [wPlayerBGMapOffsetX]
 	add e
-	ldh [hFFBF], a
+	ldh [hCurSpriteXPixel], a
 	ld hl, OBJECT_SPRITE_Y
 	add hl, bc
 	ld a, [hl]
@@ -2907,7 +2907,7 @@ InitSprites:
 	ld e, a
 	ld a, [wPlayerBGMapOffsetY]
 	add e
-	ldh [hFFC0], a
+	ldh [hCurSpriteYPixel], a
 	ld hl, OBJECT_FACING_STEP
 	add hl, bc
 	ld a, [hl]
@@ -2932,19 +2932,19 @@ InitSprites:
 	cp LOW(wVirtualOAMEnd)
 	jr nc, .full
 .addsprite
-	ldh a, [hFFC0]
+	ldh a, [hCurSpriteYPixel]
 	add [hl]
 	inc hl
 	ld [bc], a ; y
 	inc c
-	ldh a, [hFFBF]
+	ldh a, [hCurSpriteXPixel]
 	add [hl]
 	inc hl
 	ld [bc], a ; x
 	inc c
 	ld e, [hl]
 	inc hl
-	ldh a, [hFFC1]
+	ldh a, [hCurSpriteTile]
 	bit ABSOLUTE_TILE_ID_F, e
 	jr z, .nope1
 	xor a
@@ -2956,7 +2956,7 @@ InitSprites:
 	ld a, e
 	bit RELATIVE_ATTRIBUTES_F, a
 	jr z, .nope2
-	ldh a, [hFFC2]
+	ldh a, [hCurSpriteOAMFlags]
 	or e
 .nope2
 	and OBP_NUM | X_FLIP | Y_FLIP | PRIORITY

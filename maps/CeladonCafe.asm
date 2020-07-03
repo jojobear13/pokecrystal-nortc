@@ -107,14 +107,14 @@ CeladonCafeTrashcan:
 	opentext
 	getitemname STRING_BUFFER_3, LEFTOVERS
 	writetext FoundLeftoversText
-	buttonsound
+	promptbutton
 	writetext NoRoomForLeftoversText
 	waitbutton
 	closetext
 	end
 
 .TrashEmpty:
-	jumpstd trashcan
+	jumpstd TrashCanScript
 
 ChefText_Eatathon:
 	text "Hi!"

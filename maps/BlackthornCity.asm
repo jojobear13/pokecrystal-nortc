@@ -95,11 +95,11 @@ SantosScript:
 	checkevent EVENT_MET_SANTOS_OF_SATURDAY
 	iftrue .MetSantos
 	writetext MeetSantosText
-	buttonsound
+	promptbutton
 	setevent EVENT_MET_SANTOS_OF_SATURDAY
 .MetSantos:
 	writetext SantosGivesGiftText
-	buttonsound
+	promptbutton
 	verbosegiveitem SPELL_TAG
 	iffalse .Done
 	setevent EVENT_GOT_SPELL_TAG_FROM_SANTOS
@@ -137,10 +137,10 @@ BlackthornCityTrainerTips:
 	jumptext BlackthornCityTrainerTipsText
 
 BlackthornCityPokecenterSign:
-	jumpstd pokecentersign
+	jumpstd PokecenterSignScript
 
 BlackthornCityMartSign:
-	jumpstd martsign
+	jumpstd MartSignScript
 
 Text_ClairIsOut:
 	text "I am sorry."

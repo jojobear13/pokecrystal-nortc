@@ -499,7 +499,7 @@ TossMenu:
 .finish
 	ret
 
-Unreferenced_ResetPocketCursorPositions:
+ResetPocketCursorPositions: ; unreferenced
 	ld a, [wCurPocket]
 	and a ; ITEM_POCKET
 	jr z, .items
@@ -1326,7 +1326,7 @@ Pack_InterpretJoypad:
 
 Pack_InitGFX:
 	call ClearBGPalettes
-	call ClearTileMap
+	call ClearTilemap
 	call ClearSprites
 	call DisableLCD
 	ld hl, PackMenuGFX
@@ -1434,7 +1434,7 @@ Pack_GetItemName:
 	call CopyName1
 	ret
 
-Unreferenced_Pack_ClearTilemap:
+Pack_ClearTilemap: ; unreferenced
 	hlcoord 0, 0
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 	ld a, " "

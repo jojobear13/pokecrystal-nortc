@@ -11,7 +11,7 @@ _DummyGame:
 	ld b, SCGB_DIPLOMA
 	call GetSGBLayout
 	callfar ClearSpriteAnims
-	ld hl, LZ_e2221
+	ld hl, DummyGameLZ
 	ld de, vTiles2 tile $00
 	call Decompress
 	ld hl, Unknown_e00ed
@@ -110,7 +110,7 @@ endr
 .spawn_object
 	depixel 6, 3, 4, 4
 	ld a, SPRITE_ANIM_INDEX_DUMMY_GAME
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld a, 5
 	ld [wDummyGameNumberTriesRemaining], a
 	ld hl, wJumptableIndex
@@ -586,5 +586,5 @@ DummyGame_InterpretJoypad_AnimateCursor:
 	ld [hl], a
 	ret
 
-LZ_e2221:
+DummyGameLZ:
 INCBIN "gfx/dummy_game/dummy_game.2bpp.lz"

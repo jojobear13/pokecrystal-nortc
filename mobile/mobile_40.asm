@@ -1,5 +1,3 @@
-SECTION "mobile_40", ROMX
-
 Function100000:
 ; d: 1 or 2
 ; e: bank
@@ -197,7 +195,7 @@ Function100144:
 	ret z
 	res 2, [hl]
 	res 6, [hl]
-	farcall HDMATransferTileMapToWRAMBank3
+	farcall HDMATransferTilemapToWRAMBank3
 	ret
 
 Function100163:
@@ -432,7 +430,7 @@ Function100320:
 	ret
 
 Function100327:
-	farcall HDMATransferTileMapToWRAMBank3
+	farcall HDMATransferTilemapToWRAMBank3
 	ret
 
 Function10032e:
@@ -1091,10 +1089,10 @@ Function1006dc:
 	ld [de], a
 	ret
 
-Function1006fd:
-	ld a, $04
-	ld hl, $a800
-	call GetSRAMBank
+MobileBattleResetTimer:
+	ld a, BANK(sMobileBattleTimer)
+	ld hl, sMobileBattleTimer
+	call OpenSRAM
 	xor a
 	ld [hli], a
 	ld [hli], a
@@ -1105,7 +1103,7 @@ Function1006fd:
 MobileBattleFixTimer:
 	ld a, BANK(sMobileBattleTimer)
 	ld hl, sMobileBattleTimer
-	call GetSRAMBank
+	call OpenSRAM
 	xor a ; MOBILE_BATTLE_ALLOWED_SECONDS
 	ld [hli], a
 	ld a, MOBILE_BATTLE_ALLOWED_MINUTES
@@ -1127,7 +1125,7 @@ Function100720:
 	ld [wcd74], a
 	ld a, BANK(sMobileBattleTimer)
 	ld hl, sMobileBattleTimer
-	call GetSRAMBank
+	call OpenSRAM
 	ld a, [hli]
 	ld [wcd6c], a
 	ld a, [hli]
@@ -1250,7 +1248,7 @@ Function1007f6:
 	ld de, wcd71
 	call Function1006dc
 	ld a, $04
-	call GetSRAMBank
+	call OpenSRAM
 	ld hl, $a802
 	call Function100826
 	call CloseSRAM
@@ -1274,7 +1272,7 @@ Function100826:
 .asm_100830
 	ld [hld], a
 	ccf
-	ld a, [wBGMapBufferPtrs]
+	ld a, [wcd70]
 	adc [hl]
 	sub $3c
 	jr nc, .asm_10083c
@@ -1340,7 +1338,7 @@ MobileBattleGetRemainingTime:
 ; Returns minutes in c and seconds in b
 	ld a, BANK(sMobileBattleTimer)
 	ld hl, sMobileBattleTimer
-	call GetSRAMBank
+	call OpenSRAM
 	ld a, [hli]
 	ld [wStringBuffer2], a
 	ld a, [hli]
@@ -1438,7 +1436,7 @@ Function100970:
 	hlcoord 0, 0
 	ld de, w3_dc00
 	call Function1009a5
-	hlcoord 0, 0, wAttrMap
+	hlcoord 0, 0, wAttrmap
 	ld de, w3_dd68
 	call Function1009a5
 	call Function1009d2
@@ -1452,7 +1450,7 @@ Function100989:
 	call Function1009ae
 	farcall ReloadMapPart
 	ld hl, w3_dd68
-	decoord 0, 0, wAttrMap
+	decoord 0, 0, wAttrmap
 	call Function1009a5
 	ret
 
@@ -1469,7 +1467,7 @@ Function1009ae:
 	ldh [rSVBK], a
 
 	ld hl, w3_d800
-	decoord 0, 0, wAttrMap
+	decoord 0, 0, wAttrmap
 	ld c, SCREEN_WIDTH
 	ld b, SCREEN_HEIGHT
 .loop_row
@@ -1531,7 +1529,7 @@ Function1009f3:
 
 _LinkBattleSendReceiveAction:
 	call .StageForSend
-	ld [wd431], a
+	ld [wLinkBattleSentAction], a
 	farcall PlaceWaitingText
 	ld a, [wLinkMode]
 	cp LINK_MOBILE
@@ -1575,7 +1573,7 @@ _LinkBattleSendReceiveAction:
 	ret
 
 .LinkBattle_SendReceiveAction:
-	ld a, [wd431]
+	ld a, [wLinkBattleSentAction]
 	ld [wPlayerLinkAction], a
 	ld a, $ff
 	ld [wOtherPlayerLinkAction], a
@@ -1644,7 +1642,7 @@ _LinkBattleSendReceiveAction:
 Function100acf:
 	ld de, Unknown_100b0a
 	ld hl, wccb5
-	ld a, [wd431]
+	ld a, [wLinkBattleSentAction]
 	ld [hli], a
 	ld c, $01
 .asm_100adb
@@ -1683,16 +1681,13 @@ Function100ae7:
 	ld [wcd2b], a
 	ret
 
-
-SECTION "tetsuji", ROMX
-
-	charmap " ", $20 ; revert to ascii
+pushc
+setcharmap ascii
 
 Unknown_100b0a:
 	db "tetsuji", 0
 
-
-SECTION "bank40_2", ROMX
+popc
 
 Function100b12:
 	call Function100dd8
@@ -1720,7 +1715,7 @@ Function100b45:
 	call Mobile_SetOverworldDelay
 	farcall MobileMenuJoypad
 	push bc
-	farcall HDMATransferTileMapToWRAMBank3
+	farcall HDMATransferTilemapToWRAMBank3
 	call Function100e2d
 	pop bc
 	jr c, .asm_100b6b
@@ -1778,7 +1773,7 @@ MobileMoveSelectionScreen:
 	call Mobile_SetOverworldDelay
 	farcall MobileMenuJoypad
 	push bc
-	farcall HDMATransferTileMapToWRAMBank3
+	farcall HDMATransferTilemapToWRAMBank3
 	call Function100e2d
 	pop bc
 	jr c, .b_button
@@ -1862,7 +1857,7 @@ MobileMoveSelectionScreen:
 
 .print_text
 	call StdBattleTextbox
-	call Call_LoadTempTileMapToTileMap
+	call SafeLoadTempTilemapToTilemap
 	jp .GetMoveSelection
 
 Function100c74:
@@ -1909,7 +1904,7 @@ Mobile_PartyMenuSelect:
 	farcall MobileMenuJoypad
 	push bc
 	farcall PlaySpriteAnimations
-	farcall HDMATransferTileMapToWRAMBank3
+	farcall HDMATransferTilemapToWRAMBank3
 	call MobileComms_CheckInactivityTimer
 	pop bc
 	jr c, .done
@@ -1962,7 +1957,7 @@ MobileBattleMonMenu:
 	farcall MobileMenuJoypad
 	push bc
 	farcall PlaySpriteAnimations
-	farcall HDMATransferTileMapToWRAMBank3
+	farcall HDMATransferTilemapToWRAMBank3
 	call MobileComms_CheckInactivityTimer
 	pop bc
 	jr c, .asm_100d54
@@ -2379,7 +2374,7 @@ Function100f8d:
 	ret
 
 .sram
-	call GetSRAMBank
+	call OpenSRAM
 	call CopyBytes
 	call CloseSRAM
 	ret
@@ -2433,7 +2428,7 @@ endr
 	inc hl
 	ld [hl], d
 	ld a, $07
-	call GetSRAMBank
+	call OpenSRAM
 	ld hl, wc608
 	ld de, $a001
 	ld bc, wc7bd - wc608
@@ -2659,7 +2654,7 @@ LoadSelectedPartiesForColosseum:
 
 Function1011f1:
 	ld a, BANK(s4_a60c)
-	call GetSRAMBank
+	call OpenSRAM
 	ld a, [s4_a60c]
 	ld [wdc41], a
 	call CloseSRAM
@@ -2923,14 +2918,14 @@ Function1013c0:
 	ret
 
 Function1013d6:
-	farcall HDMATransferAttrMapAndTileMapToWRAMBank3
+	farcall HDMATransferAttrmapAndTilemapToWRAMBank3
 	ret
 
 Function1013dd:
 	call CGBOnly_CopyTilemapAtOnce
 	ret
 
-Unreferenced_Function1013e1:
+Function1013e1: ; unreferenced
 	push de
 	inc de
 	ld b, a
@@ -2965,7 +2960,7 @@ Function1013f5:
 	jr nz, .asm_1013f9
 	ret
 
-Unreferenced_Function101400:
+Function101400: ; unreferenced
 	ld a, [de]
 	inc de
 	cp [hl]
@@ -3140,7 +3135,7 @@ Function101507:
 	ld [wMobileCommsJumptableIndex], a
 	ret
 
-Unreferenced_Function10151d:
+Function10151d: ; unreferenced
 	ld a, $34
 	call Function3e32
 	ld a, [wMobileCommsJumptableIndex]
@@ -3317,7 +3312,7 @@ Function101663:
 	call MobileCopyTransferData2
 	ret
 
-Unreferenced_Function101674:
+Function101674: ; unreferenced
 	ld a, BANK(w5_dc00)
 	ld hl, w5_dc00
 	call MobileCopyTransferData
@@ -3617,10 +3612,8 @@ Function101826:
 	ld [wcd2b], a
 	ret
 
-
-SECTION "ascii 10186f", ROMX
-
-	charmap " ", $20 ; revert to ascii
+pushc
+setcharmap ascii
 
 Unknown_10186f:
 	db .end - @
@@ -3637,8 +3630,7 @@ Unknown_101895:
 	db $19, $67, $10, $01, "limit_crystal"
 .end	db 0
 
-
-SECTION "bank40_3", ROMX
+popc
 
 Function1018a8:
 	ld hl, wccb5
@@ -3793,7 +3785,7 @@ _StartMobileBattle:
 	farcall Function100846
 	ld c, 120
 	call DelayFrames
-	farcall ClearTileMap
+	farcall ClearTilemap
 	call .CopyOTDetails
 	call StartMobileBattle
 	ld a, [wcd2b]
@@ -4154,7 +4146,7 @@ Function101cbc:
 	ld [wcd2b], a
 	ret
 
-Unreferenced_Function101cc2:
+Function101cc2: ; unreferenced
 	ld a, $02
 	ld [wcd2b], a
 	ret
@@ -4415,14 +4407,14 @@ Function101e64:
 	ld [wcd2b], a
 	ret
 
-Unreferenced_Function101e82:
+Function101e82: ; unreferenced
 	call Function101ecc
 	ld a, [wMobileCommsJumptableIndex]
 	inc a
 	ld [wMobileCommsJumptableIndex], a
 	ret
 
-Unreferenced_Function101e8d:
+Function101e8d: ; unreferenced
 	call Function101ed3
 	ld a, [wMobileCommsJumptableIndex]
 	inc a
@@ -4667,7 +4659,7 @@ Function1020bf:
 	ld d, h
 	ld e, l
 	ld a, $04
-	call GetSRAMBank
+	call OpenSRAM
 	call Function10208e
 	call Function102068
 	call CloseSRAM
@@ -4703,7 +4695,7 @@ Function1020ea:
 
 Function102112:
 	ld a, $04
-	call GetSRAMBank
+	call OpenSRAM
 	ld hl, $a041
 	ld c, 40
 .outer_loop
@@ -4915,14 +4907,14 @@ Function102274:
 
 Function102283:
 	ld a, $01
-	ld [wAttrMapEnd], a
+	ld [wAttrmapEnd], a
 	ld hl, wcd4b
 	set 0, [hl]
 	ret
 
 Function10228e:
 	xor a
-	ld [wAttrMapEnd], a
+	ld [wAttrmapEnd], a
 	ld hl, wcd4b
 	res 0, [hl]
 	ret
@@ -4953,7 +4945,7 @@ Function102298:
 .asm_1022c1
 	call Function10304f
 	ld a, $01
-	ld [wAttrMapEnd], a
+	ld [wAttrmapEnd], a
 	ret
 
 Function1022ca:
@@ -6131,7 +6123,7 @@ Function102b4e:
 	ld [w2DMenuNumRows], a
 	ret
 
-Unreferenced_Function102b68:
+Function102b68: ; unreferenced
 	xor a
 	ld hl, wWindowStackPointer
 	ld bc, $10
@@ -6262,7 +6254,7 @@ Function102c3b:
 Function102c48:
 	farcall Function10165a
 	ld a, 0
-	call GetSRAMBank
+	call OpenSRAM
 	ld hl, $a600
 	ld de, wc608
 	ld bc, $2f
@@ -6372,7 +6364,7 @@ Function102d34:
 	ret
 
 Function102d3e:
-	call GetSRAMBank
+	call OpenSRAM
 	call CopyBytes
 	call CloseSRAM
 	ret
@@ -6423,10 +6415,10 @@ Function102d9a:
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 	call ByteFill
 	ld a, $07
-	hlcoord 0, 0, wAttrMap
+	hlcoord 0, 0, wAttrmap
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 	call ByteFill
-	farcall HDMATransferAttrMapAndTileMapToWRAMBank3
+	farcall HDMATransferAttrmapAndTilemapToWRAMBank3
 	ret
 
 Function102db7:
@@ -6447,16 +6439,16 @@ Function102dc3:
 
 Function102dd3:
 	call DisableLCD
-	ld de, GFX_1032a2
+	ld de, MobileTradeLightsGFX
 	ld hl, vTiles0
-	lb bc, BANK(GFX_1032a2), 4
+	lb bc, BANK(MobileTradeLightsGFX), 4
 	call Get2bpp
 	farcall __LoadTradeScreenBorder
 	call EnableLCD
 	ret
 
 Function102dec:
-	ld hl, Palettes_1032e2
+	ld hl, MobileTradeLightsPalettes
 	ld de, wOBPals1
 	ld bc, 4 palettes
 	ld a, $05
@@ -6477,7 +6469,7 @@ Function102e07:
 	jr .okay
 
 .link_battle
-; this is idiotic
+; the next three operations are pointless
 	hlcoord 3, 10
 	ld b,  1
 	ld c, 11
@@ -6495,12 +6487,12 @@ Function102e07:
 	db "Waiting...!@"
 
 Function102e3e:
-	ld de, .CANCEL
+	ld de, .CancelString
 	hlcoord 10, 17
 	call PlaceString
 	ret
 
-.CANCEL:
+.CancelString:
 	db "CANCEL@"
 
 Function102e4f:
@@ -6699,7 +6691,7 @@ String_10302e:
 
 Function10304f:
 	xor a
-	ld [wAttrMapEnd], a
+	ld [wAttrmapEnd], a
 	ld [wcf42], a
 	ld [wcf44], a
 	ld [wcf45], a
@@ -6707,7 +6699,7 @@ Function10304f:
 
 Function10305d:
 	nop
-	ld a, [wAttrMapEnd]
+	ld a, [wAttrmapEnd]
 	and a
 	ret z
 	call Function10307f
@@ -6898,29 +6890,11 @@ Unknown_10327a:
 	db $00, $00, $03, $02
 	db $00, $00, $01, $03
 
-GFX_1032a2:
-INCBIN "gfx/unknown/1032a2.2bpp"
+MobileTradeLightsGFX:
+INCBIN "gfx/mobile/mobile_trade_lights.2bpp"
 
-Palettes_1032e2:
-	RGB  0,  0,  0
-	RGB 31, 31,  7
-	RGB 20, 31,  6
-	RGB 13, 20, 16
-
-	RGB  0,  0,  0
-	RGB  7, 11, 17
-	RGB  0,  0,  0
-	RGB  0,  0,  0
-
-	RGB  0,  0,  0
-	RGB 31, 24,  4
-	RGB 25, 12,  0
-	RGB 31,  7,  4
-
-	RGB  0,  0,  0
-	RGB 25,  0,  0
-	RGB  0,  0,  0
-	RGB  0,  0,  0
+MobileTradeLightsPalettes:
+INCLUDE "gfx/mobile/mobile_trade_lights.pal"
 
 Function103302:
 	call Function103309
@@ -6935,7 +6909,7 @@ Function103309:
 	xor a
 	call ByteFill
 	ld a, BANK(s4_a60c)
-	call GetSRAMBank
+	call OpenSRAM
 	ld a, [wdc41]
 	ld [s4_a60c], a
 	ld [wBuffer1], a
@@ -6966,7 +6940,7 @@ Function103309:
 	ld [wd1ee], a
 	call Function1034be
 	call UpdateSprites
-	farcall HDMATransferAttrMapAndTileMapToWRAMBank3
+	farcall HDMATransferAttrmapAndTilemapToWRAMBank3
 	ld a, $01
 	ld [wd1f0], a
 	call Function10339a
@@ -6979,7 +6953,7 @@ Function103362:
 	call Function1033af
 	call Function10339a
 	call Function10342c
-	farcall HDMATransferTileMapToWRAMBank3
+	farcall HDMATransferTilemapToWRAMBank3
 	ld a, [wBuffer2]
 	bit 7, a
 	jr z, .asm_103362
@@ -6987,7 +6961,7 @@ Function103362:
 	bit 6, [hl]
 	jr z, .asm_103398
 	ld a, BANK(s4_a60c)
-	call GetSRAMBank
+	call OpenSRAM
 	ld a, [wBuffer1]
 	ld [s4_a60c], a
 	ld [wdc41], a
@@ -7187,7 +7161,7 @@ Function1034e0:
 	push hl
 	call ClearBox
 	pop hl
-	ld bc, wAttrMap - wTileMap
+	ld bc, wAttrmap - wTilemap
 	add hl, bc
 	pop bc
 	ld a, $06
@@ -7551,7 +7525,7 @@ Function10378c:
 	ld a, c
 	and a
 	ret z
-	farcall Function1006fd
+	farcall MobileBattleResetTimer
 	ret
 
 .failed_to_save

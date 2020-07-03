@@ -149,7 +149,7 @@ RunTradeAnimScript:
 	ld [wJumptableIndex], a
 	call ClearBGPalettes
 	call ClearSprites
-	call ClearTileMap
+	call ClearTilemap
 	call DisableLCD
 	call LoadFontsBattleExtra
 	callfar ClearSpriteAnims
@@ -173,15 +173,15 @@ RunTradeAnimScript:
 	ld hl, TradeGameBoyLZ
 	ld de, vTiles2 tile $31
 	call Decompress
-	ld hl, TradeArrowGFX
+	ld hl, TradeArrowRightGFX
 	ld de, vTiles0 tile TRADEANIM_RIGHT_ARROW
 	ld bc, 1 tiles
-	ld a, BANK(TradeArrowGFX)
+	ld a, BANK(TradeArrowRightGFX)
 	call FarCopyBytes
-	ld hl, TradeArrowGFX + 1 tiles
+	ld hl, TradeArrowLeftGFX
 	ld de, vTiles0 tile TRADEANIM_LEFT_ARROW
 	ld bc, 1 tiles
-	ld a, BANK(TradeArrowGFX)
+	ld a, BANK(TradeArrowLeftGFX)
 	call FarCopyBytes
 	xor a
 	ldh [hSCX], a
@@ -228,16 +228,7 @@ DoTradeAnimation:
 	ret
 
 .DoTradeAnimCommand:
-	ld a, [wJumptableIndex]
-	ld e, a
-	ld d, 0
-	ld hl, .JumpTable
-	add hl, de
-	add hl, de
-	ld a, [hli]
-	ld h, [hl]
-	ld l, a
-	jp hl
+	jumptable .JumpTable, wJumptableIndex
 
 .JumpTable:
 ; entries correspond to macros/scripts/trade_anims.asm enumeration
@@ -359,7 +350,7 @@ TradeAnim_InitTubeAnim:
 
 	pop de
 	ld a, SPRITE_ANIM_INDEX_TRADEMON_ICON
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 
 	ld hl, SPRITEANIMSTRUCT_JUMPTABLE_INDEX
 	add hl, bc
@@ -368,7 +359,7 @@ TradeAnim_InitTubeAnim:
 
 	pop de
 	ld a, SPRITE_ANIM_INDEX_TRADEMON_BUBBLE
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 
 	ld hl, SPRITEANIMSTRUCT_JUMPTABLE_INDEX
 	add hl, bc
@@ -466,7 +457,7 @@ TradeAnim_TubeToPlayer6:
 TradeAnim_TubeToOT8:
 TradeAnim_TubeToPlayer8:
 	call ClearBGPalettes
-	call ClearTileMap
+	call ClearTilemap
 	call ClearSprites
 	call DisableLCD
 	callfar ClearSpriteAnims
@@ -534,7 +525,7 @@ TradeAnim_TubeAnimJumptable:
 
 .Zero:
 .Three:
-	call TradeAnim_BlankTileMap
+	call TradeAnim_BlankTilemap
 	hlcoord 9, 3
 	ld [hl], $5b
 	inc hl
@@ -546,7 +537,7 @@ TradeAnim_TubeAnimJumptable:
 	ret
 
 .One:
-	call TradeAnim_BlankTileMap
+	call TradeAnim_BlankTilemap
 	hlcoord 0, 3
 	ld bc, SCREEN_WIDTH
 	ld a, $60
@@ -554,7 +545,7 @@ TradeAnim_TubeAnimJumptable:
 	ret
 
 .Two:
-	call TradeAnim_BlankTileMap
+	call TradeAnim_BlankTilemap
 	hlcoord 0, 3
 	ld bc, $11
 	ld a, $60
@@ -593,7 +584,7 @@ TradeAnim_PlaceTrademonStatsOnTubeAnim:
 	call WaitTop
 	ld a, HIGH(vBGMap1)
 	ldh [hBGMapAddress + 1], a
-	call ClearTileMap
+	call ClearTilemap
 	hlcoord 0, 0
 	ld bc, SCREEN_WIDTH
 	ld a, "─"
@@ -623,11 +614,11 @@ TradeAnim_PlaceTrademonStatsOnTubeAnim:
 	call WaitTop
 	ld a, HIGH(vBGMap0)
 	ldh [hBGMapAddress + 1], a
-	call ClearTileMap
+	call ClearTilemap
 	ret
 
 TradeAnim_EnterLinkTube1:
-	call ClearTileMap
+	call ClearTilemap
 	call WaitTop
 	ld a, $a0
 	ldh [hSCX], a
@@ -671,7 +662,7 @@ TradeAnim_ExitLinkTube:
 	ret
 
 .done
-	call ClearTileMap
+	call ClearTilemap
 	xor a
 	ldh [hSCX], a
 	call TradeAnim_AdvanceScriptPointer
@@ -735,7 +726,7 @@ TradeAnim_ScrollOutRight:
 	call WaitTop
 	ld a, HIGH(vBGMap0)
 	ldh [hBGMapAddress + 1], a
-	call ClearTileMap
+	call ClearTilemap
 	call TradeAnim_IncrementJumptableIndex
 	ret
 
@@ -840,7 +831,7 @@ TradeAnim_ShowFrontpic:
 	lb bc, 10, $31
 	call Request2bpp
 	call WaitTop
-	call TradeAnim_BlankTileMap
+	call TradeAnim_BlankTilemap
 	hlcoord 7, 2
 	xor a
 	ldh [hGraphicStartTile], a
@@ -925,7 +916,7 @@ ShowOTTrademonStats:
 
 TrademonStats_MonTemplate:
 	call WaitTop
-	call TradeAnim_BlankTileMap
+	call TradeAnim_BlankTilemap
 	ld a, HIGH(vBGMap1)
 	ldh [hBGMapAddress + 1], a
 	hlcoord 3, 0
@@ -945,7 +936,7 @@ TrademonStats_MonTemplate:
 
 TrademonStats_Egg:
 	call WaitTop
-	call TradeAnim_BlankTileMap
+	call TradeAnim_BlankTilemap
 	ld a, HIGH(vBGMap1)
 	ldh [hBGMapAddress + 1], a
 	hlcoord 3, 0
@@ -1012,7 +1003,7 @@ TrademonStats_PrintTrademonID:
 TradeAnim_RockingBall:
 	depixel 10, 11, 4, 0
 	ld a, SPRITE_ANIM_INDEX_TRADE_POKE_BALL
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	call TradeAnim_AdvanceScriptPointer
 	ld a, 32
 	ld [wFrameCounter], a
@@ -1021,7 +1012,7 @@ TradeAnim_RockingBall:
 TradeAnim_DropBall:
 	depixel 10, 11, 4, 0
 	ld a, SPRITE_ANIM_INDEX_TRADE_POKE_BALL
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_JUMPTABLE_INDEX
 	add hl, bc
 	ld [hl], $1
@@ -1036,7 +1027,7 @@ TradeAnim_DropBall:
 TradeAnim_Poof:
 	depixel 10, 11, 4, 0
 	ld a, SPRITE_ANIM_INDEX_TRADE_POOF
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	call TradeAnim_AdvanceScriptPointer
 	ld a, 16
 	ld [wFrameCounter], a
@@ -1049,7 +1040,7 @@ TradeAnim_BulgeThroughTube:
 	call DmgToCgbObjPal0
 	depixel 5, 11
 	ld a, SPRITE_ANIM_INDEX_TRADE_TUBE_BULGE
-	call _InitSpriteAnimStruct
+	call InitSpriteAnimStruct
 	call TradeAnim_AdvanceScriptPointer
 	ld a, 64
 	ld [wFrameCounter], a
@@ -1277,7 +1268,7 @@ TradeAnim_Wait80Frames:
 	call DelayFrames
 	ret
 
-TradeAnim_BlankTileMap:
+TradeAnim_BlankTilemap:
 	hlcoord 0, 0
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 	ld a, " "
@@ -1400,9 +1391,8 @@ TradeAnim_WaitAnim2:
 	call TradeAnim_AdvanceScriptPointer
 	ret
 
-Unreferenced_DebugTrade:
-; This function is not referenced.
-; It was meant for use in Japanese versions, so the
+DebugTrade: ; unreferenced
+; This function was meant for use in Japanese versions, so the
 ; constant used for copy length was changed by accident.
 
 	ld hl, .DebugTradeData
@@ -1457,9 +1447,10 @@ TradeLinkTubeTilemap:
 	db $43, $57, $58, $54, $54, $54, $54, $54, $54, $54, $54, $54
 	db $43, $59, $5a, $43, $43, $43, $43, $43, $43, $43, $43, $43
 
-TradeArrowGFX:  INCBIN "gfx/trade/arrow.2bpp"
-TradeCableGFX:  INCBIN "gfx/trade/cable.2bpp"
-TradeBubbleGFX: INCBIN "gfx/trade/bubble.2bpp"
-TradeGameBoyLZ: INCBIN "gfx/trade/game_boy.2bpp.lz"
-TradeBallGFX:   INCBIN "gfx/trade/ball.2bpp"
-TradePoofGFX:   INCBIN "gfx/trade/poof.2bpp"
+TradeArrowRightGFX: INCBIN "gfx/trade/arrow_right.2bpp"
+TradeArrowLeftGFX:  INCBIN "gfx/trade/arrow_left.2bpp"
+TradeCableGFX:      INCBIN "gfx/trade/cable.2bpp"
+TradeBubbleGFX:     INCBIN "gfx/trade/bubble.2bpp"
+TradeGameBoyLZ:     INCBIN "gfx/trade/game_boy_cable.2bpp.lz"
+TradeBallGFX:       INCBIN "gfx/trade/ball.2bpp"
+TradePoofGFX:       INCBIN "gfx/trade/poof.2bpp"

@@ -1,26 +1,26 @@
 	const_def $6a
-	const DEBUGTEST_UP_ARROW ; $6a
-	const DEBUGTEST_TICKS    ; $6b
-	const DEBUGTEST_WHITE    ; $6c
-	const DEBUGTEST_LIGHT    ; $6d
-	const DEBUGTEST_DARK     ; $6e
-	const DEBUGTEST_BLACK    ; $6f
-	const DEBUGTEST_0        ; $70
-	const DEBUGTEST_1        ; $71
-	const DEBUGTEST_2        ; $72
-	const DEBUGTEST_3        ; $73
-	const DEBUGTEST_4        ; $74
-	const DEBUGTEST_5        ; $75
-	const DEBUGTEST_6        ; $76
-	const DEBUGTEST_7        ; $77
-	const DEBUGTEST_8        ; $78
-	const DEBUGTEST_9        ; $79
-	const DEBUGTEST_A        ; $7a
-	const DEBUGTEST_B        ; $7b
-	const DEBUGTEST_C        ; $7c
-	const DEBUGTEST_D        ; $7d
-	const DEBUGTEST_E        ; $7e
-	const DEBUGTEST_F        ; $7f
+	const DEBUGTEST_TICKS_1 ; $6a
+	const DEBUGTEST_TICKS_2 ; $6b
+	const DEBUGTEST_WHITE   ; $6c
+	const DEBUGTEST_LIGHT   ; $6d
+	const DEBUGTEST_DARK    ; $6e
+	const DEBUGTEST_BLACK   ; $6f
+	const DEBUGTEST_0       ; $70
+	const DEBUGTEST_1       ; $71
+	const DEBUGTEST_2       ; $72
+	const DEBUGTEST_3       ; $73
+	const DEBUGTEST_4       ; $74
+	const DEBUGTEST_5       ; $75
+	const DEBUGTEST_6       ; $76
+	const DEBUGTEST_7       ; $77
+	const DEBUGTEST_8       ; $78
+	const DEBUGTEST_9       ; $79
+	const DEBUGTEST_A       ; $7a
+	const DEBUGTEST_B       ; $7b
+	const DEBUGTEST_C       ; $7c
+	const DEBUGTEST_D       ; $7d
+	const DEBUGTEST_E       ; $7e
+	const DEBUGTEST_F       ; $7f
 
 ColorTest:
 ; A debug menu to test monster and trainer palettes at runtime.
@@ -135,7 +135,7 @@ Function81948:
 	ld bc, sScratch - vTiles0
 	xor a
 	call ByteFill
-	hlcoord 0, 0, wAttrMap
+	hlcoord 0, 0, wAttrmap
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 	xor a
 	call ByteFill
@@ -147,11 +147,11 @@ Function81948:
 	ret
 
 Function8197c:
-	ld hl, DebugColorTestGFX + 1 tiles
-	ld de, vTiles2 tile DEBUGTEST_UP_ARROW
+	ld hl, DebugColorTestGFX
+	ld de, vTiles2 tile DEBUGTEST_TICKS_1
 	ld bc, 22 tiles
 	call CopyBytes
-	ld hl, DebugColorTestGFX
+	ld hl, DebugUpArrowGFX
 	ld de, vTiles0
 	ld bc, 1 tiles
 	call CopyBytes
@@ -230,16 +230,7 @@ Function81a74:
 	jr nz, .asm_81aab
 
 .asm_81a8b
-	ld a, [wJumptableIndex]
-	ld e, a
-	ld d, 0
-	ld hl, Jumptable_81acf
-	add hl, de
-	add hl, de
-	ld a, [hli]
-	ld h, [hl]
-	ld l, a
-	jp hl
+	jumptable Jumptable_81acf, wJumptableIndex
 
 .asm_81a9a
 	call Function81eca
@@ -297,15 +288,15 @@ Function81adb:
 	hlcoord 1, 3
 	lb bc, 7, 18
 	ld a, DEBUGTEST_WHITE
-	call Bank20_FillBoxWithByte
+	call DebugColor_FillBoxWithByte
 	hlcoord 11, 0
 	lb bc, 2, 3
 	ld a, DEBUGTEST_LIGHT
-	call Bank20_FillBoxWithByte
+	call DebugColor_FillBoxWithByte
 	hlcoord 16, 0
 	lb bc, 2, 3
 	ld a, DEBUGTEST_DARK
-	call Bank20_FillBoxWithByte
+	call DebugColor_FillBoxWithByte
 	call Function81bc0
 	call Function81bf4
 	ld a, [wcf66]
@@ -378,24 +369,24 @@ String_81bb4: db "ノーマル@" ; normal
 String_81bb9: db DEBUGTEST_A, "きりかえ▶@" ; (A) switches
 
 Function81bc0:
-	decoord 0, 11, wAttrMap
+	decoord 0, 11, wAttrmap
 	hlcoord 2, 11
 	ld a, $1
 	call Function81bde
-	decoord 0, 13, wAttrMap
+	decoord 0, 13, wAttrmap
 	hlcoord 2, 13
 	ld a, $2
 	call Function81bde
-	decoord 0, 15, wAttrMap
+	decoord 0, 15, wAttrmap
 	hlcoord 2, 15
 	ld a, $3
 
 Function81bde:
 	push af
-	ld a, DEBUGTEST_UP_ARROW
+	ld a, DEBUGTEST_TICKS_1
 	ld [hli], a
 	ld bc, $f
-	ld a, DEBUGTEST_TICKS
+	ld a, DEBUGTEST_TICKS_2
 	call ByteFill
 	ld l, e
 	ld h, d
@@ -880,7 +871,7 @@ Function81ee3:
 	jr nz, .asm_81ee3
 	ret
 
-Bank20_FillBoxWithByte:
+DebugColor_FillBoxWithByte:
 ; For some reason, we have another copy of FillBoxWithByte here
 .row
 	push bc
@@ -1031,6 +1022,9 @@ String_81fcd:
 	next "いいえ<DOT><DOT>", DEBUGTEST_B ; NO..(B)
 	db   "@"
 
+DebugUpArrowGFX:
+INCBIN "gfx/debug/up_arrow.2bpp"
+
 DebugColorTestGFX:
 INCBIN "gfx/debug/color_test.2bpp"
 
@@ -1047,13 +1041,13 @@ TilesetColorTest:
 	call WaitBGMap2
 	xor a
 	ldh [hBGMapMode], a
-	ld de, DebugColorTestGFX + 1 tiles
-	ld hl, vTiles2 tile DEBUGTEST_UP_ARROW
+	ld de, DebugColorTestGFX
+	ld hl, vTiles2 tile DEBUGTEST_TICKS_1
 	lb bc, BANK(DebugColorTestGFX), 22
 	call Request2bpp
-	ld de, DebugColorTestGFX
+	ld de, DebugUpArrowGFX
 	ld hl, vTiles1
-	lb bc, BANK(DebugColorTestGFX), 1
+	lb bc, BANK(DebugUpArrowGFX), 1
 	call Request2bpp
 	ld a, HIGH(vBGMap1)
 	ldh [hBGMapAddress + 1], a
@@ -1061,7 +1055,7 @@ TilesetColorTest:
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 	ld a, DEBUGTEST_BLACK
 	call ByteFill
-	hlcoord 0, 0, wAttrMap
+	hlcoord 0, 0, wAttrmap
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 	ld a, $7
 	call ByteFill
@@ -1091,7 +1085,7 @@ Function821d2:
 
 Function821d8:
 	ld a, [wcf64]
-	hlcoord 0, 0, wAttrMap
+	hlcoord 0, 0, wAttrmap
 
 Function821de:
 	add hl, de
@@ -1118,10 +1112,10 @@ Function821f4:
 	hlcoord 2, 8
 
 Function82203:
-	ld a, DEBUGTEST_UP_ARROW
+	ld a, DEBUGTEST_TICKS_1
 	ld [hli], a
 	ld bc, $10 - 1
-	ld a, DEBUGTEST_TICKS
+	ld a, DEBUGTEST_TICKS_2
 	call ByteFill
 	ret
 

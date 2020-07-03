@@ -38,7 +38,7 @@ EcruteakPokecenter1F_MapScripts:
 	pause 10
 	opentext
 	writetext EcruteakPokecenter1F_BillText1
-	buttonsound
+	promptbutton
 	sjump .PointlessJump
 
 .PointlessJump:
@@ -56,7 +56,7 @@ EcruteakPokecenter1F_MapScripts:
 	end
 
 EcruteakPokecenter1FNurseScript:
-	jumpstd pokecenternurse
+	jumpstd PokecenterNurseScript
 
 EcruteakPokecenter1FPokefanMScript:
 	special Mobile_DummyReturnFalse

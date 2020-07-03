@@ -711,7 +711,7 @@ EnemyWithdrewText:
 	text_far _EnemyWithdrewText
 	text_end
 
-Function384d5: ; This appears to be unused
+EnemyUsedFullHealRed: ; unreferenced
 	call AIUsedItemSound
 	call AI_HealStatus
 	ld a, FULL_HEAL_RED ; X_SPEED
@@ -725,10 +725,14 @@ AI_HealStatus:
 	xor a
 	ld [hl], a
 	ld [wEnemyMonStatus], a
-	; Bug: this should reset SUBSTATUS_NIGHTMARE too
-	; Uncomment the lines below to fix
+	; Bug: this should reset SUBSTATUS_NIGHTMARE
+	; Uncomment the 2 lines below to fix
 	; ld hl, wEnemySubStatus1
 	; res SUBSTATUS_NIGHTMARE, [hl]
+	; Bug: this should reset SUBSTATUS_CONFUSED
+	; Uncomment the 2 lines below to fix
+	; ld hl, wEnemySubStatus3
+	; res SUBSTATUS_CONFUSED, [hl]
 	ld hl, wEnemySubStatus5
 	res SUBSTATUS_TOXIC, [hl]
 	ret
@@ -754,7 +758,7 @@ EnemyUsedDireHit:
 	ld a, DIRE_HIT
 	jp PrintText_UsedItemOn_AND_AIUpdateHUD
 
-Function3851e: ; This appears to be unused
+Function3851e: ; unreferenced
 	ldh [hDivisor], a
 	ld hl, wEnemyMonMaxHP
 	ld a, [hli]

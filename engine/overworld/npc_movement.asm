@@ -75,7 +75,7 @@ WillObjectBumpIntoWater:
 	ld a, [hl]
 	ld d, a
 	call GetTileCollision
-	and a ; LANDTILE
+	and a ; LAND_TILE
 	jr z, WillObjectBumpIntoTile
 	scf
 	ret
@@ -87,7 +87,7 @@ WillObjectBumpIntoLand:
 	add hl, bc
 	ld a, [hl]
 	call GetTileCollision
-	cp WATERTILE
+	cp WATER_TILE
 	jr z, WillObjectBumpIntoTile
 	scf
 	ret
@@ -213,11 +213,11 @@ Function6fa1:
 	call GetCoordTile
 	call GetTileCollision
 	pop de
-	and a ; LANDTILE
+	and a ; LAND_TILE
 	jr nz, .not_land
 	call GetCoordTile
 	call GetTileCollision
-	and a ; LANDTILE
+	and a ; LAND_TILE
 	jr nz, .not_land
 	xor a
 	ret
@@ -274,7 +274,7 @@ WillObjectBumpIntoSomeoneElse:
 	ld e, [hl]
 	jr IsNPCAtCoord
 
-Unreferenced_Function7015:
+Function7015: ; unreferenced
 	ldh a, [hMapObjectIndexBuffer]
 	call GetObjectStruct
 	call .CheckWillBeFacingNPC
@@ -369,7 +369,7 @@ IsNPCAtCoord:
 	jr nz, .setcarry
 
 .next
-	ld hl, OBJECT_STRUCT_LENGTH
+	ld hl, OBJECT_LENGTH
 	add hl, bc
 	ld b, h
 	ld c, l
@@ -473,7 +473,7 @@ IsObjectMovingOffEdgeOfScreen:
 	scf
 	ret
 
-Unreferenced_Function7113:
+Function7113: ; unreferenced
 	ld a, [wPlayerStandingMapX]
 	ld d, a
 	ld a, [wPlayerStandingMapY]
@@ -523,7 +523,7 @@ Unreferenced_Function7113:
 	jr .yes
 
 .next
-	ld hl, OBJECT_STRUCT_LENGTH
+	ld hl, OBJECT_LENGTH
 	add hl, bc
 	ld b, h
 	ld c, l

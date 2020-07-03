@@ -43,14 +43,14 @@ TrainerYoungsterJoey:
 	loadvar VAR_CALLERID, PHONE_YOUNGSTER_JOEY
 	endifjustbattled
 	opentext
-	checkflag ENGINE_JOEY
+	checkflag ENGINE_JOEY_READY_FOR_REMATCH
 	iftrue .Rematch
 	checkcellnum PHONE_YOUNGSTER_JOEY
 	iftrue .NumberAccepted
 	checkevent EVENT_JOEY_ASKED_FOR_PHONE_NUMBER
 	iftrue .AskAgain
 	writetext YoungsterJoey1AfterText
-	buttonsound
+	promptbutton
 	setevent EVENT_JOEY_ASKED_FOR_PHONE_NUMBER
 	scall .AskNumber1
 	sjump .RequestNumber
@@ -91,7 +91,7 @@ TrainerYoungsterJoey:
 	startbattle
 	reloadmapafterbattle
 	loadmem wJoeyFightCount, 1
-	clearflag ENGINE_JOEY
+	clearflag ENGINE_JOEY_READY_FOR_REMATCH
 	end
 
 .LoadFight1:
@@ -99,7 +99,7 @@ TrainerYoungsterJoey:
 	startbattle
 	reloadmapafterbattle
 	loadmem wJoeyFightCount, 2
-	clearflag ENGINE_JOEY
+	clearflag ENGINE_JOEY_READY_FOR_REMATCH
 	end
 
 .LoadFight2:
@@ -107,7 +107,7 @@ TrainerYoungsterJoey:
 	startbattle
 	reloadmapafterbattle
 	loadmem wJoeyFightCount, 3
-	clearflag ENGINE_JOEY
+	clearflag ENGINE_JOEY_READY_FOR_REMATCH
 	end
 
 .LoadFight3:
@@ -115,14 +115,14 @@ TrainerYoungsterJoey:
 	startbattle
 	reloadmapafterbattle
 	loadmem wJoeyFightCount, 4
-	clearflag ENGINE_JOEY
+	clearflag ENGINE_JOEY_READY_FOR_REMATCH
 	end
 
 .LoadFight4:
 	loadtrainer YOUNGSTER, JOEY5
 	startbattle
 	reloadmapafterbattle
-	clearflag ENGINE_JOEY
+	clearflag ENGINE_JOEY_READY_FOR_REMATCH
 	checkevent EVENT_JOEY_HP_UP
 	iftrue .GiveHPUp
 	checkevent EVENT_GOT_HP_UP_FROM_JOEY
@@ -147,40 +147,40 @@ TrainerYoungsterJoey:
 	sjump .NumberAccepted
 
 .AskNumber1:
-	jumpstd asknumber1m
+	jumpstd AskNumber1MScript
 	end
 
 .AskNumber2:
-	jumpstd asknumber2m
+	jumpstd AskNumber2MScript
 	end
 
 .RegisteredNumber:
-	jumpstd registerednumberm
+	jumpstd RegisteredNumberMScript
 	end
 
 .NumberAccepted:
-	jumpstd numberacceptedm
+	jumpstd NumberAcceptedMScript
 	end
 
 .NumberDeclined:
-	jumpstd numberdeclinedm
+	jumpstd NumberDeclinedMScript
 	end
 
 .PhoneFull:
-	jumpstd phonefullm
+	jumpstd PhoneFullMScript
 	end
 
 .RematchStd:
-	jumpstd rematchm
+	jumpstd RematchMScript
 	end
 
 .PackFull:
 	setevent EVENT_JOEY_HP_UP
-	jumpstd packfullm
+	jumpstd PackFullMScript
 	end
 
 .RematchGift:
-	jumpstd rematchgiftm
+	jumpstd RematchGiftMScript
 	end
 
 TrainerYoungsterMikey:

@@ -16,7 +16,7 @@ EcruteakItemfinderGuy:
 	yesorno
 	iffalse .no
 	writetext EcruteakItemfinderTrueSpiritText
-	buttonsound
+	promptbutton
 	verbosegiveitem ITEMFINDER
 	setevent EVENT_GOT_ITEMFINDER
 .itemfinder:
@@ -53,7 +53,7 @@ EcruteakHistoryBook:
 	end
 
 ItemFinderHouseRadio:
-	jumpstd radio2
+	jumpstd Radio2Script
 
 EcruteakItemfinderAdventureText:
 	text "Ah. You're on an"

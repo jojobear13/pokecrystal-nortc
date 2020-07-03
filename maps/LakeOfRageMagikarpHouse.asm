@@ -51,7 +51,7 @@ MagikarpLengthRaterScript:
 
 .GetReward:
 	writetext MagikarpLengthRaterText_Memento
-	buttonsound
+	promptbutton
 	verbosegiveitem ELIXER
 	iffalse .NoRoom
 	writetext MagikarpLengthRaterText_Bonus
@@ -88,7 +88,7 @@ LakeOfRageMagikarpHouseUnusedRecordSign:
 	jumptext LakeOfRageMagikarpHouseUnusedRecordText
 
 MagikarpHouseBookshelf:
-	jumpstd difficultbookshelf
+	jumpstd DifficultBookshelfScript
 
 MagikarpLengthRaterText_LakeOfRageHistory:
 	text "LAKE OF RAGE is"

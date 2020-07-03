@@ -12,7 +12,7 @@ Route30BerryHousePokefanMScript:
 	checkevent EVENT_GOT_BERRY_FROM_ROUTE_30_HOUSE
 	iftrue .GotBerry
 	writetext Route30BerrySpeechHouseMonEatBerriesText
-	buttonsound
+	promptbutton
 	verbosegiveitem BERRY
 	iffalse .NoRoom
 	setevent EVENT_GOT_BERRY_FROM_ROUTE_30_HOUSE
@@ -24,7 +24,7 @@ Route30BerryHousePokefanMScript:
 	end
 
 Route30BerryHouseBookshelf:
-	jumpstd magazinebookshelf
+	jumpstd MagazineBookshelfScript
 
 Route30BerrySpeechHouseMonEatBerriesText:
 	text "You know, #MON"

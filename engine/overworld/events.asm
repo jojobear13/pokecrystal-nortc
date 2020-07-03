@@ -399,7 +399,7 @@ SetMinTwoStepWildEncounterCooldown:
 Dummy_CheckScriptFlags3Bit5:
 	call CheckBit5_ScriptFlags3
 	ret z
-	call ret_2f3e
+	call Function2f3e
 	ret
 
 RunSceneScript:
@@ -759,40 +759,41 @@ PlayerMovement:
 	ret
 
 .pointers
-	dw .zero
-	dw .one
-	dw .two
-	dw .three
-	dw .four
-	dw .five
-	dw .six
-	dw .seven
+; entries correspond to PLAYERMOVEMENT_* constants
+	dw .normal
+	dw .warp
+	dw .turn
+	dw .force_turn
+	dw .finish
+	dw .continue
+	dw .exit_water
+	dw .jump
 
-.zero
-.four
+.normal:
+.finish:
 	xor a
 	ld c, a
 	ret
 
-.seven
+.jump:
 	call ret_968d7 ; mobile
 	xor a
 	ld c, a
 	ret
 
-.one
-	ld a, 5
+.warp:
+	ld a, PLAYEREVENT_WARP
 	ld c, a
 	scf
 	ret
 
-.two
-	ld a, 9
+.turn:
+	ld a, PLAYEREVENT_JOYCHANGEFACING
 	ld c, a
 	scf
 	ret
 
-.three
+.force_turn:
 ; force the player to move in some direction
 	ld a, BANK(Script_ForcedMovement)
 	ld hl, Script_ForcedMovement
@@ -802,8 +803,8 @@ PlayerMovement:
 	scf
 	ret
 
-.five
-.six
+.continue:
+.exit_water:
 	ld a, -1
 	ld c, a
 	and a
@@ -812,7 +813,7 @@ PlayerMovement:
 CheckMenuOW:
 	xor a
 	ldh [hMenuReturn], a
-	ldh [hMenuReturn + 1], a
+	ldh [hUnusedFFA1], a
 	ldh a, [hJoyPressed]
 
 	bit SELECT_F, a
@@ -923,13 +924,12 @@ CountStep:
 	ret
 
 .hatch
-	ld a, 8
+	ld a, PLAYEREVENT_HATCH
 	scf
 	ret
 
-; unused
-.unreferenced
-	ld a, 7
+.whiteout ; unreferenced
+	ld a, PLAYEREVENT_WHITEOUT
 	scf
 	ret
 
@@ -1337,305 +1337,4 @@ DoBikeStep::
 	xor a
 	ret
 
-ClearCmdQueue::
-	ld hl, wCmdQueue
-	ld de, CMDQUEUE_ENTRY_SIZE
-	ld c, CMDQUEUE_CAPACITY
-	xor a
-.loop
-	ld [hl], a
-	add hl, de
-	dec c
-	jr nz, .loop
-	ret
-
-HandleCmdQueue::
-	ld hl, wCmdQueue
-	xor a
-.loop
-	ldh [hMapObjectIndexBuffer], a
-	ld a, [hl]
-	and a
-	jr z, .skip
-	push hl
-	ld b, h
-	ld c, l
-	call HandleQueuedCommand
-	pop hl
-
-.skip
-	ld de, CMDQUEUE_ENTRY_SIZE
-	add hl, de
-	ldh a, [hMapObjectIndexBuffer]
-	inc a
-	cp CMDQUEUE_CAPACITY
-	jr nz, .loop
-	ret
-
-Unreferenced_GetNthCmdQueueEntry:
-	ld hl, wCmdQueue
-	ld bc, CMDQUEUE_ENTRY_SIZE
-	call AddNTimes
-	ld b, h
-	ld c, l
-	ret
-
-WriteCmdQueue::
-	push bc
-	push de
-	call .GetNextEmptyEntry
-	ld d, h
-	ld e, l
-	pop hl
-	pop bc
-	ret c
-	ld a, b
-	ld bc, CMDQUEUE_ENTRY_SIZE - 1
-	call FarCopyBytes
-	xor a
-	ld [hl], a
-	ret
-
-.GetNextEmptyEntry:
-	ld hl, wCmdQueue
-	ld de, CMDQUEUE_ENTRY_SIZE
-	ld c, CMDQUEUE_CAPACITY
-.loop
-	ld a, [hl]
-	and a
-	jr z, .done
-	add hl, de
-	dec c
-	jr nz, .loop
-	scf
-	ret
-
-.done
-	ld a, CMDQUEUE_CAPACITY
-	sub c
-	and a
-	ret
-
-DelCmdQueue::
-	ld hl, wCmdQueue
-	ld de, CMDQUEUE_ENTRY_SIZE
-	ld c, CMDQUEUE_CAPACITY
-.loop
-	ld a, [hl]
-	cp b
-	jr z, .done
-	add hl, de
-	dec c
-	jr nz, .loop
-	and a
-	ret
-
-.done
-	xor a
-	ld [hl], a
-	scf
-	ret
-
-_DelCmdQueue:
-	ld hl, CMDQUEUE_TYPE
-	add hl, bc
-	ld [hl], 0
-	ret
-
-HandleQueuedCommand:
-	ld hl, CMDQUEUE_TYPE
-	add hl, bc
-	ld a, [hl]
-	cp NUM_CMDQUEUE_TYPES
-	jr c, .okay
-	xor a
-
-.okay
-	ld e, a
-	ld d, 0
-	ld hl, .Jumptable
-	add hl, de
-	add hl, de
-	add hl, de
-	ld a, [hli]
-	push af
-	ld a, [hli]
-	ld h, [hl]
-	ld l, a
-	pop af
-	rst FarCall
-	ret
-
-.Jumptable:
-	dba CmdQueue_Null
-	dba CmdQueue_Null2
-	dba CmdQueue_StoneTable
-	dba CmdQueue_Type3
-	dba CmdQueue_Type4
-
-CmdQueueAnonymousJumptable:
-	ld hl, CMDQUEUE_05
-	add hl, bc
-	ld a, [hl]
-	pop hl
-	rst JumpTable
-	ret
-
-CmdQueueAnonJT_Increment:
-	ld hl, CMDQUEUE_05
-	add hl, bc
-	inc [hl]
-	ret
-
-CmdQueueAnonJT_Decrement:
-	ld hl, CMDQUEUE_05
-	add hl, bc
-	dec [hl]
-	ret
-
-CmdQueue_Null:
-	ret
-
-CmdQueue_Null2:
-	call ret_2f3e
-	ret
-
-CmdQueue_Type4:
-	call CmdQueueAnonymousJumptable
-	; anonymous dw
-	dw .zero
-	dw .one
-
-.zero
-	ldh a, [hSCY]
-	ld hl, 4
-	add hl, bc
-	ld [hl], a
-	call CmdQueueAnonJT_Increment
-.one
-	ld hl, 1
-	add hl, bc
-	ld a, [hl]
-	dec a
-	ld [hl], a
-	jr z, .finish
-	and $1
-	jr z, .add
-	ld hl, 2
-	add hl, bc
-	ldh a, [hSCY]
-	sub [hl]
-	ldh [hSCY], a
-	ret
-
-.add
-	ld hl, 2
-	add hl, bc
-	ldh a, [hSCY]
-	add [hl]
-	ldh [hSCY], a
-	ret
-
-.finish
-	ld hl, 4
-	add hl, bc
-	ld a, [hl]
-	ldh [hSCY], a
-	call _DelCmdQueue
-	ret
-
-CmdQueue_Type3:
-	call CmdQueueAnonymousJumptable
-	; anonymous dw
-	dw .zero
-	dw .one
-	dw .two
-
-.zero
-	call .IsPlayerFacingDown
-	jr z, .PlayerNotFacingDown
-	call CmdQueueAnonJT_Increment
-.one
-	call .IsPlayerFacingDown
-	jr z, .PlayerNotFacingDown
-	call CmdQueueAnonJT_Increment
-
-	ld hl, 2
-	add hl, bc
-	ld a, [hl]
-	ld [wd173], a
-	ret
-
-.two
-	call .IsPlayerFacingDown
-	jr z, .PlayerNotFacingDown
-	call CmdQueueAnonJT_Decrement
-
-	ld hl, 3
-	add hl, bc
-	ld a, [hl]
-	ld [wd173], a
-	ret
-
-.PlayerNotFacingDown:
-	ld a, $7f
-	ld [wd173], a
-	ld hl, 5
-	add hl, bc
-	ld [hl], 0
-	ret
-
-.IsPlayerFacingDown:
-	push bc
-	ld bc, wPlayerStruct
-	call GetSpriteDirection
-	and a
-	pop bc
-	ret
-
-CmdQueue_StoneTable:
-	ld de, wPlayerStruct
-	ld a, NUM_OBJECT_STRUCTS
-.loop
-	push af
-
-	ld hl, OBJECT_SPRITE
-	add hl, de
-	ld a, [hl]
-	and a
-	jr z, .next
-
-	ld hl, OBJECT_MOVEMENTTYPE
-	add hl, de
-	ld a, [hl]
-	cp SPRITEMOVEDATA_STRENGTH_BOULDER
-	jr nz, .next
-
-	ld hl, OBJECT_NEXT_TILE
-	add hl, de
-	ld a, [hl]
-	call CheckPitTile
-	jr nz, .next
-
-	ld hl, OBJECT_DIRECTION_WALKING
-	add hl, de
-	ld a, [hl]
-	cp STANDING
-	jr nz, .next
-	call HandleStoneQueue
-	jr c, .fall_down_hole
-
-.next
-	ld hl, OBJECT_STRUCT_LENGTH
-	add hl, de
-	ld d, h
-	ld e, l
-
-	pop af
-	dec a
-	jr nz, .loop
-	ret
-
-.fall_down_hole
-	pop af
-	ret
+INCLUDE "engine/overworld/cmd_queue.asm"

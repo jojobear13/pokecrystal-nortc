@@ -31,14 +31,14 @@ TrainerCooltrainermGaven3:
 	loadvar VAR_CALLERID, PHONE_COOLTRAINERM_GAVEN
 	endifjustbattled
 	opentext
-	checkflag ENGINE_GAVEN
+	checkflag ENGINE_GAVEN_READY_FOR_REMATCH
 	iftrue .WantsBattle
 	checkcellnum PHONE_COOLTRAINERM_GAVEN
 	iftrue .NumberAccepted
 	checkevent EVENT_GAVEN_ASKED_FOR_PHONE_NUMBER
 	iftrue .AskedAlready
 	writetext CooltrainermGavenAfterText
-	buttonsound
+	promptbutton
 	setevent EVENT_GAVEN_ASKED_FOR_PHONE_NUMBER
 	scall .AskNumber1
 	sjump .AskForNumber
@@ -71,7 +71,7 @@ TrainerCooltrainermGaven3:
 	startbattle
 	reloadmapafterbattle
 	loadmem wGavenFightCount, 1
-	clearflag ENGINE_GAVEN
+	clearflag ENGINE_GAVEN_READY_FOR_REMATCH
 	end
 
 .LoadFight1:
@@ -79,42 +79,42 @@ TrainerCooltrainermGaven3:
 	startbattle
 	reloadmapafterbattle
 	loadmem wGavenFightCount, 2
-	clearflag ENGINE_GAVEN
+	clearflag ENGINE_GAVEN_READY_FOR_REMATCH
 	end
 
 .LoadFight2:
 	loadtrainer COOLTRAINERM, GAVEN2
 	startbattle
 	reloadmapafterbattle
-	clearflag ENGINE_GAVEN
+	clearflag ENGINE_GAVEN_READY_FOR_REMATCH
 	end
 
 .AskNumber1:
-	jumpstd asknumber1m
+	jumpstd AskNumber1MScript
 	end
 
 .AskNumber2:
-	jumpstd asknumber2m
+	jumpstd AskNumber2MScript
 	end
 
 .RegisteredNumber:
-	jumpstd registerednumberm
+	jumpstd RegisteredNumberMScript
 	end
 
 .NumberAccepted:
-	jumpstd numberacceptedm
+	jumpstd NumberAcceptedMScript
 	end
 
 .NumberDeclined:
-	jumpstd numberdeclinedm
+	jumpstd NumberDeclinedMScript
 	end
 
 .PhoneFull:
-	jumpstd phonefullm
+	jumpstd PhoneFullMScript
 	end
 
 .Rematch:
-	jumpstd rematchm
+	jumpstd RematchMScript
 	end
 
 TrainerCooltrainerfJoyce:
@@ -135,14 +135,14 @@ TrainerCooltrainerfBeth1:
 	loadvar VAR_CALLERID, PHONE_COOLTRAINERF_BETH
 	endifjustbattled
 	opentext
-	checkflag ENGINE_BETH
+	checkflag ENGINE_BETH_READY_FOR_REMATCH
 	iftrue .WantsBattle
 	checkcellnum PHONE_COOLTRAINERF_BETH
 	iftrue .NumberAccepted
 	checkevent EVENT_BETH_ASKED_FOR_PHONE_NUMBER
 	iftrue .AskedAlready
 	writetext CooltrainerfBethAfterText
-	buttonsound
+	promptbutton
 	setevent EVENT_BETH_ASKED_FOR_PHONE_NUMBER
 	scall .AskNumber1
 	sjump .AskForNumber
@@ -175,7 +175,7 @@ TrainerCooltrainerfBeth1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wBethFightCount, 1
-	clearflag ENGINE_BETH
+	clearflag ENGINE_BETH_READY_FOR_REMATCH
 	end
 
 .LoadFight1:
@@ -183,42 +183,42 @@ TrainerCooltrainerfBeth1:
 	startbattle
 	reloadmapafterbattle
 	loadmem wBethFightCount, 2
-	clearflag ENGINE_BETH
+	clearflag ENGINE_BETH_READY_FOR_REMATCH
 	end
 
 .LoadFight2:
 	loadtrainer COOLTRAINERF, BETH3
 	startbattle
 	reloadmapafterbattle
-	clearflag ENGINE_BETH
+	clearflag ENGINE_BETH_READY_FOR_REMATCH
 	end
 
 .AskNumber1:
-	jumpstd asknumber1f
+	jumpstd AskNumber1FScript
 	end
 
 .AskNumber2:
-	jumpstd asknumber2f
+	jumpstd AskNumber2FScript
 	end
 
 .RegisteredNumber:
-	jumpstd registerednumberf
+	jumpstd RegisteredNumberFScript
 	end
 
 .NumberAccepted:
-	jumpstd numberacceptedf
+	jumpstd NumberAcceptedFScript
 	end
 
 .NumberDeclined:
-	jumpstd numberdeclinedf
+	jumpstd NumberDeclinedFScript
 	end
 
 .PhoneFull:
-	jumpstd phonefullf
+	jumpstd PhoneFullFScript
 	end
 
 .Rematch:
-	jumpstd rematchf
+	jumpstd RematchFScript
 	end
 
 TrainerPsychicRichard:

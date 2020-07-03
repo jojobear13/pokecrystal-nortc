@@ -120,7 +120,7 @@ MoveTutorScript:
 
 .TeachMove:
 	writetext GoldenrodCityMoveTutorIfYouUnderstandYouveMadeItText
-	buttonsound
+	promptbutton
 	takecoins 4000
 	waitsfx
 	playsound SFX_TRANSACTION
@@ -205,7 +205,7 @@ GoldenrodCityGrampsScript:
 GoldenrodCityRocketScoutScript:
 	opentext
 	writetext GoldenrodCityRocketScoutText1
-	buttonsound
+	promptbutton
 	faceplayer
 	writetext GoldenrodCityRocketScoutText2
 	waitbutton
@@ -262,7 +262,7 @@ GoldenrodCityUndergroundSignSouth:
 	jumptext GoldenrodCityUndergroundSignSouthText
 
 GoldenrodCityPokecenterSign:
-	jumpstd pokecentersign
+	jumpstd PokecenterSignScript
 
 GoldenrodCityFlowerShopSign:
 	jumptext GoldenrodCityFlowerShopSignText
